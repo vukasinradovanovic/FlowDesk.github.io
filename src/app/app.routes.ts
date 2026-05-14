@@ -11,10 +11,12 @@ export const routes: Routes = [
 			{
 				path: '',
 				component: Login,
+				data: { animation: 'login' },
 			},
 			{
 				path: 'register',
 				component: Register,
+				data: { animation: 'register' },
 			},
 		],
 	},
