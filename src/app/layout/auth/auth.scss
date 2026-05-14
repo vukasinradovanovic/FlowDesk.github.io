@@ -3,120 +3,11 @@ app-register {
 	display: contents;
 }
 
-.text-primary {
-	color: var(--fd-primary) !important;
-}
-
-.text-secondary {
-	color: var(--fd-text-muted) !important;
-}
-
-.brand-logo {
-	display: flex;
-	align-items: center;
-	gap: 0.625rem;
-}
-
-.brand-mark {
-	width: 36px;
-	height: 36px;
-	display: grid;
-	place-items: center;
-	background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-	color: #fff;
-	border-radius: 10px;
-	font-size: 1.1rem;
-	box-shadow: 0 6px 14px rgba(99, 102, 241, 0.4);
-}
-
-.brand-name {
-	font-weight: 700;
-	font-size: 1.125rem;
-	letter-spacing: -0.02em;
-}
-
-.auth-view {
-	min-height: 100vh;
-}
-
-.auth-split {
-	display: grid;
-	grid-template-columns: 1fr;
-	min-height: 100vh;
-}
-
-@media (min-width: 992px) {
-	.auth-split {
-		grid-template-columns: 1.1fr 1fr;
-	}
-}
-
-.auth-hero {
-	position: relative;
-	background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
-	color: #fff;
-	padding: 3rem;
-	overflow: hidden;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.auth-hero-alt {
-	background: linear-gradient(135deg, #1e293b 0%, #4338ca 50%, #6366f1 100%);
-}
-
-.auth-hero-content {
-	position: relative;
-	z-index: 2;
-	max-width: 520px;
-}
-
-.hero-orb {
-	position: absolute;
-	border-radius: 50%;
-	filter: blur(60px);
-	opacity: 0.45;
-	z-index: 1;
-}
-
-.orb-1 {
-	width: 400px;
-	height: 400px;
-	background: #a78bfa;
-	top: -100px;
-	right: -100px;
-}
-
-.orb-2 {
-	width: 350px;
-	height: 350px;
-	background: #60a5fa;
-	bottom: -120px;
-	left: -80px;
-}
-
-.glass-card {
-	background: rgba(255, 255, 255, 0.1);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.18);
-	border-radius: var(--fd-radius);
-	padding: 1rem 1.25rem;
-	color: #fff;
-}
-
-.auth-form-wrap {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 2rem 1.25rem;
-	background: var(--fd-bg);
-}
-
 .auth-form {
 	width: 100%;
 	max-width: 440px;
 }
+
 
 .form-control,
 .input-group-text {
@@ -156,29 +47,3 @@ app-register {
 	border-color: var(--fd-primary);
 }
 
-.btn-ghost {
-	background: transparent;
-	border: 1px solid var(--fd-border);
-	color: var(--fd-text-muted);
-	border-radius: var(--fd-radius-sm);
-}
-
-.btn-ghost:hover {
-	background: var(--fd-surface-2);
-	color: var(--fd-text);
-}
-
-.view {
-	animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(6px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}

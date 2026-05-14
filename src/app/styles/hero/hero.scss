@@ -1,0 +1,53 @@
+.auth-hero {
+	position: relative;
+	background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+	color: #fff;
+	padding: 3rem;
+	overflow: hidden;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.auth-hero-alt {
+	background: linear-gradient(135deg, #1e293b 0%, #4338ca 50%, #6366f1 100%);
+}
+
+.auth-hero-content {
+	position: relative;
+	z-index: 2;
+	max-width: 520px;
+}
+
+.hero-orb {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(60px);
+	opacity: 0.45;
+	z-index: 1;
+}
+
+.orb-1 {
+	width: 400px;
+	height: 400px;
+	background: #a78bfa;
+	top: -100px;
+	right: -100px;
+}
+
+.orb-2 {
+	width: 350px;
+	height: 350px;
+	background: #60a5fa;
+	bottom: -120px;
+	left: -80px;
+}
+
+.glass-card {
+	background: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: var(--fd-radius);
+	padding: 1rem 1.25rem;
+	color: #fff;
+}

@@ -1,181 +1,156 @@
-<div class="auth-hero auth-hero-alt d-none d-lg-flex">
-          <div class="auth-hero-content">
-            <div class="brand-logo mb-4">
-              <div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
-              <span class="brand-name">Flowdesk</span>
-            </div>
-            <h1 class="display-5 fw-bold mb-3">
-              Start building momentum in minutes.
-            </h1>
-            <p class="lead opacity-75 mb-5">
-              Join thousands of teams who stopped context-switching and started
-              shipping.
-            </p>
+<div class="row g-0 min-vh-100">
+	<div class="col-lg-7 d-none d-lg-flex">
+		<div class="auth-hero auth-hero-alt d-flex w-100 h-100">
+			<div class="auth-hero-content">
+				<div class="brand-logo mb-4">
+					<div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
+					<span class="brand-name">Flowdesk</span>
+				</div>
+				<h1 class="display-5 fw-bold mb-3">Start building momentum in minutes.</h1>
+				<p class="lead opacity-75 mb-5">
+					Join thousands of teams who stopped context-switching and started shipping.
+				</p>
 
-            <div class="feature-list">
-              <div class="feature-item glass-card">
-                <div class="feature-icon"><i class="bi bi-kanban"></i></div>
-                <div>
-                  <div class="fw-semibold">Visual Kanban boards</div>
-                  <div class="small opacity-75">Drag, drop, done.</div>
-                </div>
-              </div>
-              <div class="feature-item glass-card">
-                <div class="feature-icon"><i class="bi bi-people"></i></div>
-                <div>
-                  <div class="fw-semibold">Team collaboration</div>
-                  <div class="small opacity-75">
-                    Real-time presence & comments.
-                  </div>
-                </div>
-              </div>
-              <div class="feature-item glass-card">
-                <div class="feature-icon">
-                  <i class="bi bi-graph-up-arrow"></i>
-                </div>
-                <div>
-                  <div class="fw-semibold">Insightful analytics</div>
-                  <div class="small opacity-75">
-                    Velocity, burndown, and more.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="hero-orb orb-1"></div>
-          <div class="hero-orb orb-2"></div>
-        </div>
+				<div class="d-flex flex-column gap-3">
+					<div class="glass-card d-flex align-items-center gap-3">
+						<div
+							class="d-flex align-items-center justify-content-center rounded-3 bg-white bg-opacity-10 flex-shrink-0"
+							style="width: 44px; height: 44px"
+						>
+							<i class="bi bi-kanban"></i>
+						</div>
+						<div>
+							<div class="fw-semibold">Visual Kanban boards</div>
+							<div class="small opacity-75">Drag, drop, done.</div>
+						</div>
+					</div>
+					<div class="glass-card d-flex align-items-center gap-3">
+						<div
+							class="d-flex align-items-center justify-content-center rounded-3 bg-white bg-opacity-10 flex-shrink-0"
+							style="width: 44px; height: 44px"
+						>
+							<i class="bi bi-people"></i>
+						</div>
+						<div>
+							<div class="fw-semibold">Team collaboration</div>
+							<div class="small opacity-75">Real-time presence & comments.</div>
+						</div>
+					</div>
+					<div class="glass-card d-flex align-items-center gap-3">
+						<div
+							class="d-flex align-items-center justify-content-center rounded-3 bg-white bg-opacity-10 flex-shrink-0"
+							style="width: 44px; height: 44px"
+						>
+							<i class="bi bi-graph-up-arrow"></i>
+						</div>
+						<div>
+							<div class="fw-semibold">Insightful analytics</div>
+							<div class="small opacity-75">Velocity, burndown, and more.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="hero-orb orb-1"></div>
+			<div class="hero-orb orb-2"></div>
+		</div>
+	</div>
 
-<div class="auth-form-wrap">
-  <div class="auth-form">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div class="brand-logo d-lg-none">
-        <div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
-        <span class="brand-name">Flowdesk</span>
-      </div>
-      <button class="btn btn-sm btn-ghost ms-auto" data-theme-toggle>
-        <i class="bi bi-moon-stars"></i>
-      </button>
-    </div>
+	<div class="col-12 col-lg-5">
+		<div class="d-flex align-items-center justify-content-center p-4 p-lg-5 bg-body h-100">
+			<div class="w-100 auth-form">
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<div class="brand-logo d-lg-none">
+						<div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
+						<span class="brand-name">Flowdesk</span>
+					</div>
+					<button type="button" class="btn btn-sm btn-ghost ms-auto" (click)="theme.toggleTheme()">
+						<i [class]="theme.iconClass()"></i>
+					</button>
+				</div>
 
-    <h2 class="fw-bold mb-1">Create your account</h2>
-    <p class="text-secondary mb-4">
-      Free 14-day trial · No credit card required.
-    </p>
+				<h2 class="fw-bold mb-1">Create your account</h2>
+				<p class="text-secondary mb-4">Free 14-day trial · No credit card required.</p>
 
-    <form id="registerForm" class="needs-validation" novalidate>
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <label class="form-label">First name</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            value="Sarah"
-            required
-          />
-          <div class="invalid-feedback">
-            Please enter your first name.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Last name</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            value="Jenkins"
-            required
-          />
-          <div class="invalid-feedback">
-            Please enter your last name.
-          </div>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Work email</label>
-        <div class="input-group input-group-lg">
-          <span class="input-group-text"
-            ><i class="bi bi-envelope"></i
-          ></span>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="you@company.com"
-            required
-          />
-          <div class="invalid-feedback">Enter a valid email.</div>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <div class="input-group input-group-lg">
-          <span class="input-group-text"
-            ><i class="bi bi-lock"></i
-          ></span>
-          <input
-            type="password"
-            id="regPassword"
-            class="form-control"
-            placeholder="Create a strong password"
-            required
-            minlength="8"
-          />
-          <button
-            type="button"
-            class="input-group-text btn-eye"
-            data-toggle-pw="regPassword"
-          >
-            <i class="bi bi-eye"></i>
-          </button>
-        </div>
-        <div class="password-meter mt-2">
-          <div class="password-meter-bar" id="pwBar"></div>
-        </div>
-        <small class="text-secondary"
-          >Use 8+ characters with a mix of letters, numbers &
-          symbols.</small
-        >
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Confirm password</label>
-        <div class="input-group input-group-lg">
-          <span class="input-group-text"
-            ><i class="bi bi-shield-lock"></i
-          ></span>
-          <input
-            type="password"
-            id="regConfirm"
-            class="form-control"
-            placeholder="Repeat password"
-            required
-          />
-        </div>
-        <div id="matchFeedback" class="small mt-1"></div>
-      </div>
-      <div class="form-check mb-4">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="terms"
-          required
-        />
-        <label class="form-check-label" for="terms">
-          I agree to the
-          <a href="#" class="text-primary text-decoration-none">Terms</a>
-          and
-          <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-        Create account <i class="bi bi-arrow-right ms-1"></i>
-      </button>
-      <p class="text-center text-secondary mb-0">
-        Already have an account?
-        <a
-          routerLink="/"
-          class="text-primary text-decoration-none fw-medium"
-          >Sign in
-        </a>
-      </p>
-    </form>
-  </div>
+				<form id="registerForm" class="needs-validation" novalidate>
+					<div class="row g-3 mb-3 mx-0">
+						<div class="col-md-6">
+							<label class="form-label">First name</label>
+							<input type="text" class="form-control form-control-lg" value="Sarah" required />
+							<div class="invalid-feedback">Please enter your first name.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Last name</label>
+							<input type="text" class="form-control form-control-lg" value="Jenkins" required />
+							<div class="invalid-feedback">Please enter your last name.</div>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Work email</label>
+						<div class="input-group input-group-lg">
+							<span class="input-group-text"><i class="bi bi-envelope"></i></span>
+							<input type="email" class="form-control" placeholder="you@company.com" required />
+							<div class="invalid-feedback">Enter a valid email.</div>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Password</label>
+						<div class="input-group input-group-lg">
+							<span class="input-group-text"><i class="bi bi-lock"></i></span>
+							<input
+								[type]="passwordVisible() ? 'text' : 'password'"
+								id="regPassword"
+								class="form-control"
+								placeholder="Create a strong password"
+								required
+								minlength="8"
+							/>
+							<button
+								type="button"
+								class="input-group-text btn-eye"
+								(click)="togglePassword()"
+							>
+								<i [class]="passwordVisible() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+							</button>
+						</div>
+						<div class="password-meter mt-2">
+							<div class="password-meter-bar" id="pwBar"></div>
+						</div>
+						<small class="text-secondary"
+							>Use 8+ characters with a mix of letters, numbers & symbols.</small
+						>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Confirm password</label>
+						<div class="input-group input-group-lg">
+							<span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+							<input
+								type="password"
+								id="regConfirm"
+								class="form-control"
+								placeholder="Repeat password"
+								required
+							/>
+						</div>
+						<div id="matchFeedback" class="small mt-1"></div>
+					</div>
+					<div class="form-check mb-4">
+						<input class="form-check-input" type="checkbox" id="terms" required />
+						<label class="form-check-label" for="terms">
+							I agree to the
+							<a href="#" class="text-primary text-decoration-none">Terms</a>
+							and
+							<a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.
+						</label>
+					</div>
+					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+						Create account <i class="bi bi-arrow-right ms-1"></i>
+					</button>
+					<p class="text-center text-secondary mb-0">
+						Already have an account?
+						<a routerLink="/" class="text-primary text-decoration-none fw-medium">Sign in </a>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>

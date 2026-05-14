@@ -1,4 +1,7 @@
 @use "bootstrap/scss/bootstrap";
-@import "bootstrap-icons/font/bootstrap-icons.css";
-@use "./app/styles/variables/variables.scss";
-@use "./app/styles/buttons/common.scss";
+@use "./app/styles/variables/variables.scss" as vars;
+@use "./app/styles/buttons/common.scss" as buttons;
+@use "./app/styles/utilities/common.scss" as utils;
+@use "./app/styles/layout/dashboard.scss" as dashboard;
+@use "./app/styles/hero/hero.scss" as hero;
+@use "bootstrap-icons/font/bootstrap-icons.css" as *;
