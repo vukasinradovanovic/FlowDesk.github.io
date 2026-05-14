@@ -1,0 +1,15 @@
+.btn-primary {
+	background-color: var(--fd-primary);
+	border-color: var(--fd-primary);
+	box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+	background-color: var(--fd-primary-hover);
+	border-color: var(--fd-primary-hover);
+	transform: translateY(-1px);
+	box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3);
+}
