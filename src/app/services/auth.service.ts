@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable, delay, map, of, tap } from 'rxjs';
 
 export interface User {
@@ -15,9 +16,21 @@ export interface User {
 })
 export class AuthService {
 	private readonly http = inject(HttpClient);
+	private readonly platformId = inject(PLATFORM_ID);
 	
 	private usersData: User[] | null = null;
 	public currentUser: User | null = null;
+
+	constructor() {
+		// Proveravamo da li je aplikacija pokrenuta u pregledaču (ne na serveru)
+		if (isPlatformBrowser(this.platformId)) {
+			const storedUser = sessionStorage.getItem('currentUser');
+			// Ako postoji zapamćen korisnik, vraćamo ga u stanje
+			if (storedUser) {
+				this.currentUser = JSON.parse(storedUser);
+			}
+		}
+	}
 
 	// Inicijalizujemo podatke iz JSON-a
 	private loadInitialData(): Observable<User[]> {
@@ -39,6 +52,12 @@ export class AuthService {
 					throw new Error('Pogrešan email ili lozinka.');
 				}
 				this.currentUser = user;
+				
+				// Čuvamo podatke u sesiju prilikom logina
+				if (isPlatformBrowser(this.platformId)) {
+					sessionStorage.setItem('currentUser', JSON.stringify(user));
+				}
+				
 				return user;
 			})
 		);
@@ -61,8 +80,23 @@ export class AuthService {
 				users.push(newUser);
 				
 				this.currentUser = newUser;
+				
+				// Čuvamo podatke u sesiju prilikom registracije 
+				if (isPlatformBrowser(this.platformId)) {
+					sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+				}
+				
 				return newUser;
 			})
 		);
 	}
+
+    public logout(): void {
+        this.currentUser = null;
+        
+        // Brišemo iz sesije
+        if (isPlatformBrowser(this.platformId)) {
+            sessionStorage.removeItem('currentUser');
+        }
+    }
 }
