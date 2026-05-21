@@ -19,7 +19,6 @@ export class Login {
 
 	protected readonly passwordVisible = signal(false);
 	
-	// Stanje forme
 	protected email = signal('');
 	protected password = signal('');
 	protected errorMessage = signal<string | null>(null);

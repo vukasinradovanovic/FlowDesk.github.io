@@ -22,17 +22,14 @@ export class AuthService {
 	public currentUser: User | null = null;
 
 	constructor() {
-		// Proveravamo da li je aplikacija pokrenuta u pregledaču (ne na serveru)
 		if (isPlatformBrowser(this.platformId)) {
 			const storedUser = sessionStorage.getItem('currentUser');
-			// Ako postoji zapamćen korisnik, vraćamo ga u stanje
 			if (storedUser) {
 				this.currentUser = JSON.parse(storedUser);
 			}
 		}
 	}
 
-	// Inicijalizujemo podatke iz JSON-a
 	private loadInitialData(): Observable<User[]> {
 		if (this.usersData !== null) {
 			return of(this.usersData);
@@ -76,12 +73,10 @@ export class AuthService {
 					id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
 				};
 				
-				// Ovde dodajemo korisnika u in-memory array jer broweser ne moze da over-writeuje json fajl lokalno.
 				users.push(newUser);
 				
 				this.currentUser = newUser;
 				
-				// Čuvamo podatke u sesiju prilikom registracije 
 				if (isPlatformBrowser(this.platformId)) {
 					sessionStorage.setItem('currentUser', JSON.stringify(newUser));
 				}
@@ -94,7 +89,6 @@ export class AuthService {
     public logout(): void {
         this.currentUser = null;
         
-        // Brišemo iz sesije
         if (isPlatformBrowser(this.platformId)) {
             sessionStorage.removeItem('currentUser');
         }

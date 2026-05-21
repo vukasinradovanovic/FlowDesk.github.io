@@ -5,11 +5,13 @@ import { Auth } from './layout/auth/auth';
 import { Dashboard } from './layout/dashboard/dashboard';
 import { Index } from './dashboard/index/index';
 import { authGuard } from './auth/guards/auth-guard';
+import { anonGuard } from './auth/guards/anon-guard';
 
 export const routes: Routes = [
 	{
 		path: '',
 		component: Auth,
+		canActivate: [anonGuard],
 		children: [
 			{
 				path: '',
