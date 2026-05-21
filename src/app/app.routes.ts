@@ -4,6 +4,7 @@ import { Register } from './auth/register/register';
 import { Auth } from './layout/auth/auth';
 import { Dashboard } from './layout/dashboard/dashboard';
 import { Index } from './dashboard/index/index';
+import { authGuard } from './auth/guards/auth-guard';
 
 export const routes: Routes = [
 	{
@@ -25,6 +26,7 @@ export const routes: Routes = [
 	{
 		path: 'dashboard',
 		component: Dashboard,
+		canActivate: [authGuard],
 		children: [
 			{
 				path: '',
@@ -32,4 +34,9 @@ export const routes: Routes = [
 			},
 		],
 	},
+	// Safe fallback wildcard: redirects any random mistyped URL to login
+    { 
+        path: '**', 
+        redirectTo: '' 
+    }
 ];
