@@ -71,36 +71,45 @@
 				<h2 class="fw-bold mb-1">Create your account</h2>
 				<p class="text-secondary mb-4">Free 14-day trial · No credit card required.</p>
 
-				<form id="registerForm" class="needs-validation" novalidate>
+				<form id="registerForm" class="needs-validation" novalidate (ngSubmit)="handleSubmit()">
+					@if (errorMessage()) {
+						<div class="alert alert-danger py-2 px-3 small mb-3">
+							<i class="bi bi-exclamation-triangle me-2"></i>
+							{{ errorMessage() }}
+						</div>
+					}
 					<div class="row g-3 mb-3 mx-0">
 						<div class="col-md-6">
-							<label class="form-label">First name</label>
-							<input type="text" class="form-control form-control-lg" value="Sarah" required />
+							<label class="form-label" for="regFirstName">First name</label>
+							<input name="firstName" id="regFirstName" type="text" class="form-control form-control-lg" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" required />
 							<div class="invalid-feedback">Please enter your first name.</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Last name</label>
-							<input type="text" class="form-control form-control-lg" value="Jenkins" required />
+							<label class="form-label" for="regLastName">Last name</label>
+							<input name="lastName" id="regLastName" type="text" class="form-control form-control-lg" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" required />
 							<div class="invalid-feedback">Please enter your last name.</div>
 						</div>
 					</div>
 					<div class="mb-3">
-						<label class="form-label">Work email</label>
+						<label class="form-label" for="regEmail">Work email</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-envelope"></i></span>
-							<input type="email" class="form-control" placeholder="you@company.com" required />
+							<input name="email" id="regEmail" type="email" class="form-control" placeholder="you@company.com" [ngModel]="email()" (ngModelChange)="email.set($event)" required />
 							<div class="invalid-feedback">Enter a valid email.</div>
 						</div>
 					</div>
 					<div class="mb-3">
-						<label class="form-label">Password</label>
+						<label class="form-label" for="regPassword">Password</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-lock"></i></span>
 							<input
+								name="password"
 								[type]="passwordVisible() ? 'text' : 'password'"
 								id="regPassword"
 								class="form-control"
 								placeholder="Create a strong password"
+								[ngModel]="password()"
+								(ngModelChange)="password.set($event)"
 								required
 								minlength="8"
 							/>
@@ -120,14 +129,17 @@
 						>
 					</div>
 					<div class="mb-3">
-						<label class="form-label">Confirm password</label>
+						<label class="form-label" for="regConfirm">Confirm password</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
 							<input
+								name="confirmPassword"
 								type="password"
 								id="regConfirm"
 								class="form-control"
 								placeholder="Repeat password"
+								[ngModel]="confirmPassword()"
+								(ngModelChange)="confirmPassword.set($event)"
 								required
 							/>
 						</div>
@@ -142,8 +154,13 @@
 							<a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.
 						</label>
 					</div>
-					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-						Create account <i class="bi bi-arrow-right ms-1"></i>
+					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3" [disabled]="isLoading()">
+						@if (isLoading()) {
+							<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+							Creating...
+						} @else {
+							Create account <i class="bi bi-arrow-right ms-1"></i>
+						}
 					</button>
 					<p class="text-center text-secondary mb-0">
 						Already have an account?

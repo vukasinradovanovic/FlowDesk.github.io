@@ -1,0 +1,11 @@
+{
+	"users": [
+		{
+			"id": 1,
+			"firstName": "Sarah",
+			"lastName": "Jenkins",
+			"email": "sarah@flowdesk.com",
+			"password": "password123"
+		}
+	]
+}

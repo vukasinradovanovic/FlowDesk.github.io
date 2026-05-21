@@ -86,33 +86,44 @@
 					<div class="flex-grow-1 border-top"></div>
 				</div>
 
-				<form id="loginForm" novalidate>
+				<form id="loginForm" novalidate (ngSubmit)="handleSubmit()">
+					@if (errorMessage()) {
+						<div class="alert alert-danger py-2 px-3 small mb-3">
+							<i class="bi bi-exclamation-triangle me-2"></i>
+							{{ errorMessage() }}
+						</div>
+					}
 					<div class="mb-3">
-						<label class="form-label">Email address</label>
+						<label class="form-label" for="loginEmail">Email address</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-envelope"></i></span>
 							<input
+								id="loginEmail"
+								name="email"
 								type="email"
 								class="form-control"
 								placeholder="you@company.com"
-								value="sarah@flowdesk.com"
+								[ngModel]="email()"
+								(ngModelChange)="email.set($event)"
 								required
 							/>
 						</div>
 					</div>
 					<div class="mb-3">
 						<div class="d-flex justify-content-between">
-							<label class="form-label">Password</label>
+							<label class="form-label" for="loginPassword">Password</label>
 							<a href="#" class="small text-primary text-decoration-none">Forgot?</a>
 						</div>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-lock"></i></span>
 							<input
+								name="password"
 								[type]="passwordVisible() ? 'text' : 'password'"
 								class="form-control"
 								id="loginPassword"
 								placeholder="••••••••"
-								value="password123"
+								[ngModel]="password()"
+								(ngModelChange)="password.set($event)"
 								required
 							/>
 							<button
@@ -128,8 +139,13 @@
 						<input class="form-check-input" type="checkbox" id="remember" checked />
 						<label class="form-check-label" for="remember">Remember me for 30 days</label>
 					</div>
-					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-						Sign in <i class="bi bi-arrow-right ms-1"></i>
+					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3" [disabled]="isLoading()">
+						@if (isLoading()) {
+							<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+							Signing in...
+						} @else {
+							Sign in <i class="bi bi-arrow-right ms-1"></i>
+						}
 					</button>
 					<p class="text-center text-secondary mb-0">
 						New to Flowdesk?
