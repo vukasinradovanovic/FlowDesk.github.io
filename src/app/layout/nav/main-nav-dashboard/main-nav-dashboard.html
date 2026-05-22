@@ -1,0 +1,19 @@
+<nav class="sidebar-nav">
+	<div class="nav-label">Menu</div>
+	
+	@for (link of navLinks; track link.label) {
+		<a 
+			[routerLink]="link.route" 
+			routerLinkActive="active" 
+			[routerLinkActiveOptions]="{ exact: link.exact || false }"
+			class="nav-item"
+		>
+			<i [class]="link.icon"></i> 
+			{{ link.label }}
+			
+			@if (link.adons) {
+				<span class="badge bg-primary-soft ms-auto">{{ link.adons }}</span>
+			}
+		</a>
+	}
+</nav>
