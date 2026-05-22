@@ -4,11 +4,15 @@ import { Register } from './auth/register/register';
 import { Auth } from './layout/auth/auth';
 import { Dashboard } from './layout/dashboard/dashboard';
 import { Index } from './dashboard/index/index';
+import { Index as ProjectsIndex } from './dashboard/project/index/index';
+import { authGuard } from './auth/guards/auth-guard';
+import { anonGuard } from './auth/guards/anon-guard';
 
 export const routes: Routes = [
 	{
 		path: '',
 		component: Auth,
+		canActivate: [anonGuard],
 		children: [
 			{
 				path: '',
@@ -25,11 +29,21 @@ export const routes: Routes = [
 	{
 		path: 'dashboard',
 		component: Dashboard,
+		canActivate: [authGuard],
 		children: [
 			{
 				path: '',
 				component: Index,
 			},
+			{
+				path: 'projects',
+				component: ProjectsIndex,
+			},
 		],
 	},
+	// Safe fallback wildcard: redirects any random mistyped URL to login
+    { 
+        path: '**', 
+        redirectTo: '' 
+    }
 ];

@@ -5,7 +5,76 @@
 			"firstName": "Sarah",
 			"lastName": "Jenkins",
 			"email": "sarah@flowdesk.com",
-			"password": "password123"
+			"password": "user123"
+		},
+		{
+			"id": 2,
+			"firstName": "John",
+			"lastName": "Doe",
+			"email": "john@flowdesk.com",
+			"password": "user123"
 		}
+	],
+	"projects": [
+		{
+			"id": 1,
+			"name": "Marketing Website Redesign",
+			"tasksCount": 24,
+			"icon": "bi-palette",
+			"theme": "primary",
+			"progress": 72,
+			"dueDate": "2026-11-13",
+			"status": "In Progress",
+			"statusTheme": "primary",
+			"members": [1, 2, 3, 4]
+		},
+		{
+			"id": 2,
+			"name": "Mobile App V3.2",
+			"tasksCount": 48,
+			"icon": "bi-phone",
+			"theme": "emerald",
+			"progress": 48,
+			"dueDate": "2026-12-02",
+			"status": "On Track",
+			"statusTheme": "indigo",
+			"members": [2, 3, 4]
+		},
+		{
+			"id": 3,
+			"name": "API Platform V2",
+			"tasksCount": 62,
+			"icon": "bi-cpu",
+			"theme": "amber",
+			"progress": 91,
+			"dueDate": "2026-11-17",
+			"status": "At Risk",
+			"statusTheme": "amber",
+			"members": [1]
+		},
+		{
+			"id": 4,
+			"name": "Brand Guidelines 2026",
+			"tasksCount": 16,
+			"icon": "bi-bookmark-star",
+			"theme": "indigo",
+			"progress": 100,
+			"dueDate": "2026-11-08",
+			"status": "Completed",
+			"statusTheme": "emerald",
+			"members": [1, 2]
+		}
+	],
+	"user-projects": [
+		{ "id": 1, "userId": 1, "projectId": 1 },
+		{ "id": 2, "userId": 2, "projectId": 1 },
+		{ "id": 3, "userId": 3, "projectId": 1 },
+		{ "id": 4, "userId": 4, "projectId": 1 },
+		{ "id": 5, "userId": 2, "projectId": 2 },
+		{ "id": 6, "userId": 3, "projectId": 2 },
+		{ "id": 7, "userId": 4, "projectId": 2 },
+		{ "id": 8, "userId": 1, "projectId": 3 },
+		{ "id": 9, "userId": 1, "projectId": 4 },
+		{ "id": 10, "userId": 2, "projectId": 4 }
 	]
 }

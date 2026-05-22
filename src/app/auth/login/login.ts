@@ -19,9 +19,8 @@ export class Login {
 
 	protected readonly passwordVisible = signal(false);
 	
-	// Stanje forme
-	protected email = signal('sarah@flowdesk.com');
-	protected password = signal('password123');
+	protected email = signal('');
+	protected password = signal('');
 	protected errorMessage = signal<string | null>(null);
 	protected isLoading = signal(false);
 

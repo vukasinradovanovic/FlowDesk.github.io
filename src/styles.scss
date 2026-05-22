@@ -1,6 +1,7 @@
 @use "bootstrap/scss/bootstrap";
 @use "./app/styles/variables/variables.scss" as vars;
 @use "./app/styles/buttons/common.scss" as buttons;
+@use "./app/styles/buttons/dropdown.scss" as dropdown;
 @use "./app/styles/utilities/common.scss" as utils;
 @use "./app/styles/layout/dashboard.scss" as dashboard;
 @use "./app/styles/hero/hero.scss" as hero;

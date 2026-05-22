@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable, delay, map, of, tap } from 'rxjs';
 
 export interface User {
@@ -15,11 +16,20 @@ export interface User {
 })
 export class AuthService {
 	private readonly http = inject(HttpClient);
+	private readonly platformId = inject(PLATFORM_ID);
 	
 	private usersData: User[] | null = null;
 	public currentUser: User | null = null;
 
-	// Inicijalizujemo podatke iz JSON-a
+	constructor() {
+		if (isPlatformBrowser(this.platformId)) {
+			const storedUser = sessionStorage.getItem('currentUser');
+			if (storedUser) {
+				this.currentUser = JSON.parse(storedUser);
+			}
+		}
+	}
+
 	private loadInitialData(): Observable<User[]> {
 		if (this.usersData !== null) {
 			return of(this.usersData);
@@ -39,6 +49,12 @@ export class AuthService {
 					throw new Error('Pogrešan email ili lozinka.');
 				}
 				this.currentUser = user;
+				
+				// Čuvamo podatke u sesiju prilikom logina
+				if (isPlatformBrowser(this.platformId)) {
+					sessionStorage.setItem('currentUser', JSON.stringify(user));
+				}
+				
 				return user;
 			})
 		);
@@ -57,12 +73,24 @@ export class AuthService {
 					id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
 				};
 				
-				// Ovde dodajemo korisnika u in-memory array jer broweser ne moze da over-writeuje json fajl lokalno.
 				users.push(newUser);
 				
 				this.currentUser = newUser;
+				
+				if (isPlatformBrowser(this.platformId)) {
+					sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+				}
+				
 				return newUser;
 			})
 		);
 	}
+
+    public logout(): void {
+        this.currentUser = null;
+        
+        if (isPlatformBrowser(this.platformId)) {
+            sessionStorage.removeItem('currentUser');
+        }
+    }
 }
