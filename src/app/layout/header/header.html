@@ -19,7 +19,9 @@
 		<button class="btn btn-primary btn-sm d-none d-sm-inline-flex">
 			<i class="bi bi-plus-lg me-1"></i> New Task
 		</button>
-		<button class="btn-icon" data-theme-toggle><i class="bi bi-moon-stars"></i></button>
+		<button class="btn-icon" (click)="theme.toggleTheme()">
+			<i class="bi bi-moon-stars"></i>
+		</button>
 
 		<div class="dropdown">
 			<button class="btn-icon position-relative" data-bs-toggle="dropdown">

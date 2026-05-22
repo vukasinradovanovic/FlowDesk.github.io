@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { ThemeService } from '../../services/theme/theme.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './header.scss',
 })
 export class Header {
+  readonly theme = inject(ThemeService);
   auth = inject(AuthService);
   router = inject(Router);
 
