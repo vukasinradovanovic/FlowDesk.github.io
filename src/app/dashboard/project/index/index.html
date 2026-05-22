@@ -4,16 +4,16 @@
 		<p class="text-secondary mb-0">Here's what's happening across your workspace today.</p>
 	</div>
 	<div class="d-flex gap-2">
-		<button class="btn btn-light-soft"><i class="bi bi-calendar3 me-1"></i> {{ Date() | date:'MMM d, y' }}</button>
+		<button class="btn btn-light-soft">
+			<i class="bi bi-calendar3 me-1"></i> {{ Date() | date: 'MMM d, y' }}
+		</button>
 		<button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
 		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button>
 	</div>
 </div>
 
 <!-- Stats -->
-<div class="row g-3 mb-4">
-	
-</div>
+<div class="row g-3 mb-4"></div>
 
 <!-- Recent Projects Table -->
 <div class="card card-plain">
@@ -42,181 +42,55 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>
-							<div class="d-flex align-items-center gap-3">
-								<div class="project-icon bg-primary-soft text-primary">
-									<i class="bi bi-palette"></i>
+					@for (p of userProjects; track $index) {
+						<tr>
+							<td>
+								<div class="d-flex align-items-center gap-3">
+									<div class="project-icon bg-primary-soft text-primary">
+										<i class="bi {{ p.icon }}"></i>
+									</div>
+									<div>
+										<div class="fw-semibold">{{ p.name }}</div>
+										<div class="text-secondary small">{{ p.tasksCount === 1 ? '1 task' : `${p.tasksCount} tasks` }} · {{ p.members.length === 1 ? '1 member' : `${p.members.length} members` }}</div>
+									</div>
 								</div>
-								<div>
-									<div class="fw-semibold">Marketing Website Redesign</div>
-									<div class="text-secondary small">24 tasks · 4 members</div>
+							</td>
+							<td>
+								<div class="avatar-stack">
+									@for (id of p.members; track id) {
+										<div class="avatar avatar-xs">
+											@if (getMemberDetails(id); as member) {
+												<span
+													class="avatar-initials bg-{{ member.avatarColor }}"
+												>
+													{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
+												</span>
+											} @else {
+												<span class="member-badge unknown">User: {{ id }}</span>
+											}
+										</div>
+									}
 								</div>
-							</div>
-						</td>
-						<td>
-							<div class="avatar-stack">
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-emerald">SJ</span>
+							</td>
+							<td style="min-width: 180px">
+								<div class="d-flex align-items-center gap-2">
+									<div class="progress flex-grow-1" style="height: 6px">
+										<div class="progress-bar bg-{{ p.statusTheme }}" style="width: {{ p.progress }}%"></div>
+									</div>
+									<span class="small fw-medium">{{ p.progress }}%</span>
 								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-indigo">MR</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-amber">EK</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-rose">+3</span>
-								</div>
-							</div>
-						</td>
-						<td style="min-width: 180px">
-							<div class="d-flex align-items-center gap-2">
-								<div class="progress flex-grow-1" style="height: 6px">
-									<div class="progress-bar bg-primary" style="width: 72%"></div>
-								</div>
-								<span class="small fw-medium">72%</span>
-							</div>
-						</td>
-						<td class="small">Nov 13, 2026</td>
-						<td>
-							<span class="badge bg-primary-soft text-primary">In Progress</span>
-						</td>
-						<td>
-							<button class="btn-icon">
-								<i class="bi bi-three-dots"></i>
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="d-flex align-items-center gap-3">
-								<div class="project-icon bg-emerald-soft text-emerald">
-									<i class="bi bi-phone"></i>
-								</div>
-								<div>
-									<div class="fw-semibold">Mobile App V3.2</div>
-									<div class="text-secondary small">48 tasks · 8 members</div>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="avatar-stack">
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-indigo">MR</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials">JP</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-emerald">SJ</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-rose">+5</span>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="d-flex align-items-center gap-2">
-								<div class="progress flex-grow-1" style="height: 6px">
-									<div class="progress-bar bg-emerald" style="width: 48%"></div>
-								</div>
-								<span class="small fw-medium">48%</span>
-							</div>
-						</td>
-						<td class="small">Dec 2, 2026</td>
-						<td>
-							<span class="badge bg-indigo-soft text-indigo">On Track</span>
-						</td>
-						<td>
-							<button class="btn-icon">
-								<i class="bi bi-three-dots"></i>
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="d-flex align-items-center gap-3">
-								<div class="project-icon bg-amber-soft text-amber">
-									<i class="bi bi-cpu"></i>
-								</div>
-								<div>
-									<div class="fw-semibold">API Platform V2</div>
-									<div class="text-secondary small">62 tasks · 6 members</div>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="avatar-stack">
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-amber">EK</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-emerald">SJ</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials">JP</span>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="d-flex align-items-center gap-2">
-								<div class="progress flex-grow-1" style="height: 6px">
-									<div class="progress-bar bg-amber" style="width: 91%"></div>
-								</div>
-								<span class="small fw-medium">91%</span>
-							</div>
-						</td>
-						<td class="small">Nov 17, 2026</td>
-						<td>
-							<span class="badge bg-amber-soft text-amber">At Risk</span>
-						</td>
-						<td>
-							<button class="btn-icon">
-								<i class="bi bi-three-dots"></i>
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="d-flex align-items-center gap-3">
-								<div class="project-icon bg-indigo-soft text-indigo">
-									<i class="bi bi-bookmark-star"></i>
-								</div>
-								<div>
-									<div class="fw-semibold">Brand Guidelines 2026</div>
-									<div class="text-secondary small">16 tasks · 3 members</div>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="avatar-stack">
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-rose">LT</span>
-								</div>
-								<div class="avatar avatar-xs">
-									<span class="avatar-initials bg-indigo">MR</span>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="d-flex align-items-center gap-2">
-								<div class="progress flex-grow-1" style="height: 6px">
-									<div class="progress-bar bg-success" style="width: 100%"></div>
-								</div>
-								<span class="small fw-medium">100%</span>
-							</div>
-						</td>
-						<td class="small">Nov 8, 2026</td>
-						<td>
-							<span class="badge bg-emerald-soft text-emerald">Completed</span>
-						</td>
-						<td>
-							<button class="btn-icon">
-								<i class="bi bi-three-dots"></i>
-							</button>
-						</td>
-					</tr>
+							</td>
+							<td class="small">{{ p.dueDate | date: 'MMM d, y' }}</td>
+							<td>
+								<span class="badge bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">{{ p.status }}</span>
+							</td>
+							<td>
+								<button class="btn-icon">
+									<i class="bi bi-three-dots"></i>
+								</button>
+							</td>
+						</tr>
+					}
 				</tbody>
 			</table>
 		</div>

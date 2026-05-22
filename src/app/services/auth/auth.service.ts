@@ -9,6 +9,7 @@ export interface User {
 	lastName?: string;
 	email?: string;
 	password?: string;
+	avatarColor?: string | "bg-emerald" | "bg-indigo" | "bg-amber" | "bg-rose"; 
 }
 
 @Injectable({
@@ -18,9 +19,10 @@ export class AuthService {
 	private readonly http = inject(HttpClient);
 	private readonly platformId = inject(PLATFORM_ID);
 	
-	private usersData: User[] | null = null;
+	public usersData: User[] | null = null;
 	public currentUser: User | null = null;
 
+	// Konstruktor sprecava da se informacije izbrisu prilikom osvezavanja stranice
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
 			const storedUser = sessionStorage.getItem('currentUser');
@@ -28,6 +30,10 @@ export class AuthService {
 				this.currentUser = JSON.parse(storedUser);
 			}
 		}
+	}
+
+	getMembersById(id: number): Observable<User | undefined> {
+		return this.loadInitialData().pipe(map((users) => users.find((u) => u.id === id)));
 	}
 
 	private loadInitialData(): Observable<User[]> {
