@@ -46,7 +46,7 @@
 						<tr>
 							<td>
 								<div class="d-flex align-items-center gap-3">
-									<div class="project-icon bg-primary-soft text-primary">
+									<div class="project-icon bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">
 										<i class="bi {{ p.icon }}"></i>
 									</div>
 									<div>
@@ -61,7 +61,7 @@
 										<div class="avatar avatar-xs">
 											@if (getMemberDetails(id); as member) {
 												<span
-													class="avatar-initials bg-{{ member.avatarColor }}"
+													[class]="'avatar-initials bg-' + member.avatarColor"
 												>
 													{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
 												</span>
