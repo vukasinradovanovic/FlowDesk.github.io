@@ -64,10 +64,10 @@
 						<span class="status-dot online"></span>
 					</div>
 					<div class="flex-grow-1">
-						<div class="fw-semibold small">Sarah Jenkins</div>
+						<div class="fw-semibold small">{{ auth.currentUser?.firstName }} {{ auth.currentUser?.lastName }}</div>
 						<div class="text-secondary small">Lead Developer</div>
 					</div>
-					<button class="btn-icon">
+					<button class="btn-icon" (click)="handleLogout()">
 						<i class="bi bi-box-arrow-right"></i>
 					</button>
 				</div>

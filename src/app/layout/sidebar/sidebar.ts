@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MainNavDashboard } from '../nav/main-nav-dashboard/main-nav-dashboard';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
 	selector: 'app-sidebar',
@@ -7,4 +10,12 @@ import { MainNavDashboard } from '../nav/main-nav-dashboard/main-nav-dashboard';
 	templateUrl: './sidebar.html',
 	styleUrl: './sidebar.scss',
 })
-export class Sidebar {}
+export class Sidebar {
+	private readonly router = inject(Router);
+	auth = inject(AuthService);
+
+	protected handleLogout(): void {
+		this.auth.logout();
+		this.router.navigate(['/']);
+	}
+}

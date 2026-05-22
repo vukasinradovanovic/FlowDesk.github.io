@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { ThemeService } from '../../services/theme.service';
-import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme/theme.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
