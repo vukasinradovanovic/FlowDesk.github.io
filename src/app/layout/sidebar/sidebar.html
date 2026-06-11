@@ -64,7 +64,7 @@
 						<span class="status-dot online"></span>
 					</div>
 					<div class="flex-grow-1">
-						<div class="fw-semibold small">{{ auth.currentUser?.firstName }} {{ auth.currentUser?.lastName }}</div>
+						<div class="fw-semibold small">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</div>
 						<div class="text-secondary small">Lead Developer</div>
 					</div>
 					<button class="btn-icon" (click)="handleLogout()">

@@ -1,7 +1,7 @@
 <nav class="sidebar-nav">
 	<div class="nav-label">Menu</div>
 	
-	@for (link of navLinks; track link.label) {
+	@for (link of navLinks(); track link.label) {
 		<a 
 			[routerLink]="link.route" 
 			routerLinkActive="active" 

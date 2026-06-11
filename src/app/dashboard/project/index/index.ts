@@ -1,37 +1,38 @@
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService, User } from '../../../services/auth/auth.service';
 import { Project, ProjectService } from '../../../services/project/project';
+import { Team, TeamService } from '../../../services/team/team.service';
 
 @Component({
-	selector: 'app-index',
-	imports: [DatePipe, CommonModule],
-	templateUrl: './index.html',
-	styleUrl: './index.scss',
+    selector: 'app-index',
+    imports: [DatePipe, CommonModule],
+    templateUrl: './index.html',
+    styleUrl: './index.scss',
 })
-export class Index implements OnInit {
-	protected readonly Date = Date;
-	private readonly projects = inject(ProjectService);
+export class Index {
+    protected readonly Date = Date;
+    
+    private readonly projectService = inject(ProjectService);
+    private readonly teamService = inject(TeamService);
+    public readonly auth = inject(AuthService);
 
-	auth = inject(AuthService);
-	userProjects: Project[] = [];
+    teams = toSignal(this.teamService.getTeams(), { initialValue: [] });
+    teamProjects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 
-	ngOnInit(): void {
-		if (this.auth.usersData === null) {
-			this.auth.getMembersById(-1).subscribe();
-		}
+    authTrigger = toSignal(this.auth.getMembersById(-1), { initialValue: undefined });
 
-		this.projects.getProjects().subscribe({
-			next: (data: Project[]) => {
-				this.userProjects = data;
-			},
-			error: (err) => {
-				console.error('Failed to load user projects:', err);
-			},
-		});
-	}
+    getMemberDetails = computed(() => {
+        const users = this.auth.usersData() || [];
+        return (id: number): User | undefined => users.find(user => user.id === id);
+    });
 
-	getMemberDetails(id: number): User | undefined {
-		return this.auth.usersData?.find(user => user.id === id);
-	}
+    getTeamName = computed(() => {
+        const currentTeams = this.teams();
+        return (teamId: number): string => {
+            const team = currentTeams.find(t => t.id === teamId);
+            return team ? team.name : `Team #${teamId}`;
+        };
+    });
 }

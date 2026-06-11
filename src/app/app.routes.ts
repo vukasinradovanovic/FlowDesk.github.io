@@ -5,6 +5,7 @@ import { Auth } from './layout/auth/auth';
 import { Dashboard } from './layout/dashboard/dashboard';
 import { Index } from './dashboard/index/index';
 import { Index as ProjectsIndex } from './dashboard/project/index/index';
+import { Index as TeamsIndex } from './dashboard/team/index/index';
 import { authGuard } from './guards/auth-guard';
 import { anonGuard } from './guards/anon-guard';
 
@@ -38,6 +39,10 @@ export const routes: Routes = [
 			{
 				path: 'projects',
 				component: ProjectsIndex,
+			},
+			{
+				path: 'team',
+				component: TeamsIndex,
 			},
 		],
 	},

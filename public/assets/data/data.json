@@ -3,7 +3,7 @@
 		{
 			"id": 1,
 			"firstName": "Sarah",
-			"lastName": "Jenkins",
+			"lastName": "Jenkins",	
 			"email": "sarah@flowdesk.com",
 			"password": "user123",
 			"avatarColor": "emerald"
@@ -31,6 +31,14 @@
 			"email": "michael@flowdesk.com",
 			"password": "user123",
 			"avatarColor": "rose"
+		},
+		{
+			"id": 5,
+			"firstName": "Jessica",
+			"lastName": "Davis",
+			"email": "jessica@flowdesk.com",
+			"password": "user123",
+			"avatarColor": "emerald"
 		}
 	],
 	"projects": [
@@ -44,7 +52,7 @@
 			"dueDate": "2026-11-13",
 			"status": "In Progress",
 			"statusTheme": "primary",
-			"members": [1, 2, 3, 4]
+			"teamId": 1
 		},
 		{
 			"id": 2,
@@ -56,7 +64,7 @@
 			"dueDate": "2026-12-02",
 			"status": "On Track",
 			"statusTheme": "indigo",
-			"members": [2, 3, 4]
+			"teamId": 2
 		},
 		{
 			"id": 3,
@@ -68,7 +76,7 @@
 			"dueDate": "2026-11-17",
 			"status": "At Risk",
 			"statusTheme": "amber",
-			"members": [1]
+			"teamId": 1
 		},
 		{
 			"id": 4,
@@ -80,19 +88,36 @@
 			"dueDate": "2026-11-08",
 			"status": "Completed",
 			"statusTheme": "emerald",
-			"members": [1, 2]
+			"teamId": 3
 		}
 	],
-	"user-projects": [
-		{ "id": 1, "userId": 1, "projectId": 1 },
-		{ "id": 2, "userId": 2, "projectId": 1 },
-		{ "id": 3, "userId": 3, "projectId": 1 },
-		{ "id": 4, "userId": 4, "projectId": 1 },
-		{ "id": 5, "userId": 2, "projectId": 2 },
-		{ "id": 6, "userId": 3, "projectId": 2 },
-		{ "id": 7, "userId": 4, "projectId": 2 },
-		{ "id": 8, "userId": 1, "projectId": 3 },
-		{ "id": 9, "userId": 1, "projectId": 4 },
-		{ "id": 10, "userId": 2, "projectId": 4 }
+	"team-projects": [
+		{ "id": 1, "teamId": 1, "projectId": 1 },
+		{ "id": 2, "teamId": 1, "projectId": 3 },
+		{ "id": 3, "teamId": 2, "projectId": 2 },
+		{ "id": 4, "teamId": 3, "projectId": 4 },
+		{ "id": 5, "teamId": 2, "projectId": 1 },
+		{ "id": 6, "teamId": 3, "projectId": 2 },
+		{ "id": 7, "teamId": 3, "projectId": 3 }
+	],
+	"teams": [
+		{
+			"id": 1,
+			"name": "Development Team"
+		},
+		{
+			"id": 2,
+			"name": "Design Team"
+		},
+		{
+			"id": 3,
+			"name": "Marketing Team"
+		}
+	],
+	"user-teams": [
+		{ "id": 1, "userId": 1, "teamId": 2 },
+		{ "id": 2, "userId": 2, "teamId": 1 },
+		{ "id": 3, "userId": 3, "teamId": 3 },
+		{ "id": 4, "userId": 4, "teamId": 1 }
 	]
 }
