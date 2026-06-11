@@ -8,6 +8,7 @@ import { Index as ProjectsIndex } from './dashboard/project/index/index';
 import { Index as TeamsIndex } from './dashboard/team/index/index';
 import { authGuard } from './guards/auth-guard';
 import { anonGuard } from './guards/anon-guard';
+import { Edit as EditProject } from './dashboard/project/edit/edit';
 
 export const routes: Routes = [
 	{
@@ -39,6 +40,12 @@ export const routes: Routes = [
 			{
 				path: 'projects',
 				component: ProjectsIndex,
+				children: [
+					{
+						path: 'edit/:slug',
+						component: EditProject,
+					}
+				]
 			},
 			{
 				path: 'team',

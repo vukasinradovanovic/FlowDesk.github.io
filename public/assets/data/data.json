@@ -106,6 +106,7 @@
 		{
 			"id": 1,
 			"name": "Marketing Website Redesign",
+			"slug": "marketing-website-redesign",
 			"tasksCount": 24,
 			"icon": "bi-palette",
 			"theme": "primary",
@@ -118,6 +119,7 @@
 		{
 			"id": 2,
 			"name": "Mobile App V3.2",
+			"slug": "mobile-app-v3-2",
 			"tasksCount": 48,
 			"icon": "bi-phone",
 			"theme": "emerald",
@@ -130,6 +132,7 @@
 		{
 			"id": 3,
 			"name": "API Platform V2",
+			"slug": "api-platform-v2",
 			"tasksCount": 62,
 			"icon": "bi-cpu",
 			"theme": "amber",
@@ -142,6 +145,7 @@
 		{
 			"id": 4,
 			"name": "Brand Guidelines 2026",
+			"slug": "brand-guidelines-2026",
 			"tasksCount": 16,
 			"icon": "bi-bookmark-star",
 			"theme": "indigo",
