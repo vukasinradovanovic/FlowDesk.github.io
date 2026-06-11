@@ -41,6 +41,67 @@
 			"avatarColor": "emerald"
 		}
 	],
+	"roles": [
+		{
+			"id": 1,
+			"name": "Admin"
+		},
+		{
+			"id": 2,
+			"name": "Project Manager"
+		},
+		{
+			"id": 3,
+			"name": "Team Menager"
+		},
+		{
+			"id": 4,
+			"name": "Team Lead"
+		},
+		{
+			"id": 5,
+			"name": "Team Member"
+		}
+	],
+	"permisions" : [
+		{
+			"id": 1,
+			"name": "Full Access"
+		},
+		{
+			"id": 2,
+			"name": "Edit Projects"
+		},
+		{
+			"id": 3,
+			"name": "Delete Projects"
+		},
+		{
+			"id": 4,
+			"name": "Create Projects"
+		},
+		{
+			"id": 5,
+			"name": "Edit Teams"
+		},
+		{
+			"id": 6,
+			"name": "Delete Teams"
+		},
+		{
+			"id": 7,
+			"name": "Create Teams"
+		}
+	],
+	"user-roles": [
+		{ "id": 1, "userId": 1, "roleId": 1 , "permissions": [1] },
+		{ "id": 2, "userId": 1, "roleId": 4 , "permissions": [2, 5] },
+		{ "id": 3, "userId": 2, "roleId": 2 , "permissions": [2, 3, 4] },
+		{ "id": 4, "userId": 3, "roleId": 4 , "permissions": [] },
+		{ "id": 5, "userId": 2, "roleId": 3 , "permissions": [5, 6, 7] },
+		{ "id": 6, "userId": 3, "roleId": 2 , "permissions": [2, 3, 4] },
+		{ "id": 7, "userId": 3, "roleId": 4 , "permissions": [] }
+	],
 	"projects": [
 		{
 			"id": 1,
