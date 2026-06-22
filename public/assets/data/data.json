@@ -113,7 +113,7 @@
 			"progress": 72,
 			"dueDate": "2026-11-13",
 			"status": "In Progress",
-			"statusTheme": "primary",
+			"statusTheme": "primary", 
 			"teamId": 1
 		},
 		{

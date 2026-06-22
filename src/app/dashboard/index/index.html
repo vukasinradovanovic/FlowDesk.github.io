@@ -4,7 +4,9 @@
 		<p class="text-secondary mb-0">Here's what's happening across your workspace today.</p>
 	</div>
 	<div class="d-flex gap-2">
-		<button class="btn btn-light-soft"><i class="bi bi-calendar3 me-1"></i> {{ Date() | date:'MMM d, y' }}</button>
+		<button class="btn btn-light-soft">
+			<i class="bi bi-calendar3 me-1"></i> {{ Date() | date: 'MMM d, y' }}
+		</button>
 		<button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
 		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button>
 	</div>
@@ -64,38 +66,16 @@
 
 <div class="row g-3 mb-4">
 	<!-- Productivity Chart -->
-	<div class="col-xl-8">
-		<div class="card card-plain h-100">
-			<div class="card-body">
-				<div class="d-flex justify-content-between align-items-start mb-4">
-					<div>
-						<h5 class="fw-semibold mb-1">Productivity Overview</h5>
-						<p class="text-secondary small mb-0">Task completions over the last 7 days</p>
-					</div>
-					<div class="btn-group btn-group-sm" role="group">
-						<button type="button" class="btn btn-chip">Day</button>
-						<button type="button" class="btn btn-chip active">Week</button>
-						<button type="button" class="btn btn-chip">Month</button>
-					</div>
-				</div>
-				<canvas id="productivityChart" height="110"></canvas>
-				<div class="row g-3 mt-3 pt-3 border-top">
-					<div class="col-4 text-center">
-						<div class="text-secondary small">Completed</div>
-						<div class="h5 fw-bold mb-0 text-emerald">84</div>
-					</div>
-					<div class="col-4 text-center">
-						<div class="text-secondary small">In Progress</div>
-						<div class="h5 fw-bold mb-0 text-primary">32</div>
-					</div>
-					<div class="col-4 text-center">
-						<div class="text-secondary small">Overdue</div>
-						<div class="h5 fw-bold mb-0 text-amber">7</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div class="my-3">
+    <app-productivity-chart [projects]="teamProjects()"></app-productivity-chart>
+</div>
+
+<div class="row g-3 mt-3 pt-3 border-top">
+    <div class="col-4 text-center">
+        <div class="text-secondary small">Completed</div>
+        <div class="h5 fw-bold mb-0 text-emerald">{{ completedCount() }}</div>
+    </div>
+    </div>
 
 	<!-- Workload Donut -->
 	<div class="col-xl-4">
