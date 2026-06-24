@@ -1,13 +1,7 @@
 <header class="topbar">
 	<button class="btn-icon d-lg-none" id="sidebarOpen"><i class="bi bi-list"></i></button>
 
-	<div class="breadcrumbs d-none d-md-flex">
-		<span class="text-secondary">Workspace</span>
-		<i class="bi bi-chevron-right mx-1 text-secondary small"></i>
-		<span class="text-secondary">Projects</span>
-		<i class="bi bi-chevron-right mx-1 text-secondary small"></i>
-		<span class="fw-semibold">Dashboard</span>
-	</div>
+	<app-breadcrumbs></app-breadcrumbs>
 
 	<div class="search-bar">
 		<i class="bi bi-search"></i>
@@ -86,7 +80,7 @@
 					</li>
 					<li><hr class="dropdown-divider" /></li>
 					<li>
-						<a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
+						<a class="dropdown-item" routerLink="/dashboard/profile"><i class="bi bi-person me-2"></i>Profile</a>
 					</li>
 					<li>
 						<a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a>

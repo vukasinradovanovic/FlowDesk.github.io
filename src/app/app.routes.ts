@@ -9,6 +9,7 @@ import { Index as TeamsIndex } from './dashboard/team/index/index';
 import { authGuard } from './guards/auth-guard';
 import { anonGuard } from './guards/anon-guard';
 import { Edit as EditProject } from './dashboard/project/edit/edit';
+import { Profile } from './dashboard/user/profile/profile';
 
 export const routes: Routes = [
 	{
@@ -32,14 +33,17 @@ export const routes: Routes = [
 		path: 'dashboard',
 		component: Dashboard,
 		canActivate: [authGuard],
+		data: { breadcrumb: 'Workspace' },
 		children: [
 			{
 				path: '',
 				component: Index,
+				data: { breadcrumb: 'Dashboard' },
 			},
 			{
 				path: 'projects',
 				component: ProjectsIndex,
+				data: { breadcrumb: 'Projects' },
 				children: [
 					{
 						path: 'edit/:slug',
@@ -50,6 +54,12 @@ export const routes: Routes = [
 			{
 				path: 'team',
 				component: TeamsIndex,
+				data: { breadcrumb: 'Team' },
+			},
+			{
+				path: 'profile',
+				component: Profile,
+				data: { breadcrumb: 'Profile' },
 			},
 		],
 	},

@@ -1,0 +1,14 @@
+<div class="breadcrumbs d-none d-md-flex">
+    @for (item of breadcrumbs(); track item.url; let isLast = $last) {
+        @if (!isLast) {
+            <a [routerLink]="item.url" class="text-secondary transition-link">
+                {{ item.label }}
+            </a>
+            <i class="bi bi-chevron-right mx-2 text-secondary small"></i>
+        } @else {
+            <span class="fw-semibold">
+                {{ item.label }}
+            </span>
+        }
+    }
+</div>
