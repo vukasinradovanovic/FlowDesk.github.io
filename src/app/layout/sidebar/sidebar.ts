@@ -18,10 +18,8 @@ export class Sidebar {
     private readonly roleService = inject(RoleService);
     public readonly auth = inject(AuthService);
 
-    // 1. Monitor the user id cleanly as a signal
     private currentUserId = computed(() => this.auth.currentUser()?.id);
 
-    // 2. Turn the ID signal into an observable, flatten it, and convert back to a Signal safely
     public userRoleName = toSignal(
         toObservable(this.currentUserId).pipe(
             switchMap((uid) => {

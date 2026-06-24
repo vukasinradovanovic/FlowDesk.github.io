@@ -3,9 +3,10 @@
 		<h1 class="h3 fw-bold mb-1">Team</h1>
 		<p class="text-secondary mb-0">Manage your organization's teams settings.</p>
 	</div>
-	<!-- Ovo dugme se mora prikazivati SAMO OVLASCENOM KORISNIKU KADA SE ROLE DODAJU -->
 	<div class="d-flex gap-2">
-		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Team</button>
+		<button class="btn btn-light-soft">
+			<i class="bi bi-calendar3 me-1"></i> {{ today | date: 'MMM d, y' }}
+		</button>
 	</div>
 </div>
 
@@ -14,6 +15,15 @@
 		<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 			<div>
 				<h5 class="fw-semibold mb-1">My Team</h5>
+				<p class="text-secondary small mb-0">Manage your team's information and members.</p>
+			</div>
+			<div class="d-flex gap-2">
+				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
+				@if (canCreateTeam()) {
+					<button class="btn btn-primary btn-sm">
+						<i class="bi bi-plus-lg me-1"></i> New Team
+					</button>
+				}
 			</div>
 		</div>
 
