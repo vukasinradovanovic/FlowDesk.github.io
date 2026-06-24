@@ -67,10 +67,10 @@
 
 		<!-- Dropdown avatar-->
 		<div class="dropdown">
-			<button class="avatar-btn" (click)="toggleDropdown()">
+			<button class="avatar-btn" (click)="toggleDropdown(); $event.stopPropagation()">
 				<app-avatar [user]="auth.currentUser()" size="md"></app-avatar>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-end shadow-lg" [class.show]="isDropdownOpen">
+			<ul class="dropdown-menu dropdown-menu-end shadow-lg" [class.show]="isDropdownOpen" (click)="$event.stopPropagation()">
 				<li class="px-3 py-2">
 						<div class="fw-semibold">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</div>
 						<div class="small text-secondary">{{ auth.currentUser()?.email }}</div>
