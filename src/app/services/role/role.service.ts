@@ -18,13 +18,12 @@ export interface UserRoles {
 @Injectable({
 	providedIn: 'root',
 })
-
 export class RoleService {
 	public readonly http = inject(HttpClient);
 	public readonly allRoles = signal<Role[] | null>(null);
 	public readonly allUserRoles = signal<UserRoles[] | null>(null);
 
-	private loadInitialData(): Observable<{ roles: Role[], 'user-roles': UserRoles[] }> {
+	private loadInitialData(): Observable<{ roles: Role[]; 'user-roles': UserRoles[] }> {
 		const rolesCache = this.allRoles();
 		const userRolesCache = this.allUserRoles();
 
@@ -47,5 +46,19 @@ export class RoleService {
 				}),
 				map(() => ({ roles: this.allRoles()!, 'user-roles': this.allUserRoles()! })),
 			);
+	}
+
+	public getUserRoleName(userId: number): Observable<string> {
+		return this.loadInitialData().pipe(
+			map(({ roles, 'user-roles': userRoles }) => {
+				// 1. Find the user's role mapping link
+				const userRoleMapping = userRoles.find((ur) => ur.userId === userId);
+				if (!userRoleMapping) return 'Member'; // Default fallback
+
+				// 2. Find the actual role configuration name
+				const matchingRole = roles.find((r) => r.id === userRoleMapping.roleId);
+				return matchingRole ? matchingRole.name : 'Member';
+			}),
+		);
 	}
 }

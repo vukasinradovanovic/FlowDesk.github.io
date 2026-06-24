@@ -1,77 +1,78 @@
-		<aside class="sidebar" id="sidebar">
-			<div class="sidebar-head">
-				<div class="brand-logo">
-					<div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
-					<span class="brand-name">Flowdesk</span>
-				</div>
-				<button class="btn-icon d-lg-none" id="sidebarClose">
-					<i class="bi bi-x-lg"></i>
-				</button>
+<aside class="sidebar" id="sidebar">
+	<div class="sidebar-head">
+		<div class="brand-logo">
+			<div class="brand-mark"><i class="bi bi-hexagon-fill"></i></div>
+			<span class="brand-name">Flowdesk</span>
+		</div>
+		<button class="btn-icon d-lg-none" id="sidebarClose">
+			<i class="bi bi-x-lg"></i>
+		</button>
+	</div>
+
+	<div class="workspace-switcher dropdown">
+		<button class="ws-btn" data-bs-toggle="dropdown">
+			<div class="ws-avatar">AC</div>
+			<div class="flex-grow-1 text-start">
+				<div class="ws-name">Acme Corp</div>
+				<div class="ws-plan">Business Plan</div>
 			</div>
+			<i class="bi bi-chevron-expand ms-auto"></i>
+		</button>
+		<ul class="dropdown-menu dropdown-menu-wide shadow-lg">
+			<li class="dropdown-header small text-secondary">Your workspaces</li>
+			<li>
+				<a class="dropdown-item d-flex align-items-center gap-2 active" href="#"
+					><span class="ws-avatar sm">AC</span> Acme Corp <i class="bi bi-check2 ms-auto"></i
+				></a>
+			</li>
+			<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="#"
+					><span class="ws-avatar sm bg-indigo">NV</span> Nova Studio</a
+				>
+			</li>
+			<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="#"
+					><span class="ws-avatar sm bg-emerald">LP</span> Lunar Pixel</a
+				>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			<li>
+				<a class="dropdown-item" href="#"><i class="bi bi-plus-circle me-2"></i>Create workspace</a>
+			</li>
+		</ul>
+	</div>
 
-			<div class="workspace-switcher dropdown">
-				<button class="ws-btn" data-bs-toggle="dropdown">
-					<div class="ws-avatar">AC</div>
-					<div class="flex-grow-1 text-start">
-						<div class="ws-name">Acme Corp</div>
-						<div class="ws-plan">Business Plan</div>
-					</div>
-					<i class="bi bi-chevron-expand ms-auto"></i>
-				</button>
-				<ul class="dropdown-menu dropdown-menu-wide shadow-lg">
-					<li class="dropdown-header small text-secondary">Your workspaces</li>
-					<li>
-						<a class="dropdown-item d-flex align-items-center gap-2 active" href="#"
-							><span class="ws-avatar sm">AC</span> Acme Corp <i class="bi bi-check2 ms-auto"></i
-						></a>
-					</li>
-					<li>
-						<a class="dropdown-item d-flex align-items-center gap-2" href="#"
-							><span class="ws-avatar sm bg-indigo">NV</span> Nova Studio</a
-						>
-					</li>
-					<li>
-						<a class="dropdown-item d-flex align-items-center gap-2" href="#"
-							><span class="ws-avatar sm bg-emerald">LP</span> Lunar Pixel</a
-						>
-					</li>
-					<li><hr class="dropdown-divider" /></li>
-					<li>
-						<a class="dropdown-item" href="#"
-							><i class="bi bi-plus-circle me-2"></i>Create workspace</a
-						>
-					</li>
-				</ul>
+	<app-main-nav-dashboard></app-main-nav-dashboard>
+
+	<div class="sidebar-foot">
+		<div class="upgrade-card">
+			<div class="d-flex align-items-center gap-2 mb-2">
+				<i class="bi bi-stars text-warning"></i>
+				<div class="fw-semibold small">Upgrade to Pro</div>
 			</div>
+			<div class="small text-secondary mb-2">Unlock advanced analytics & unlimited projects.</div>
+			<button class="btn btn-sm btn-primary w-100">Upgrade</button>
+		</div>
 
-			<app-main-nav-dashboard></app-main-nav-dashboard>
-
-			<div class="sidebar-foot">
-				<div class="upgrade-card">
-					<div class="d-flex align-items-center gap-2 mb-2">
-						<i class="bi bi-stars text-warning"></i>
-						<div class="fw-semibold small">Upgrade to Pro</div>
-					</div>
-					<div class="small text-secondary mb-2">
-						Unlock advanced analytics & unlimited projects.
-					</div>
-					<button class="btn btn-sm btn-primary w-100">Upgrade</button>
+		<!-- User Snippet -->
+		<div class="user-snippet mt-3">
+			<div class="avatar avatar-md">
+				<span class="avatar-initials">SJ</span>
+				<span class="status-dot online"></span>
+			</div>
+			<div class="flex-grow-1">
+				<div class="fw-semibold small">
+					{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
 				</div>
-
-				<div class="user-snippet mt-3">
-					<div class="avatar avatar-md">
-						<span class="avatar-initials">SJ</span>
-						<span class="status-dot online"></span>
-					</div>
-					<div class="flex-grow-1">
-						<div class="fw-semibold small">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</div>
-						<div class="text-secondary small">Lead Developer</div>
-					</div>
-					<button class="btn-icon" (click)="handleLogout()">
-						<i class="bi bi-box-arrow-right"></i>
-					</button>
+				<div class="text-secondary small">
+					{{ userRoleName() }}
 				</div>
 			</div>
-		</aside>
+			<button class="btn-icon" (click)="handleLogout()">
+				<i class="bi bi-box-arrow-right"></i>
+			</button>
+		</div>
+	</div>
+</aside>
 
-		<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
