@@ -1,1 +1,97 @@
-<p>profile works!</p>
+<div class="container-fluid py-4">
+	<div class="row mb-4 align-items-center p-4 rounded-3 border g-3 shadow-sm mx-1">
+		<div class="col-auto">
+			<app-avatar [user]="auth.currentUser()" size="xl"></app-avatar>
+		</div>
+		<div class="col">
+			<h2 class="h4 mb-1 fw-bold">
+				{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
+			</h2>
+			<p class="mb-0 d-flex align-items-center gap-2">
+				<span class="px-2.5 py-1 fs-6 rounded">
+					{{ userRoleName() }}
+				</span>
+				<span class="text-muted small">• ID: #{{ auth.currentUser()?.id }}</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="row g-4">
+		<div class="col-12 col-lg-6">
+			<div class="card h-100 shadow-sm border border-light-subtle rounded-3">
+				<div class="card-header border-0 pt-4 px-4 pb-0">
+					<h3 class="card-title h5 fw-bold m-0">Personal Information</h3>
+					<p class="text-muted small m-0 mt-1">
+						Manage and verify your global profile attributes here.
+					</p>
+				</div>
+				<div class="card-body p-4">
+					<div class="row g-3">
+						<div class="col-12 col-md-6">
+							<label class="form-label small fw-medium">First Name</label>
+							<input
+								type="text"
+								class="form-control border-0"
+								[value]="auth.currentUser()?.firstName"
+								readonly
+							/>
+						</div>
+						<div class="col-12 col-md-6">
+							<label class="form-label small fw-medium">Last Name</label>
+							<input
+								type="text"
+								class="form-control border-0"
+								[value]="auth.currentUser()?.lastName"
+								readonly
+							/>
+						</div>
+						<div class="col-12">
+							<label class="form-label small fw-medium">Email Address</label>
+							<div class="input-group">
+								<span class="input-group-text border-0 text-muted"
+									><i class="bi bi-envelope"></i
+								></span>
+								<input
+									type="email"
+									class="form-control border-0"
+									[value]="auth.currentUser()?.email"
+									readonly
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-lg-6">
+			<div class="card h-100 shadow-sm border border-light-subtle rounded-3">
+				<div class="card-header border-0 pt-4 px-4 pb-0">
+					<h3 class="card-title h5 fw-bold m-0">Assigned Platform Capabilities</h3>
+					<p class="text-muted small m-0 mt-1">
+						Real-time compilation of active permission tokens verified on this browser snapshot.
+					</p>
+				</div>
+				<div class="card-body p-4">
+					<div class="d-flex flex-wrap gap-2">
+						@for (permission of userPermissions(); track permission) {
+							<div
+								class="d-flex align-items-center gap-2 border border-light-subtle px-3 py-2 rounded-2 shadow-xs"
+							>
+								<i class="bi bi-shield-check text-success fs-5"></i>
+								<span class="small fw-semibold">{{ permission }}</span>
+							</div>
+						} @empty {
+							<div class="text-center w-100 py-4 border border-dashed rounded-3 bg-light-soft">
+								<i class="bi bi-shield-slash text-muted fs-2 d-block mb-2"></i>
+								<span class="text-secondary small"
+									>No advanced permissions assigned to this profile context layout.</span
+								>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

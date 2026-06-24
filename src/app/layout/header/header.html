@@ -68,10 +68,7 @@
 		<!-- Dropdown avatar-->
 		<div class="dropdown">
 			<button class="avatar-btn" (click)="toggleDropdown()">
-				<div class="avatar avatar-md">
-					<span class="avatar-initials">{{ auth.currentUser()?.firstName?.charAt(0) }}{{ auth.currentUser()?.lastName?.charAt(0) }}</span>
-					<span class="status-dot online"></span>
-				</div>
+				<app-avatar [user]="auth.currentUser()" size="md"></app-avatar>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-end shadow-lg" [class.show]="isDropdownOpen">
 				<li class="px-3 py-2">

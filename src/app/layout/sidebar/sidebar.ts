@@ -5,11 +5,12 @@ import { RoleService } from '../../services/role/role.service';
 import { Router } from '@angular/router';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop'; // Import toObservable
 import { of, switchMap } from 'rxjs'; // Import switchMap
+import { AvatarComponent } from '../../dashboard/avatar.component/avatar.component';
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [MainNavDashboard],
+    imports: [MainNavDashboard, AvatarComponent],
     templateUrl: './sidebar.html',
     styleUrl: './sidebar.scss',
 })

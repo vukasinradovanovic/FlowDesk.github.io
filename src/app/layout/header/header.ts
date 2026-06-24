@@ -3,10 +3,11 @@ import { AuthService } from '../../services/auth/auth.service';
 import { ThemeService } from '../../services/theme/theme.service';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbsComponent } from '../../dashboard/breadcrumbs.component/breadcrumbs.component';
+import { AvatarComponent } from '../../dashboard/avatar.component/avatar.component';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, BreadcrumbsComponent],
+  imports: [RouterLink, BreadcrumbsComponent, AvatarComponent],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

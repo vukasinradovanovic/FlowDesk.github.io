@@ -56,10 +56,7 @@
 
 		<!-- User Snippet -->
 		<div class="user-snippet mt-3">
-			<div class="avatar avatar-md">
-				<span class="avatar-initials">SJ</span>
-				<span class="status-dot online"></span>
-			</div>
+			<app-avatar [user]="auth.currentUser()" size="md"></app-avatar>
 			<div class="flex-grow-1">
 				<div class="fw-semibold small">
 					{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
