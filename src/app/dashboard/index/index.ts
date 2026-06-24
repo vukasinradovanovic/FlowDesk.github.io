@@ -39,6 +39,10 @@ export class Index {
 		this.activeFilter.set(scope);
 	}
 
+	private readonly projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
+
+    public readonly projectsCount = computed(() => this.projects().length);
+
 	private filterProjectsByScope(projects: any[], scope: FilterScope): any[] {
 		const now = new Date();
 		return projects.filter(project => {

@@ -19,7 +19,7 @@
 			</div>
 			<div class="stat-meta">
 				<div class="stat-label">Total Projects</div>
-				<div class="stat-value">24</div>
+				<div class="stat-value">{{ this.projectsCount() }}</div>
 				<div class="stat-trend up"><i class="bi bi-arrow-up-right"></i> +3 this month</div>
 			</div>
 		</div>
@@ -63,17 +63,84 @@
 </div>
 
 <div class="row g-3 mb-4">
-	<div class="card-body">
-		<app-productivity-chart [projects]="teamProjects()"></app-productivity-chart>
+	<div class="row g-4">
+		<div class="col-xl-8">
+			<!-- Productivity Chart -->
+			<div class="card card-plain h-100">
+				<div class="card-body">
+					<app-productivity-chart [projects]="teamProjects()"></app-productivity-chart>
 
-		<div class="row g-3 mt-3 pt-3 border-top">
-			<div class="col-4 text-center">
-				<div class="text-secondary small">Completed</div>
-				<div class="h5 fw-bold mb-0 text-emerald">{{ completedCount() }}</div>
+					<div class="row g-3 mt-3 pt-3 border-top">
+						<div class="col-4 text-center">
+							<div class="text-secondary small">Completed</div>
+							<div class="h5 fw-bold mb-0 text-emerald">{{ completedCount() }}</div>
+						</div>
+						<div class="col-4 text-center">
+							<div class="text-secondary small">In Progress</div>
+							<div class="h5 fw-bold mb-0 text-indigo">{{ inProgressCount() }}</div>
+						</div>
+						<div class="col-4 text-center">
+							<div class="text-secondary small">Overdue</div>
+							<div class="h5 fw-bold mb-0 text-amber">{{ overdueCount() }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Workload Chart -->
+		<div class="col-xl-4">
+			<div class="card card-plain h-100">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-start mb-4">
+						<div>
+							<h5 class="fw-semibold mb-1">Workload</h5>
+							<p class="text-secondary small mb-0">By department</p>
+						</div>
+						<button class="btn-icon">
+							<i class="bi bi-three-dots"></i>
+						</button>
+					</div>
+
+					<div class="donut-wrap">
+						<canvas id="workloadChart"></canvas>
+						<div class="donut-center">
+							<div class="h3 fw-bold mb-0">100%</div>
+							<div class="small text-secondary">Allocated</div>
+						</div>
+					</div>
+
+					<div class="mt-4">
+						<div class="legend-row d-flex align-items-center mb-2">
+							<span
+								class="dot bg-primary me-2 rounded-circle"
+								style="width: 10px; height: 10px; display: inline-block"
+							></span
+							>Development
+							<span class="ms-auto fw-semibold">45%</span>
+						</div>
+						<div class="legend-row d-flex align-items-center mb-2">
+							<span
+								class="dot bg-indigo me-2 rounded-circle"
+								style="width: 10px; height: 10px; display: inline-block"
+							></span
+							>Design
+							<span class="ms-auto fw-semibold">25%</span>
+						</div>
+						<div class="legend-row d-flex align-items-center">
+							<span
+								class="dot bg-emerald me-2 rounded-circle"
+								style="width: 10px; height: 10px; display: inline-block"
+							></span
+							>QA
+							<span class="ms-auto fw-semibold">30%</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="row g-3 mb-4">
 		<!-- Activity Timeline -->
 		<div class="col-xl-7">
