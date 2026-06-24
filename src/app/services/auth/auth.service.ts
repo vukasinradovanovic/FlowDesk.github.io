@@ -9,7 +9,8 @@ export interface User {
     lastName?: string;
     email?: string;
     password?: string;
-    avatarColor?: string | "bg-emerald" | "bg-indigo" | "bg-amber" | "bg-rose"; 
+    avatarColor?: string; // e.g. "emerald", "indigo" 
+    avatarClass?: string; // Generated helper for dynamic template styling classes
 }
 
 @Injectable({
@@ -23,13 +24,27 @@ export class AuthService {
     public readonly currentUser = signal<User | null>(null);
 
     constructor() {
-        // Sprečava da se informacije izbrisu prilikom osvežavanja stranice
         if (isPlatformBrowser(this.platformId)) {
             const storedUser = sessionStorage.getItem('currentUser');
             if (storedUser) {
                 this.currentUser.set(JSON.parse(storedUser));
             }
         }
+    }
+
+    // Helper map method to append custom CSS utilities cleanly based on color keys
+    private mapAvatarClass(user: User): User {
+        const colorMaps: Record<string, string> = {
+            emerald: 'bg-emerald text-white',
+            indigo: 'bg-indigo text-white',
+            amber: 'bg-amber text-dark',
+            rose: 'bg-rose text-white'
+        };
+
+        return {
+            ...user,
+            avatarClass: user.avatarColor ? (colorMaps[user.avatarColor] || 'bg-secondary text-white') : 'bg-secondary text-white'
+        };
     }
 
     getMembersById(id: number): Observable<User | undefined> {
@@ -46,7 +61,7 @@ export class AuthService {
         }
         
         return this.http.get<{users: User[]}>('/assets/data/data.json').pipe(
-            map(response => response.users),
+            map(response => (response.users || []).map(u => this.mapAvatarClass(u))),
             tap(users => this.usersData.set(users))
         );
     }
@@ -61,7 +76,6 @@ export class AuthService {
                 
                 this.currentUser.set(user);
                 
-                // Čuvamo podatke u sesiju prilikom logina
                 if (isPlatformBrowser(this.platformId)) {
                     sessionStorage.setItem('currentUser', JSON.stringify(user));
                 }
@@ -79,10 +93,14 @@ export class AuthService {
                     throw new Error('Korisnik sa ovim email-om već postoji.');
                 }
                 
-                const newUser = {
+                const colors = ['emerald', 'indigo', 'amber', 'rose'];
+                const assignedColor = userData.avatarColor || colors[Math.floor(Math.random() * colors.length)];
+
+                const newUser = this.mapAvatarClass({
                     ...userData,
+                    avatarColor: assignedColor,
                     id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
-                };
+                });
                 
                 const updatedUsers = [...users, newUser];
                 this.usersData.set(updatedUsers);
@@ -99,7 +117,6 @@ export class AuthService {
 
     public logout(): void {
         this.currentUser.set(null);
-        
         if (isPlatformBrowser(this.platformId)) {
             sessionStorage.removeItem('currentUser');
         }
