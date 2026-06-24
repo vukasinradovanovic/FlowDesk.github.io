@@ -26,7 +26,7 @@
 			<div class="d-flex gap-2">
 				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
 				@if (canCreateProject()) {
-					<button class="btn btn-primary btn-sm">
+					<button class="btn btn-primary btn-sm" [routerLink]="'/dashboard/projects/create'">
 						<i class="bi bi-plus-lg me-1"></i> New Project
 					</button>
 				}
@@ -81,10 +81,32 @@
 									p.status
 								}}</span>
 							</td>
-							<td class="d-flex justify-content-end">
-								<button class="btn-icon">
-									<i class="bi bi-three-dots"></i>
-								</button>
+							<td class="text-end align-middle">
+								<div class="dropdown d-inline-block">
+									<button class="btn-icon" (click)="toggleDropdownProject(p.slug, $event)">
+										<i class="bi bi-three-dots"></i>
+									</button>
+
+									@if (openDropdownSlug() === p.slug) {
+										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
+											<a
+												class="dropdown-item d-flex align-items-center gap-2"
+												[routerLink]="['/dashboard/projects/edit', p.slug]"
+												(click)="openDropdownSlug.set(null)"
+											>
+												<i class="bi bi-pencil small"></i> Edit Project
+											</a>
+
+											<button
+												type="button"
+												class="dropdown-item d-flex align-items-center gap-2 text-danger"
+												(click)="openDropdownSlug.set(null)"
+											>
+												<i class="bi bi-trash small"></i> Delete
+											</button>
+										</div>
+									}
+								</div>
 							</td>
 						</tr>
 					}

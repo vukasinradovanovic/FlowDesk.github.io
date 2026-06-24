@@ -1,0 +1,62 @@
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="card shadow-sm border border-light-subtle rounded-3 p-4">
+    <div class="row g-3">
+        <div class="col-12">
+                <label class="form-label small fw-semibold">Project Name</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="e.g. Redesign Dashboard Layout"
+                   [ngClass]="{'is-invalid': projectForm.get('name')?.touched && projectForm.get('name')?.invalid}">
+            <div class="invalid-feedback">A valid project name (minimum 3 characters) is required.</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Visual Element Icon</label>
+            <select formControlName="icon" class="form-select">
+                @for (icon of icons; track icon) {
+                    <option [value]="icon">{{ icon.replace('bi-', '') | titlecase }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Theme Color Context</label>
+            <select formControlName="theme" class="form-select">
+                @for (t of themes; track t) {
+                    <option [value]="t">{{ t | titlecase }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Target Due Date</label>
+            <input type="date" formControlName="dueDate" class="form-control"
+                   [ngClass]="{'is-invalid': projectForm.get('dueDate')?.touched && projectForm.get('dueDate')?.invalid}">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Primary Owner Team Identifier</label>
+            <input type="number" formControlName="teamId" class="form-control" min="1">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Operational Status</label>
+            <select formControlName="status" class="form-select">
+                @for (s of statuses; track s) {
+                    <option [value]="s">{{ s }}</option>
+                }
+            </select>
+        </div>
+        
+        @if(hasRangePicker) {
+            <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Progress Completion Metric ({{ projectForm.get('progress')?.value }}%)</label>
+            <input type="range" formControlName="progress" class="form-range mt-2" min="0" max="100" step="1">
+        </div>
+        }
+
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button type="button" class="btn btn-secondary btn-sm border" [routerLink]="'/dashboard/projects'">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="projectForm.invalid">
+                {{ submitLabel }}
+            </button>
+        </div>
+    </div>
+</form>

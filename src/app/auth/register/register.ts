@@ -35,12 +35,12 @@ export class Register {
 
 	protected handleSubmit(): void {
 		if (!this.firstName() || !this.lastName() || !this.email() || !this.password() || !this.confirmPassword()) {
-			this.errorMessage.set('Sva polja su obavezna.');
+			this.errorMessage.set('Please fill in all required fields.');
 			return;
 		}
 
 		if (this.password() !== this.confirmPassword()) {
-			this.errorMessage.set('Lozinke se ne podudaraju.');
+			this.errorMessage.set('Password and confirm password do not match.');
 			return;
 		}
 
