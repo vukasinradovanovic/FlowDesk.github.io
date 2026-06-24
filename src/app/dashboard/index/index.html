@@ -5,7 +5,7 @@
 	</div>
 	<div class="d-flex gap-2">
 		<button class="btn btn-light-soft">
-			<i class="bi bi-calendar3 me-1"></i> {{ Date() | date: 'MMM d, y' }}
+			<i class="bi bi-calendar3 me-1"></i> {{ today | date: 'MMM d, y' }}
 		</button>
 		<button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
 		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button>
@@ -65,195 +65,156 @@
 </div>
 
 <div class="row g-3 mb-4">
-	<!-- Productivity Chart -->
-	<div class="my-3">
-    <app-productivity-chart [projects]="teamProjects()"></app-productivity-chart>
-</div>
+	<div class="card-body">
+		<app-productivity-chart [projects]="teamProjects()"></app-productivity-chart>
 
-<div class="row g-3 mt-3 pt-3 border-top">
-    <div class="col-4 text-center">
-        <div class="text-secondary small">Completed</div>
-        <div class="h5 fw-bold mb-0 text-emerald">{{ completedCount() }}</div>
-    </div>
-    </div>
-
-	<!-- Workload Donut -->
-	<div class="col-xl-4">
-		<div class="card card-plain h-100">
-			<div class="card-body">
-				<div class="d-flex justify-content-between align-items-start mb-4">
-					<div>
-						<h5 class="fw-semibold mb-1">Workload</h5>
-						<p class="text-secondary small mb-0">By department</p>
+		<div class="row g-3 mt-3 pt-3 border-top">
+			<div class="col-4 text-center">
+				<div class="text-secondary small">Completed</div>
+				<div class="h5 fw-bold mb-0 text-emerald">{{ completedCount() }}</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row g-3 mb-4">
+		<!-- Activity Timeline -->
+		<div class="col-xl-7">
+			<div class="card card-plain h-100">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-4">
+						<div>
+							<h5 class="fw-semibold mb-1">Activity Timeline</h5>
+							<p class="text-secondary small mb-0">Recent team updates</p>
+						</div>
+						<a href="#" class="small text-primary text-decoration-none">View all</a>
 					</div>
-					<button class="btn-icon">
-						<i class="bi bi-three-dots"></i>
-					</button>
-				</div>
-				<div class="donut-wrap">
-					<canvas id="workloadChart"></canvas>
-					<div class="donut-center">
-						<div class="h3 fw-bold mb-0">100%</div>
-						<div class="small text-secondary">Allocated</div>
-					</div>
-				</div>
-				<div class="mt-4">
-					<div class="legend-row">
-						<span class="dot bg-primary"></span>Development
-						<span class="ms-auto fw-semibold">45%</span>
-					</div>
-					<div class="legend-row">
-						<span class="dot bg-indigo"></span>Design
-						<span class="ms-auto fw-semibold">25%</span>
-					</div>
-					<div class="legend-row">
-						<span class="dot bg-emerald"></span>QA
-						<span class="ms-auto fw-semibold">30%</span>
+					<div class="timeline">
+						<div class="timeline-item">
+							<div class="timeline-avatar">
+								<span class="avatar-initials bg-emerald">SJ</span>
+							</div>
+							<div class="timeline-body">
+								<div>
+									<b>Sarah Jenkins</b> completed
+									<b>Refactor Auth Middleware</b>
+								</div>
+								<div class="text-secondary small">T-102 · 12 min ago</div>
+							</div>
+							<span class="badge bg-emerald-soft text-emerald">Done</span>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-avatar">
+								<span class="avatar-initials bg-indigo">MR</span>
+							</div>
+							<div class="timeline-body">
+								<div>
+									<b>Mike Ross</b> created
+									<b>Figma Mockups for Profile</b>
+								</div>
+								<div class="text-secondary small">T-105 · 1 hour ago</div>
+							</div>
+							<span class="badge bg-primary-soft text-primary">To Do</span>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-avatar">
+								<span class="avatar-initials bg-amber">EK</span>
+							</div>
+							<div class="timeline-body">
+								<div>
+									<b>Elena Kostas</b> updated
+									<b>API Documentation V2</b>
+								</div>
+								<div class="text-secondary small">T-108 · 3 hours ago</div>
+							</div>
+							<span class="badge bg-amber-soft text-amber">Review</span>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-avatar">
+								<span class="avatar-initials">JP</span>
+							</div>
+							<div class="timeline-body">
+								<div>
+									<b>James Park</b> added 3 comments on
+									<b>Payment Gateway Integration</b>
+								</div>
+								<div class="text-secondary small">T-094 · 5 hours ago</div>
+							</div>
+							<span class="badge bg-indigo-soft text-indigo">In Progress</span>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-avatar">
+								<span class="avatar-initials bg-rose">LT</span>
+							</div>
+							<div class="timeline-body">
+								<div>
+									<b>Lina Tanaka</b> uploaded 4 attachments to
+									<b>Brand Guidelines</b>
+								</div>
+								<div class="text-secondary small">T-076 · Yesterday</div>
+							</div>
+							<span class="badge bg-secondary-soft text-secondary">Backlog</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-<div class="row g-3 mb-4">
-	<!-- Activity Timeline -->
-	<div class="col-xl-7">
-		<div class="card card-plain h-100">
-			<div class="card-body">
-				<div class="d-flex justify-content-between align-items-center mb-4">
-					<div>
-						<h5 class="fw-semibold mb-1">Activity Timeline</h5>
-						<p class="text-secondary small mb-0">Recent team updates</p>
-					</div>
-					<a href="#" class="small text-primary text-decoration-none">View all</a>
-				</div>
-				<div class="timeline">
-					<div class="timeline-item">
-						<div class="timeline-avatar">
-							<span class="avatar-initials bg-emerald">SJ</span>
+		<!-- Upcoming Deadlines -->
+		<div class="col-xl-5">
+			<div class="card card-plain h-100">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-4">
+						<div>
+							<h5 class="fw-semibold mb-1">Upcoming Deadlines</h5>
+							<p class="text-secondary small mb-0">Next 7 days</p>
 						</div>
-						<div class="timeline-body">
-							<div>
-								<b>Sarah Jenkins</b> completed
-								<b>Refactor Auth Middleware</b>
+						<a href="#" class="small text-primary text-decoration-none">Calendar</a>
+					</div>
+					<div class="deadline-list">
+						<div class="deadline-item">
+							<div class="date-pill">
+								<div class="date-month">NOV</div>
+								<div class="date-day">13</div>
 							</div>
-							<div class="text-secondary small">T-102 · 12 min ago</div>
-						</div>
-						<span class="badge bg-emerald-soft text-emerald">Done</span>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-avatar">
-							<span class="avatar-initials bg-indigo">MR</span>
-						</div>
-						<div class="timeline-body">
-							<div>
-								<b>Mike Ross</b> created
-								<b>Figma Mockups for Profile</b>
+							<div class="flex-grow-1 min-w-0">
+								<div class="fw-semibold text-truncate">Alpha Phase 2 Sprint Review</div>
+								<div class="text-secondary small">Marketing Website · 8 tasks</div>
 							</div>
-							<div class="text-secondary small">T-105 · 1 hour ago</div>
+							<span class="badge bg-danger-soft text-danger">2 days</span>
 						</div>
-						<span class="badge bg-primary-soft text-primary">To Do</span>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-avatar">
-							<span class="avatar-initials bg-amber">EK</span>
-						</div>
-						<div class="timeline-body">
-							<div>
-								<b>Elena Kostas</b> updated
-								<b>API Documentation V2</b>
+						<div class="deadline-item">
+							<div class="date-pill">
+								<div class="date-month">NOV</div>
+								<div class="date-day">15</div>
 							</div>
-							<div class="text-secondary small">T-108 · 3 hours ago</div>
-						</div>
-						<span class="badge bg-amber-soft text-amber">Review</span>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-avatar">
-							<span class="avatar-initials">JP</span>
-						</div>
-						<div class="timeline-body">
-							<div>
-								<b>James Park</b> added 3 comments on
-								<b>Payment Gateway Integration</b>
+							<div class="flex-grow-1 min-w-0">
+								<div class="fw-semibold text-truncate">Client Presentation — Nova</div>
+								<div class="text-secondary small">Design System · 4 tasks</div>
 							</div>
-							<div class="text-secondary small">T-094 · 5 hours ago</div>
+							<span class="badge bg-amber-soft text-amber">4 days</span>
 						</div>
-						<span class="badge bg-indigo-soft text-indigo">In Progress</span>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-avatar">
-							<span class="avatar-initials bg-rose">LT</span>
-						</div>
-						<div class="timeline-body">
-							<div>
-								<b>Lina Tanaka</b> uploaded 4 attachments to
-								<b>Brand Guidelines</b>
+						<div class="deadline-item">
+							<div class="date-pill">
+								<div class="date-month">NOV</div>
+								<div class="date-day">17</div>
 							</div>
-							<div class="text-secondary small">T-076 · Yesterday</div>
+							<div class="flex-grow-1 min-w-0">
+								<div class="fw-semibold text-truncate">API V2 Launch</div>
+								<div class="text-secondary small">Backend · 12 tasks</div>
+							</div>
+							<span class="badge bg-emerald-soft text-emerald">6 days</span>
 						</div>
-						<span class="badge bg-secondary-soft text-secondary">Backlog</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Upcoming Deadlines -->
-	<div class="col-xl-5">
-		<div class="card card-plain h-100">
-			<div class="card-body">
-				<div class="d-flex justify-content-between align-items-center mb-4">
-					<div>
-						<h5 class="fw-semibold mb-1">Upcoming Deadlines</h5>
-						<p class="text-secondary small mb-0">Next 7 days</p>
-					</div>
-					<a href="#" class="small text-primary text-decoration-none">Calendar</a>
-				</div>
-				<div class="deadline-list">
-					<div class="deadline-item">
-						<div class="date-pill">
-							<div class="date-month">NOV</div>
-							<div class="date-day">13</div>
+						<div class="deadline-item">
+							<div class="date-pill">
+								<div class="date-month">NOV</div>
+								<div class="date-day">18</div>
+							</div>
+							<div class="flex-grow-1 min-w-0">
+								<div class="fw-semibold text-truncate">Quarterly OKR Sync</div>
+								<div class="text-secondary small">All Hands · 1 task</div>
+							</div>
+							<span class="badge bg-emerald-soft text-emerald">7 days</span>
 						</div>
-						<div class="flex-grow-1 min-w-0">
-							<div class="fw-semibold text-truncate">Alpha Phase 2 Sprint Review</div>
-							<div class="text-secondary small">Marketing Website · 8 tasks</div>
-						</div>
-						<span class="badge bg-danger-soft text-danger">2 days</span>
-					</div>
-					<div class="deadline-item">
-						<div class="date-pill">
-							<div class="date-month">NOV</div>
-							<div class="date-day">15</div>
-						</div>
-						<div class="flex-grow-1 min-w-0">
-							<div class="fw-semibold text-truncate">Client Presentation — Nova</div>
-							<div class="text-secondary small">Design System · 4 tasks</div>
-						</div>
-						<span class="badge bg-amber-soft text-amber">4 days</span>
-					</div>
-					<div class="deadline-item">
-						<div class="date-pill">
-							<div class="date-month">NOV</div>
-							<div class="date-day">17</div>
-						</div>
-						<div class="flex-grow-1 min-w-0">
-							<div class="fw-semibold text-truncate">API V2 Launch</div>
-							<div class="text-secondary small">Backend · 12 tasks</div>
-						</div>
-						<span class="badge bg-emerald-soft text-emerald">6 days</span>
-					</div>
-					<div class="deadline-item">
-						<div class="date-pill">
-							<div class="date-month">NOV</div>
-							<div class="date-day">18</div>
-						</div>
-						<div class="flex-grow-1 min-w-0">
-							<div class="fw-semibold text-truncate">Quarterly OKR Sync</div>
-							<div class="text-secondary small">All Hands · 1 task</div>
-						</div>
-						<span class="badge bg-emerald-soft text-emerald">7 days</span>
 					</div>
 				</div>
 			</div>

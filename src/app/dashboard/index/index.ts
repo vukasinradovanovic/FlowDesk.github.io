@@ -1,25 +1,56 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../services/auth/auth.service';
 import { ProjectService } from '../../services/project/project';
-import { ProductivityChartComponent } from './productivity-chart.component'; // Import here
+import { ProductivityChartComponent } from '../charts/productivity-chart/productivity-chart';
+
+// Define a type for our allowed filter scopes
+export type FilterScope = 'day' | 'week' | 'month';
 
 @Component({
 	selector: 'app-index',
 	standalone: true,
-	imports: [DatePipe, ProductivityChartComponent], // Add to imports
+	imports: [DatePipe, ProductivityChartComponent],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 })
 export class Index {
 	private readonly projectService = inject(ProjectService);
-	auth = inject(AuthService);
+	public readonly auth = inject(AuthService);
+	public readonly today = new Date();
 
-	public teamProjects = toSignal(this.projectService.getProjects(), { initialValue: [] });
+	public readonly allProjects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 
-	// Keep these computed signals here only if your text stat blocks underneath still need them
-	public completedCount = computed(() => this.teamProjects().filter(p => p.status === 'Completed').length);
-	public inProgressCount = computed(() => this.teamProjects().filter(p => p.status === 'In Progress' || p.status === 'On Track').length);
-	public overdueCount = computed(() => this.teamProjects().filter(p => p.status === 'At Risk').length);
+	public readonly activeFilter = signal<FilterScope>('week');
+
+	public readonly teamProjects = computed(() => {
+		const filter = this.activeFilter();
+		const projects = this.allProjects();
+
+		return this.filterProjectsByScope(projects, filter);
+	});
+
+	public readonly completedCount = computed(() => this.allProjects().filter(p => p.status === 'Completed').length);
+	public readonly inProgressCount = computed(() => this.allProjects().filter(p => p.status === 'In Progress' || p.status === 'On Track').length);
+	public readonly overdueCount = computed(() => this.allProjects().filter(p => p.status === 'At Risk').length);
+
+	public setFilter(scope: FilterScope): void {
+		this.activeFilter.set(scope);
+	}
+
+	private filterProjectsByScope(projects: any[], scope: FilterScope): any[] {
+		const now = new Date();
+		return projects.filter(project => {
+			if (!project.updatedAt) return true; // fallback
+			const projectDate = new Date(project.updatedAt);
+			const diffTime = Math.abs(now.getTime() - projectDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+			if (scope === 'day') return diffDays <= 1;
+			if (scope === 'week') return diffDays <= 7;
+			if (scope === 'month') return diffDays <= 30;
+			return true;
+		});
+	}
 }
