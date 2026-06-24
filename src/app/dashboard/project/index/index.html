@@ -1,14 +1,14 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
 	<div>
-		<h1 class="h3 fw-bold mb-1">Projects 👋</h1>
+		<h1 class="h3 fw-bold mb-1">Projects</h1>
 		<p class="text-secondary mb-0">Manage your projects and track their progress.</p>
 	</div>
 	<div class="d-flex gap-2">
 		<button class="btn btn-light-soft">
 			<i class="bi bi-calendar3 me-1"></i> {{ Date() | date: 'MMM d, y' }}
 		</button>
-		<button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
-		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button>
+		<!-- <button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
+		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button> -->
 	</div>
 </div>
 
@@ -25,7 +25,11 @@
 			</div>
 			<div class="d-flex gap-2">
 				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
-				<button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> New</button>
+				@if (canCreateProject()) {
+					<button class="btn btn-primary btn-sm">
+						<i class="bi bi-plus-lg me-1"></i> New Project
+					</button>
+				}
 			</div>
 		</div>
 
@@ -38,11 +42,11 @@
 						<th>Progress</th>
 						<th>Due Date</th>
 						<th>Status</th>
-						<th></th>
+						<th class="text-end">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					@for (p of userProjects; track $index) {
+					@for (p of teamProjects(); track p.id) {
 						<tr>
 							<td>
 								<div class="d-flex align-items-center gap-3">
@@ -51,40 +55,33 @@
 									</div>
 									<div>
 										<div class="fw-semibold">{{ p.name }}</div>
-										<div class="text-secondary small">{{ p.tasksCount === 1 ? '1 task' : `${p.tasksCount} tasks` }} · {{ p.members.length === 1 ? '1 member' : `${p.members.length} members` }}</div>
+										<div class="text-secondary small">
+											{{ p.tasksCount === 1 ? '1 task' : p.tasksCount + ' tasks' }}
+										</div>
 									</div>
 								</div>
 							</td>
 							<td>
-								<div class="avatar-stack">
-									@for (id of p.members; track id) {
-										<div class="avatar avatar-xs">
-											@if (getMemberDetails(id); as member) {
-												<span
-													[class]="'avatar-initials bg-' + member.avatarColor"
-												>
-													{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
-												</span>
-											} @else {
-												<span class="member-badge unknown">User: {{ id }}</span>
-											}
-										</div>
-									}
-								</div>
+								<span class="text-secondary fw-semibold">{{ getTeamName()(p.teamId) }}</span>
 							</td>
 							<td style="min-width: 180px">
 								<div class="d-flex align-items-center gap-2">
 									<div class="progress flex-grow-1" style="height: 6px">
-										<div [class]="'progress-bar bg-' + p.statusTheme" [style.width.%]="p.progress"></div>
+										<div
+											[class]="'progress-bar bg-' + p.statusTheme"
+											[style.width.%]="p.progress"
+										></div>
 									</div>
 									<span class="small fw-medium">{{ p.progress }}%</span>
 								</div>
 							</td>
 							<td class="small">{{ p.dueDate | date: 'MMM d, y' }}</td>
 							<td>
-								<span class="badge bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">{{ p.status }}</span>
+								<span class="badge bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">{{
+									p.status
+								}}</span>
 							</td>
-							<td>
+							<td class="d-flex justify-content-end">
 								<button class="btn-icon">
 									<i class="bi bi-three-dots"></i>
 								</button>

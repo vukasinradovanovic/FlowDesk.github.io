@@ -55,7 +55,6 @@ export class Register {
 		}).subscribe({
 			next: () => {
 				this.isLoading.set(false);
-				// Automatski login nakon registracije
 				this.router.navigate(['/dashboard']);
 			},
 			error: (err) => {

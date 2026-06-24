@@ -3,7 +3,7 @@
 		{
 			"id": 1,
 			"firstName": "Sarah",
-			"lastName": "Jenkins",
+			"lastName": "Jenkins",	
 			"email": "sarah@flowdesk.com",
 			"password": "user123",
 			"avatarColor": "emerald"
@@ -31,24 +31,93 @@
 			"email": "michael@flowdesk.com",
 			"password": "user123",
 			"avatarColor": "rose"
+		},
+		{
+			"id": 5,
+			"firstName": "Jessica",
+			"lastName": "Davis",
+			"email": "jessica@flowdesk.com",
+			"password": "user123",
+			"avatarColor": "emerald"
 		}
+	],
+	"roles": [
+		{
+			"id": 1,
+			"name": "Admin"
+		},
+		{
+			"id": 2,
+			"name": "Project Manager"
+		},
+		{
+			"id": 3,
+			"name": "Team Menager"
+		},
+		{
+			"id": 4,
+			"name": "Team Lead"
+		},
+		{
+			"id": 5,
+			"name": "Team Member"
+		}
+	],
+	"permisions" : [
+		{
+			"id": 1,
+			"name": "Full Access"
+		},
+		{
+			"id": 2,
+			"name": "Edit Projects"
+		},
+		{
+			"id": 3,
+			"name": "Delete Projects"
+		},
+		{
+			"id": 4,
+			"name": "Create Projects"
+		},
+		{
+			"id": 5,
+			"name": "Edit Teams"
+		},
+		{
+			"id": 6,
+			"name": "Delete Teams"
+		},
+		{
+			"id": 7,
+			"name": "Create Teams"
+		}
+	],
+	"user-roles": [
+		{ "id": 1, "userId": 1, "roleId": 1 , "permissions": [1] },
+		{ "id": 2, "userId": 2, "roleId": 2 , "permissions": [2, 4, 5] },
+		{ "id": 3, "userId": 3, "roleId": 5 , "permissions": [] },
+		{ "id": 4, "userId": 3, "roleId": 5 , "permissions": [] },
+		{ "id": 7, "userId": 3, "roleId": 5 , "permissions": [] }
 	],
 	"projects": [
 		{
 			"id": 1,
 			"name": "Marketing Website Redesign",
+			"slug": "marketing-website-redesign",
 			"tasksCount": 24,
 			"icon": "bi-palette",
 			"theme": "primary",
 			"progress": 72,
 			"dueDate": "2026-11-13",
 			"status": "In Progress",
-			"statusTheme": "primary",
-			"members": [1, 2, 3, 4]
+			"statusTheme": "primary", 
+			"teamId": 1
 		},
 		{
 			"id": 2,
 			"name": "Mobile App V3.2",
+			"slug": "mobile-app-v3-2",
 			"tasksCount": 48,
 			"icon": "bi-phone",
 			"theme": "emerald",
@@ -56,11 +125,12 @@
 			"dueDate": "2026-12-02",
 			"status": "On Track",
 			"statusTheme": "indigo",
-			"members": [2, 3, 4]
+			"teamId": 2
 		},
 		{
 			"id": 3,
 			"name": "API Platform V2",
+			"slug": "api-platform-v2",
 			"tasksCount": 62,
 			"icon": "bi-cpu",
 			"theme": "amber",
@@ -68,11 +138,12 @@
 			"dueDate": "2026-11-17",
 			"status": "At Risk",
 			"statusTheme": "amber",
-			"members": [1]
+			"teamId": 1
 		},
 		{
 			"id": 4,
 			"name": "Brand Guidelines 2026",
+			"slug": "brand-guidelines-2026",
 			"tasksCount": 16,
 			"icon": "bi-bookmark-star",
 			"theme": "indigo",
@@ -80,19 +151,36 @@
 			"dueDate": "2026-11-08",
 			"status": "Completed",
 			"statusTheme": "emerald",
-			"members": [1, 2]
+			"teamId": 3
 		}
 	],
-	"user-projects": [
-		{ "id": 1, "userId": 1, "projectId": 1 },
-		{ "id": 2, "userId": 2, "projectId": 1 },
-		{ "id": 3, "userId": 3, "projectId": 1 },
-		{ "id": 4, "userId": 4, "projectId": 1 },
-		{ "id": 5, "userId": 2, "projectId": 2 },
-		{ "id": 6, "userId": 3, "projectId": 2 },
-		{ "id": 7, "userId": 4, "projectId": 2 },
-		{ "id": 8, "userId": 1, "projectId": 3 },
-		{ "id": 9, "userId": 1, "projectId": 4 },
-		{ "id": 10, "userId": 2, "projectId": 4 }
+	"team-projects": [
+		{ "id": 1, "teamId": 1, "projectId": 1 },
+		{ "id": 2, "teamId": 1, "projectId": 3 },
+		{ "id": 3, "teamId": 2, "projectId": 2 },
+		{ "id": 4, "teamId": 3, "projectId": 4 },
+		{ "id": 5, "teamId": 2, "projectId": 1 },
+		{ "id": 6, "teamId": 3, "projectId": 2 },
+		{ "id": 7, "teamId": 3, "projectId": 3 }
+	],
+	"teams": [
+		{
+			"id": 1,
+			"name": "Development Team"
+		},
+		{
+			"id": 2,
+			"name": "Design Team"
+		},
+		{
+			"id": 3,
+			"name": "Marketing Team"
+		}
+	],
+	"user-teams": [
+		{ "id": 1, "userId": 1, "teamId": 2 },
+		{ "id": 2, "userId": 2, "teamId": 1 },
+		{ "id": 3, "userId": 3, "teamId": 3 },
+		{ "id": 4, "userId": 4, "teamId": 1 }
 	]
 }

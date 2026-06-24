@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ThemeService } from '../../services/theme/theme.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { BreadcrumbsComponent } from '../../dashboard/breadcrumbs.component/breadcrumbs.component';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [RouterLink, BreadcrumbsComponent],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

@@ -1,21 +1,36 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { MainNavDashboard } from '../nav/main-nav-dashboard/main-nav-dashboard';
 import { AuthService } from '../../services/auth/auth.service';
+import { RoleService } from '../../services/role/role.service';
 import { Router } from '@angular/router';
-
+import { toSignal, toObservable } from '@angular/core/rxjs-interop'; // Import toObservable
+import { of, switchMap } from 'rxjs'; // Import switchMap
 
 @Component({
-	selector: 'app-sidebar',
-	imports: [MainNavDashboard],
-	templateUrl: './sidebar.html',
-	styleUrl: './sidebar.scss',
+    selector: 'app-sidebar',
+    standalone: true,
+    imports: [MainNavDashboard],
+    templateUrl: './sidebar.html',
+    styleUrl: './sidebar.scss',
 })
 export class Sidebar {
-	private readonly router = inject(Router);
-	auth = inject(AuthService);
+    private readonly router = inject(Router);
+    private readonly roleService = inject(RoleService);
+    public readonly auth = inject(AuthService);
 
-	protected handleLogout(): void {
-		this.auth.logout();
-		this.router.navigate(['/']);
-	}
+    private currentUserId = computed(() => this.auth.currentUser()?.id);
+
+    public userRoleName = toSignal(
+        toObservable(this.currentUserId).pipe(
+            switchMap((uid) => {
+                return uid ? this.roleService.getUserRoleName(uid) : of('Guest');
+            })
+        ),
+        { initialValue: 'Loading...' }
+    );
+
+    protected handleLogout(): void {
+        this.auth.logout();
+        this.router.navigate(['/']);
+    }
 }
