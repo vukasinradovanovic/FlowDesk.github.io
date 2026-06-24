@@ -95,12 +95,10 @@
 	],
 	"user-roles": [
 		{ "id": 1, "userId": 1, "roleId": 1 , "permissions": [1] },
-		{ "id": 2, "userId": 1, "roleId": 4 , "permissions": [2, 5] },
-		{ "id": 3, "userId": 2, "roleId": 2 , "permissions": [2, 3, 4] },
-		{ "id": 4, "userId": 3, "roleId": 4 , "permissions": [] },
-		{ "id": 5, "userId": 2, "roleId": 3 , "permissions": [5, 6, 7] },
-		{ "id": 6, "userId": 3, "roleId": 2 , "permissions": [2, 3, 4] },
-		{ "id": 7, "userId": 3, "roleId": 4 , "permissions": [] }
+		{ "id": 2, "userId": 2, "roleId": 2 , "permissions": [2, 4, 5] },
+		{ "id": 3, "userId": 3, "roleId": 5 , "permissions": [] },
+		{ "id": 4, "userId": 3, "roleId": 5 , "permissions": [] },
+		{ "id": 7, "userId": 3, "roleId": 5 , "permissions": [] }
 	],
 	"projects": [
 		{
