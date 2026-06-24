@@ -1,3 +1,6 @@
-@function rem($px){
-    @return #{$px / 16}rem;
+@use "sass:math";
+
+@function rem($px) {
+    // Replace the raw division with math.div()
+    @return #{math.div($px, 16)}rem;
 }

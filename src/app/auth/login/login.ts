@@ -30,7 +30,7 @@ export class Login {
 
 	protected handleSubmit(): void {
 		if (!this.email() || !this.password()) {
-			this.errorMessage.set('Molimo unesite email i lozinku.');
+			this.errorMessage.set('Please enter both email and password.');
 			return;
 		}
 

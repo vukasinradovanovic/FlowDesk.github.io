@@ -13,6 +13,14 @@ body {
 	overflow-x: hidden;
 }
 
+td {
+    overflow: visible !important;
+}
+
+.table-responsive {
+    padding-bottom: 60px; 
+}
+
 .bg-primary {
 	background-color: var(--fd-primary) !important;
 }
@@ -171,14 +179,6 @@ body {
 	}
 }
 
-.avatar-xs .avatar-initials {
-	font-size: 0.625rem;
-}
-
-.avatar-sm .avatar-initials {
-	font-size: 0.6875rem;
-}
-
 .status-dot {
 	position: absolute;
 	bottom: 0;
@@ -260,3 +260,4 @@ body {
 		transform: translateY(0);
 	}
 }
+

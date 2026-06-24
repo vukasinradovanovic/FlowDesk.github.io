@@ -37,7 +37,7 @@ export class AuthService {
         const colorMaps: Record<string, string> = {
             emerald: 'bg-emerald text-white',
             indigo: 'bg-indigo text-white',
-            amber: 'bg-amber text-dark',
+            amber: 'bg-amber text-white',
             rose: 'bg-rose text-white'
         };
 
