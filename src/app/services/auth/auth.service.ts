@@ -9,6 +9,14 @@ export interface LoginResponse {
 	user?: User;
 }
 
+export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  avatarColor?: string;
+}
+
 export interface User {
 	firstName?: string;
 	lastName?: string;
@@ -28,6 +36,7 @@ export class AuthService {
 	currentUser = signal<any | null>(this.getStoredUser());
 
 	private loginApiUrl = 'https://localhost:7175/api/auth/login';
+    private registerApiUrl = 'https://localhost:7175/api/auth/register';
 
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
@@ -82,7 +91,7 @@ export class AuthService {
 					localStorage.setItem('refreshToken', response.refreshToken);
 
 					if (response.user) {
-                        const formattedUser = this.mapAvatarClass(response.user);
+						const formattedUser = this.mapAvatarClass(response.user);
 						sessionStorage.setItem('currentUser', JSON.stringify(formattedUser));
 						this.currentUser.set(formattedUser);
 					}
@@ -91,35 +100,22 @@ export class AuthService {
 		);
 	}
 
-	// public register(userData: User): Observable<User> {
-	//     return this.loadInitialData().pipe(
-	//         map(users => {
-	//             const existingUser = users.find(u => u.email === userData.email);
-	//             if (existingUser) {
-	//                 throw new Error('Korisnik sa ovim email-om već postoji.');
-	//             }
+	public register(requestData: RegisterRequest): Observable<LoginResponse> {
+		return this.http.post<LoginResponse>(this.registerApiUrl, requestData).pipe(
+			tap((response) => {
+				if (isPlatformBrowser(this.platformId)) {
+					localStorage.setItem('accessToken', response.tokenId);
+					localStorage.setItem('refreshToken', response.refreshToken);
 
-	//             const colors = ['emerald', 'indigo', 'amber', 'rose'];
-	//             const assignedColor = userData.avatarColor || colors[Math.floor(Math.random() * colors.length)];
-
-	//             const newUser = this.mapAvatarClass({
-	//                 ...userData,
-	//                 avatarColor: assignedColor,
-	//                 id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
-	//             });
-
-	//             const updatedUsers = [...users, newUser];
-	//             this.usersData.set(updatedUsers);
-	//             this.currentUser.set(newUser);
-
-	//             if (isPlatformBrowser(this.platformId)) {
-	//                 sessionStorage.setItem('currentUser', JSON.stringify(newUser));
-	//             }
-
-	//             return newUser;
-	//         })
-	//     );
-	// }
+					if (response.user) {
+						const formattedUser = this.mapAvatarClass(response.user);
+						sessionStorage.setItem('currentUser', JSON.stringify(formattedUser));
+						this.currentUser.set(formattedUser);
+					}
+				}
+			}),
+		);
+	}
 
 	public logout(): void {
 		if (isPlatformBrowser(this.platformId)) {
