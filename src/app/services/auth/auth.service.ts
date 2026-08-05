@@ -3,14 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, map, of, tap } from 'rxjs';
 
+export interface LoginResponse {
+	tokenId: string;
+	refreshToken: string;
+	user?: User;
+}
+
 export interface User {
-    id?: number;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    password?: string;
-    avatarColor?: string; // e.g. "emerald", "indigo" 
-    avatarClass?: string; // Generated helper for dynamic template styling classes
+	firstName?: string;
+	lastName?: string;
+	email?: string;
+	avatarColor?: string;
+    avatarClass?: string; 
 }
 
 @Injectable({
@@ -21,7 +25,9 @@ export class AuthService {
     private readonly platformId = inject(PLATFORM_ID);
     
     public readonly usersData = signal<User[] | null>(null);
-    public readonly currentUser = signal<User | null>(null);
+    currentUser = signal<any | null>(this.getStoredUser());
+
+    private loginApiUrl = 'https://localhost:7175/api/auth/login';
 
     constructor() {
         if (isPlatformBrowser(this.platformId)) {
@@ -31,6 +37,15 @@ export class AuthService {
             }
         }
     }
+
+    // Get the currently logged-in user as an observable
+    private getStoredUser() {
+		if (isPlatformBrowser(this.platformId)) {
+			const stored = sessionStorage.getItem('currentUser');
+			return stored ? JSON.parse(stored) : null;
+		}
+		return null;
+	}
 
     // Helper map method to append custom CSS utilities cleanly based on color keys
     private mapAvatarClass(user: User): User {
@@ -47,78 +62,65 @@ export class AuthService {
         };
     }
 
-    getMembersById(id: number): Observable<User | undefined> {
-        if (id === -1) {
-            return this.loadInitialData().pipe(map(() => undefined));
-        }
-        return this.loadInitialData().pipe(map((users) => users.find((u) => u.id === id)));
-    }
+    public getToken(): string | null {
+		if (isPlatformBrowser(this.platformId)) {
+			return localStorage.getItem('accessToken');
+		}
+		return null;
+	}
 
-    private loadInitialData(): Observable<User[]> {
-        const currentUsers = this.usersData();
-        if (currentUsers !== null) {
-            return of(currentUsers);
-        }
-        
-        return this.http.get<{users: User[]}>('/assets/data/data.json').pipe(
-            map(response => (response.users || []).map(u => this.mapAvatarClass(u))),
-            tap(users => this.usersData.set(users))
-        );
-    }
+    public login(email: string, password: string): Observable<LoginResponse> {
+		return this.http.post<LoginResponse>(this.loginApiUrl, { email, password }).pipe(
+			tap((response) => {
+				if (isPlatformBrowser(this.platformId)) {
+					localStorage.setItem('accessToken', response.tokenId);
+					localStorage.setItem('refreshToken', response.refreshToken);
 
-    public login(email: string, password: string): Observable<User> {
-        return this.loadInitialData().pipe(
-            map(users => {
-                const user = users.find(u => u.email === email && u.password === password);
-                if (!user) {
-                    throw new Error('Pogrešan email ili lozinka.');
-                }
-                
-                this.currentUser.set(user);
-                
-                if (isPlatformBrowser(this.platformId)) {
-                    sessionStorage.setItem('currentUser', JSON.stringify(user));
-                }
-                
-                return user;
-            })
-        );
-    }
+					if (response.user) {
+						sessionStorage.setItem('currentUser', JSON.stringify(response.user));
+						this.currentUser.set(response.user);
+					}
+				}
+			}),
+		);
+	}
 
-    public register(userData: User): Observable<User> {
-        return this.loadInitialData().pipe(
-            map(users => {
-                const existingUser = users.find(u => u.email === userData.email);
-                if (existingUser) {
-                    throw new Error('Korisnik sa ovim email-om već postoji.');
-                }
+    // public register(userData: User): Observable<User> {
+    //     return this.loadInitialData().pipe(
+    //         map(users => {
+    //             const existingUser = users.find(u => u.email === userData.email);
+    //             if (existingUser) {
+    //                 throw new Error('Korisnik sa ovim email-om već postoji.');
+    //             }
                 
-                const colors = ['emerald', 'indigo', 'amber', 'rose'];
-                const assignedColor = userData.avatarColor || colors[Math.floor(Math.random() * colors.length)];
+    //             const colors = ['emerald', 'indigo', 'amber', 'rose'];
+    //             const assignedColor = userData.avatarColor || colors[Math.floor(Math.random() * colors.length)];
 
-                const newUser = this.mapAvatarClass({
-                    ...userData,
-                    avatarColor: assignedColor,
-                    id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
-                });
+    //             const newUser = this.mapAvatarClass({
+    //                 ...userData,
+    //                 avatarColor: assignedColor,
+    //                 id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
+    //             });
                 
-                const updatedUsers = [...users, newUser];
-                this.usersData.set(updatedUsers);
-                this.currentUser.set(newUser);
+    //             const updatedUsers = [...users, newUser];
+    //             this.usersData.set(updatedUsers);
+    //             this.currentUser.set(newUser);
                 
-                if (isPlatformBrowser(this.platformId)) {
-                    sessionStorage.setItem('currentUser', JSON.stringify(newUser));
-                }
+    //             if (isPlatformBrowser(this.platformId)) {
+    //                 sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+    //             }
                 
-                return newUser;
-            })
-        );
-    }
+    //             return newUser;
+    //         })
+    //     );
+    // }
 
     public logout(): void {
-        this.currentUser.set(null);
-        if (isPlatformBrowser(this.platformId)) {
-            sessionStorage.removeItem('currentUser');
-        }
-    }
+		if (isPlatformBrowser(this.platformId)) {
+			localStorage.removeItem('accessToken');
+			localStorage.removeItem('refreshToken');
+			sessionStorage.removeItem('currentUser');
+			this.currentUser.set(null);
+		}
+	}
 }
