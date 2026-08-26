@@ -12,7 +12,7 @@ export interface Project {
 	icon: string;
 	theme: string;
 	dueDate: Date;
-	status: Status[];
+	status: Status;
 	//   teamId?: number | string;
 	//   members?: (number | string)[];
 	//   updatedAt?: string;

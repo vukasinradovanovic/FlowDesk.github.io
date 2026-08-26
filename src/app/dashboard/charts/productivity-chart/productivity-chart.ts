@@ -33,9 +33,9 @@ export class ProductivityChartComponent {
         });
     });
 
-    private completedCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'Completed')).length);
-    private inProgressCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'In Progress' || s.name === 'On Track')).length);
-    private overdueCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'At Risk')).length);
+    private completedCount = computed(() => this.filteredProjects().filter(p => p.status?.name === 'Completed').length);
+    private inProgressCount = computed(() => this.filteredProjects().filter(p => p.status?.name === 'In Progress' || p.status?.name === 'On Track').length);
+    private overdueCount = computed(() => this.filteredProjects().filter(p => p.status?.name === 'At Risk').length);
 
     constructor() {
         effect(() => {

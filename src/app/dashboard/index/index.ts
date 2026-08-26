@@ -34,21 +34,21 @@ export class Index {
 	// Computed properties to get counts of projects based on their status
 	public readonly completedCount = computed(
 		() =>
-			this.allProjects()?.filter((p) => p.status?.some((s) => s.name === 'Completed')).length ?? 0,
+			this.allProjects()?.filter((p) => p.status?.name === 'Completed').length ?? 0,
 	);
 
 	// Computed properties to get counts of projects based on their status
 	public readonly inProgressCount = computed(
 		() =>
 			this.allProjects()?.filter((p) =>
-				p.status?.some((s) => s.name === 'In Progress' || s.name === 'On Track'),
+				p.status?.name === 'In Progress' || p.status?.name === 'On Track',
 			).length ?? 0,
 	);
 
 	// Computed properties to get counts of projects based on their status
 	public readonly overdueCount = computed(
 		() =>
-			this.allProjects()?.filter((p) => p.status?.some((s) => s.name === 'At Risk')).length ?? 0,
+			this.allProjects()?.filter((p) => p.status?.name === 'At Risk').length ?? 0,
 	);
 
 	public setFilter(scope: FilterScope): void {
