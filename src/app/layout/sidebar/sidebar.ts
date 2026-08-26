@@ -19,12 +19,12 @@ export class Sidebar {
 	private readonly roleService = inject(RoleService);
 	public readonly auth = inject(AuthService);
 
-	private currentUserId = computed(() => this.auth.currentUser());
+	private currentUser = computed(() => this.auth.currentUser());
 
 	public userRoleName = toSignal(
-		toObservable(this.currentUserId).pipe(
+		toObservable(this.currentUser).pipe(
 			switchMap((user) => {
-				return user ? this.roleService.getUserRoleName(1) : of('Guest');
+				return user ? of(user.role.name) : of('Loading...');
 			}),
 		),
 		{ initialValue: 'Loading...' },

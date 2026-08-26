@@ -20,20 +20,22 @@ export class Profile {
     private readonly permissionService = inject(PermissionService);
 
     // Track the active user context id cleanly
-    private currentUserId = computed(() => this.auth.currentUser());
+    private currentUser = computed(() => this.auth.currentUser());
 
     // Resolve the textual name of their active role assignment
     public userRoleName = toSignal(
-        toObservable(this.currentUserId).pipe(
-            switchMap((uid) => (uid ? this.roleService.getUserRoleName(1) : of('Guest')))
-        ),
-        { initialValue: 'Loading Role...' }
+        toObservable(this.currentUser).pipe(
+			switchMap((user) => {
+				return user ? of(user.role.name) : of('Loading...');
+			}),
+		),
+		{ initialValue: 'Loading...' },
     );
 
     // Resolve the clean list array of unique permission tag strings
     public userPermissions = toSignal(
-        toObservable(this.currentUserId).pipe(
-            switchMap((uid) => (uid ? this.permissionService.getUserPermissions(1) : of([])))
+        toObservable(this.currentUser).pipe(
+            switchMap((user) => (user ? this.permissionService.getUserPermissions(user.id) : of([])))
         ),
         { initialValue: [] }
     );
