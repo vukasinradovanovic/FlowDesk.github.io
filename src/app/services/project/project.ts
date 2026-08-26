@@ -1,83 +1,52 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 import { TeamService } from '../team/team.service';
+import { Status } from '../status/status';
 
 export interface Project {
-    id: number;
-    name: string;
-    slug: string;
-    tasksCount: number;
-    icon: string;
-    theme: string;
-    progress: number;
-    dueDate: Date;
-    status: string;
-    statusTheme: string;
-    teamId: number;
-    members?: number[]; // Added locally for filtering
-    updatedAt?: string; // Kept for your dashboard chart filtration
+	id: number;
+	name: string;
+	slug: string;
+	icon: string;
+	theme: string;
+	dueDate: Date;
+	status: Status[];
+	//   teamId?: number | string;
+	//   members?: (number | string)[];
+	//   updatedAt?: string;
 }
 
 @Injectable({
-    providedIn: 'root',
+	providedIn: 'root',
 })
 export class ProjectService {
-    private readonly auth = inject(AuthService);
-    private readonly teamService = inject(TeamService);
-    private readonly http = inject(HttpClient);
+	private readonly auth = inject(AuthService);
+	private readonly teamService = inject(TeamService);
+	private readonly http = inject(HttpClient);
 
-    public readonly allProjects = signal<Project[] | null>(null);
+	private readonly getProjectsApiUrl = 'https://localhost:7175/api/getalluserprojects';
 
-    private loadProjects(): Observable<Project[]> {
-        const cachedProjects = this.allProjects();
+	public readonly allProjects = signal<Project[] | null>(null);
 
-        if (cachedProjects !== null) {
-            return of(cachedProjects);
-        }
+	private loadProjects(): Observable<Project[]> {
+		const cachedProjects = this.allProjects();
 
-        return this.http
-            .get<{ projects: Project[]; 'team-projects': any[] }>('/assets/data/data.json')
-            .pipe(
-                map((response) => {
-                    const tProjects = response['team-projects'] || [];
-                    return response.projects.map((p) => ({
-                        ...p,
-                        members: tProjects.filter((tp) => tp.projectId === p.id).map((tp) => tp.userId),
-                    }));
-                }),
-                tap((projects) => this.allProjects.set(projects)),
-            );
-    }
+		if (cachedProjects !== null) {
+			return of(cachedProjects);
+		}
 
-    // Exact name kept: This now safely waits for team variations to resolve reactively
-    public getProjects(): Observable<Project[]> {
-        return this.loadProjects().pipe(
-            switchMap((projects) => {
-                // If teamService exposes an observable version (like getTeams() or teams$), pipe from it.
-                // If it only exposes a signal allTeams(), we wrap it into an stream fallback:
-                const teamsData = typeof this.teamService.getTeams === 'function' 
-                    ? this.teamService.getTeams() 
-                    : of(this.teamService.allTeams() || []);
+		return this.http
+			.get<Project[]>(this.getProjectsApiUrl)
+			.pipe(tap((projects) => this.allProjects.set(projects)));
+	}
 
-                return teamsData.pipe(
-                    map((teams) => {
-                        const currentUserId = this.auth.currentUser()?.id ?? -1;
-                        const currentTeam = teams?.find((team: any) => team.members?.includes(currentUserId));
-                        const currentTeamId = currentTeam?.id ?? -1;
+	public getProjects(): Observable<Project[]> {
+		return this.loadProjects();
+	}
 
-                        return projects.filter((p) => p.teamId === currentTeamId);
-                    })
-                );
-            })
-        );
-    }
-
-    // Exact name kept unchanged
-    public getProjectBySlug(slug: string): Observable<Project | undefined> {
-        return this.loadProjects().pipe(
-            map((projects) => projects.find((p) => p.slug === slug))
-        );
-    }
+	public getProjectBySlug(slug: string): Observable<Project | undefined> {
+		return this.loadProjects().pipe(map((projects) => projects.find((p) => p.slug === slug)));
+	}
 }

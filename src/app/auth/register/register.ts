@@ -26,6 +26,7 @@ export class Register {
 
 	protected firstName = signal('');
 	protected lastName = signal('');
+	protected username = signal('');
 	protected email = signal('');
 	protected password = signal('');
 	protected confirmPassword = signal('');
@@ -39,7 +40,7 @@ export class Register {
 	}
 
 	protected handleSubmit(): void {
-		if (!this.firstName() || !this.lastName() || !this.email() || !this.password() || !this.confirmPassword()) {
+		if (!this.firstName() || !this.lastName() || !this.username() || !this.email() || !this.password() || !this.confirmPassword()) {
 			this.errorMessage.set('Please fill in all required fields.');
 			return;
 		}
@@ -55,6 +56,7 @@ export class Register {
 		this.authService.register({
 			firstName: this.firstName(),
 			lastName: this.lastName(),
+			username: this.username(),
 			email: this.email(),
 			password: this.password(),
 			avatarColor: this.avatarColor(),

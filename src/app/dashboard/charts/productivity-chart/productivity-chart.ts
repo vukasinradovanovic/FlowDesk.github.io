@@ -22,7 +22,7 @@ export class ProductivityChartComponent {
         const now = new Date();
 
         return rawProjects.filter(project => {
-            const dateToCompare = project.updatedAt ? new Date(project.updatedAt) : new Date(); 
+            const dateToCompare = project.dueDate ?? new Date(project.dueDate);
             const diffTime = Math.abs(now.getTime() - dateToCompare.getTime());
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -33,9 +33,9 @@ export class ProductivityChartComponent {
         });
     });
 
-    private completedCount = computed(() => this.filteredProjects().filter(p => p.status === 'Completed').length);
-    private inProgressCount = computed(() => this.filteredProjects().filter(p => p.status === 'In Progress' || p.status === 'On Track').length);
-    private overdueCount = computed(() => this.filteredProjects().filter(p => p.status === 'At Risk').length);
+    private completedCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'Completed')).length);
+    private inProgressCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'In Progress' || s.name === 'On Track')).length);
+    private overdueCount = computed(() => this.filteredProjects().filter(p => p.status?.some((s) => s.name === 'At Risk')).length);
 
     constructor() {
         effect(() => {

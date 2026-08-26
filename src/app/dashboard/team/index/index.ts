@@ -1,7 +1,7 @@
 import { Component, inject, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { TeamService } from '../../../services/team/team.service';
+import { Team, TeamService } from '../../../services/team/team.service';
 import { AuthService, User } from '../../../services/auth/auth.service';
 import { of, switchMap } from 'rxjs';
 import { RoleService } from '../../../services/role/role.service';
@@ -14,33 +14,38 @@ import { PermissionService } from '../../../services/permisions/permisions';
 	styleUrl: './index.scss',
 })
 export class Index {
-	// private readonly teamService = inject(TeamService);
+	private readonly teamService = inject(TeamService);
 	// public readonly roleService = inject(RoleService);
 	// public readonly permissionService = inject(PermissionService);
-	
-	// public readonly auth = inject(AuthService);
+
+	public readonly auth = inject(AuthService);
 
 	public readonly today = new Date();
 
-	// public readonly teams = toSignal(this.teamService.getMyTeams(), { initialValue: [] });
+	readonly teams = this.teamService.allTeams;
+	readonly members = this.teamService.allMembers;
 
-	// protected readonly authTrigger = toSignal(this.auth.getMembersById(-1), {
+	ngOnInit(): void {
+		this.teamService.getTeams().subscribe();
+	}
+
+	// protected readonly authTrigger = toSignal(this.auth.currentUser(), {
 	// 	initialValue: undefined,
 	// });
 
-	// getMemberDetails(id: number): User | undefined {
-	// 	const users = this.auth.usersData() || [];
+	// getMemberDetails(id: number): Team | undefined {
+	// 	const users = this.Team.usersData() || [];
 	// 	return users.find((user) => user.id === id);
 	// }
 
 	// private currentUserId = computed(() => this.auth.currentUser()?.id);
 
-    // public canCreateTeam = toSignal(
-    //     toObservable(this.currentUserId).pipe(
-    //         switchMap((uid) => {
-    //             return uid ? this.permissionService.hasPermission(uid, 'Create Teams') : of(false);
-    //         })
-    //     ),
-    //     { initialValue: false }
-    // );
+	// public canCreateTeam = toSignal(
+	//     toObservable(this.currentUserId).pipe(
+	//         switchMap((uid) => {
+	//             return uid ? this.permissionService.hasPermission(uid, 'Create Teams') : of(false);
+	//         })
+	//     ),
+	//     { initialValue: false }
+	// );
 }

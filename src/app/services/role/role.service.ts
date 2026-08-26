@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
-import { UserTeam } from '../team/team.service';
 
 export interface Role {
 	id: number;

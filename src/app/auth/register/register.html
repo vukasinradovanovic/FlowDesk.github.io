@@ -107,6 +107,23 @@
 						</div>
 					</div>
 					<div class="mb-3">
+						<label class="form-label" for="regUsername">Work username</label>
+						<div class="input-group input-group-lg">
+							<span class="input-group-text"><i class="bi bi-person"></i></span>
+							<input
+								name="username"
+								id="regUsername"
+								type="text"
+								class="form-control"
+								placeholder="Unique username"
+								[ngModel]="username()"
+								(ngModelChange)="username.set($event)"
+								required
+							/>
+							<div class="invalid-feedback">Enter a valid username.</div>
+						</div>
+					</div>
+					<div class="mb-3">
 						<label class="form-label" for="regEmail">Work email</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-envelope"></i></span>

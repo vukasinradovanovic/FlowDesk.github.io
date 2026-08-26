@@ -27,7 +27,7 @@ export class MainNavDashboard {
     public readonly projectsCount = computed(() => this.projects().length);
 
     public readonly navLinks = computed<NavLink[]>(() => {
-        const userId = this.auth.currentUser()?.id;
+        const userId = this.auth.currentUser();
         if (!userId) return [];
 
         return [

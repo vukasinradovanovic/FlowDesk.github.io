@@ -17,24 +17,24 @@ import { RouterLink } from '@angular/router';
 export class Index {
 	protected readonly Date = Date;
 
-	// private readonly projectService = inject(ProjectService);
-	// private readonly teamService = inject(TeamService);
+	private readonly projectService = inject(ProjectService);
+	private readonly teamService = inject(TeamService);
 	// private readonly permisionsService = inject(PermissionService);
-	// public readonly auth = inject(AuthService);
-	// private elementRef = inject(ElementRef);
+	public readonly auth = inject(AuthService);
+	private elementRef = inject(ElementRef);
 
 	// public readonly permissoion = 'Create Projects';
 
-	// isDropdownOpen = false;
-	// toggleDropdown(): void {
-	// 	this.isDropdownOpen = !this.isDropdownOpen;
-	// }
-	// selectedOption() {
-	// 	this.isDropdownOpen = false;
-	// }
+	isDropdownOpen = false;
+	toggleDropdown(): void {
+		this.isDropdownOpen = !this.isDropdownOpen;
+	}
+	selectedOption() {
+		this.isDropdownOpen = false;
+	}
 
-	// teams = toSignal(this.teamService.getTeams(), { initialValue: [] });
-	// teamProjects = toSignal(this.projectService.getProjects(), { initialValue: [] });
+	teams = toSignal(this.teamService.getTeams(), { initialValue: [] });
+	teamProjects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 
 	// authTrigger = toSignal(this.auth.getMembersById(-1), { initialValue: undefined });
 
