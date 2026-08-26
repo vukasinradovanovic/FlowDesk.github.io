@@ -22,8 +22,8 @@ export class Index {
 
 	public readonly today = new Date();
 
-	readonly teams = this.teamService.allTeams;
-	readonly members = this.teamService.allMembers;
+	teams = this.teamService.allTeams;
+	members = this.teamService.allMembers;
 
 	ngOnInit(): void {
 		this.teamService.getTeams().subscribe();

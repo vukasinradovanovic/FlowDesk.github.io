@@ -36,4 +36,6 @@ export class TeamService {
 			.get<Team[]>(this.getTeamsApiUrl)
 			.pipe(tap((teams) => this.allTeams.set(teams)));
 	}
+
+	
 }
