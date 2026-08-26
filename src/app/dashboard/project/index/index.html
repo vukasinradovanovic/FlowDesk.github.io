@@ -5,7 +5,7 @@
 	</div>
 	<div class="d-flex gap-2">
 		<button class="btn btn-light-soft">
-			<i class="bi bi-calendar3 me-1"></i> {{ Date() | date: 'MMM d, y' }}
+			<i class="bi bi-calendar3 me-1"></i> {{ currentDate | date: 'MMM d, y' }}
 		</button>
 		<!-- <button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
 		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button> -->
@@ -25,11 +25,11 @@
 			</div>
 			<div class="d-flex gap-2">
 				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
-				@if (canCreateProject()) {
+				<!-- @if (canCreateProject()) {
 					<button class="btn btn-primary btn-sm" [routerLink]="'/dashboard/projects/create'">
 						<i class="bi bi-plus-lg me-1"></i> New Project
 					</button>
-				}
+				} -->
 			</div>
 		</div>
 
@@ -46,68 +46,88 @@
 					</tr>
 				</thead>
 				<tbody>
-					@for (p of teamProjects(); track p.id) {
-						<tr>
-							<td>
-								<div class="d-flex align-items-center gap-3">
-									<div class="project-icon bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">
-										<i class="bi {{ p.icon }}"></i>
-									</div>
-									<div>
-										<div class="fw-semibold">{{ p.name }}</div>
-										<div class="text-secondary small">
-											{{ p.tasksCount === 1 ? '1 task' : p.tasksCount + ' tasks' }}
-										</div>
-									</div>
-								</div>
-							</td>
-							<td>
-								<span class="text-secondary fw-semibold">{{ getTeamName()(p.teamId) }}</span>
-							</td>
-							<td style="min-width: 180px">
-								<div class="d-flex align-items-center gap-2">
-									<div class="progress flex-grow-1" style="height: 6px">
+					@for (t of teams(); track t.id) {
+						@for (p of t.projects ?? []; track p.id) {
+							<tr>
+								<td>
+									<div class="d-flex align-items-center gap-3">
 										<div
-											[class]="'progress-bar bg-' + p.statusTheme"
-											[style.width.%]="p.progress"
-										></div>
-									</div>
-									<span class="small fw-medium">{{ p.progress }}%</span>
-								</div>
-							</td>
-							<td class="small">{{ p.dueDate | date: 'MMM d, y' }}</td>
-							<td>
-								<span class="badge bg-{{ p.statusTheme }}-soft text-{{ p.statusTheme }}">{{
-									p.status
-								}}</span>
-							</td>
-							<td class="text-end align-middle">
-								<div class="dropdown d-inline-block">
-									<button class="btn-icon" (click)="toggleDropdownProject(p.slug, $event)">
-										<i class="bi bi-three-dots"></i>
-									</button>
-
-									@if (openDropdownSlug() === p.slug) {
-										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
-											<a
-												class="dropdown-item d-flex align-items-center gap-2"
-												[routerLink]="['/dashboard/projects/edit', p.slug]"
-												(click)="openDropdownSlug.set(null)"
-											>
-												<i class="bi bi-pencil small"></i> Edit Project
-											</a>
-
-											<button
-												type="button"
-												class="dropdown-item d-flex align-items-center gap-2 text-danger"
-												(click)="openDropdownSlug.set(null)"
-											>
-												<i class="bi bi-trash small"></i> Delete
-											</button>
+											[class]="
+												'project-icon bg-' +
+												(p.theme || 'primary') +
+												'-soft text-' +
+												(p.theme || 'primary')
+											"
+										>
+											<i class="bi {{ p.icon }}"></i>
 										</div>
+										<div>
+											<div class="fw-semibold">{{ p.name }}</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<span class="text-secondary fw-semibold">{{ t.name }}</span>
+								</td>
+								<td style="min-width: 180px">
+									<!-- Progress Bar -->
+								</td>
+								<td class="small">{{ p.dueDate | date: 'MMM d, y' }}</td>
+								<!-- Status -->
+								<td>
+									@if (p.status) {
+										<span
+											[class]="
+												'badge bg-' +
+												(p.status.theme.replace('badge-', '') || 'primary') +
+												'-soft text-' +
+												(p.status.theme.replace('badge-', '') || 'primary')
+											"
+										>
+											{{ p.status.name }}
+										</span>
+									} @else {
+										<span class="badge bg-secondary-soft text-secondary"> No Status </span>
 									}
-								</div>
-							</td>
+								</td>
+								<td class="text-end align-middle">
+									<div class="dropdown d-inline-block">
+										<button class="btn-icon" (click)="toggleDropdownProject(p.slug, $event)">
+											<i class="bi bi-three-dots"></i>
+										</button>
+
+										@if (openDropdownSlug() === p.slug) {
+											<div class="dropdown-menu show" (click)="$event.stopPropagation()">
+												<a
+													class="dropdown-item d-flex align-items-center gap-2"
+													[routerLink]="['/dashboard/projects/edit', p.slug]"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-pencil small"></i> Edit Project
+												</a>
+
+												<button
+													type="button"
+													class="dropdown-item d-flex align-items-center gap-2 text-danger"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-trash small"></i> Delete
+												</button>
+											</div>
+										}
+									</div>
+								</td>
+							</tr>
+						} @empty {
+							<tr>
+								<td colspan="6" class="text-muted text-center py-3">
+									No projects found for {{ t.name }}
+								</td>
+							</tr>
+						}
+					} @empty {
+						<tr>
+							<td colspan="6" class="text-muted text-center py-4">No teams available.</td>
 						</tr>
 					}
 				</tbody>

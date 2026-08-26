@@ -21,5 +21,5 @@ export class Dashboard {
 
 	projectsTrigger = toSignal(this.projectService.getProjects(), { initialValue: null });
 
-	authTrigger = toSignal(this.authService.getMembersById(-1), { initialValue: null });
+	// authTrigger = toSignal(this.authService.getMembersById(-1), { initialValue: null });
 }

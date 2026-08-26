@@ -31,9 +31,25 @@ export class Index {
 		return this.filterProjectsByScope(projects, filter);
 	});
 
-	public readonly completedCount = computed(() => this.allProjects().filter(p => p.status === 'Completed').length);
-	public readonly inProgressCount = computed(() => this.allProjects().filter(p => p.status === 'In Progress' || p.status === 'On Track').length);
-	public readonly overdueCount = computed(() => this.allProjects().filter(p => p.status === 'At Risk').length);
+	// Computed properties to get counts of projects based on their status
+	public readonly completedCount = computed(
+		() =>
+			this.allProjects()?.filter((p) => p.status?.name === 'Completed').length ?? 0,
+	);
+
+	// Computed properties to get counts of projects based on their status
+	public readonly inProgressCount = computed(
+		() =>
+			this.allProjects()?.filter((p) =>
+				p.status?.name === 'In Progress' || p.status?.name === 'On Track',
+			).length ?? 0,
+	);
+
+	// Computed properties to get counts of projects based on their status
+	public readonly overdueCount = computed(
+		() =>
+			this.allProjects()?.filter((p) => p.status?.name === 'At Risk').length ?? 0,
+	);
 
 	public setFilter(scope: FilterScope): void {
 		this.activeFilter.set(scope);
@@ -41,11 +57,11 @@ export class Index {
 
 	private readonly projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 
-    public readonly projectsCount = computed(() => this.projects().length);
+	public readonly projectsCount = computed(() => this.projects().length);
 
 	private filterProjectsByScope(projects: any[], scope: FilterScope): any[] {
 		const now = new Date();
-		return projects.filter(project => {
+		return projects.filter((project) => {
 			if (!project.updatedAt) return true; // fallback
 			const projectDate = new Date(project.updatedAt);
 			const diffTime = Math.abs(now.getTime() - projectDate.getTime());

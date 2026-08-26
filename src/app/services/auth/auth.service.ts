@@ -1,124 +1,138 @@
 import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, map, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+
+export interface PermissionResponse {
+	name: string;
+}
 
 export interface User {
-    id?: number;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    password?: string;
-    avatarColor?: string; // e.g. "emerald", "indigo" 
-    avatarClass?: string; // Generated helper for dynamic template styling classes
+	id: number;
+	firstName?: string;
+	lastName?: string;
+	email?: string;
+	avatarColor?: string;
+	avatarClass?: string;
+	role?: string;
+	permissions?: PermissionResponse[] | string[];
+}
+
+export interface LoginResponse {
+	token: string;
+	refreshToken: string;
+	user?: User;
+}
+
+export interface RegisterRequest {
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+	avatarColor?: string;
+	username?: string;
 }
 
 @Injectable({
-    providedIn: 'root'
+	providedIn: 'root',
 })
 export class AuthService {
-    private readonly http = inject(HttpClient);
-    private readonly platformId = inject(PLATFORM_ID);
-    
-    public readonly usersData = signal<User[] | null>(null);
-    public readonly currentUser = signal<User | null>(null);
+	private readonly http = inject(HttpClient);
+	private readonly platformId = inject(PLATFORM_ID);
+	private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-    constructor() {
-        if (isPlatformBrowser(this.platformId)) {
-            const storedUser = sessionStorage.getItem('currentUser');
-            if (storedUser) {
-                this.currentUser.set(JSON.parse(storedUser));
-            }
-        }
-    }
+	private readonly loginApiUrl = 'https://localhost:7175/api/auth/login';
+	private readonly registerApiUrl = 'https://localhost:7175/api/register';
+	private readonly logoutApiUrl = 'https://localhost:7175/api/auth/logout';
 
-    // Helper map method to append custom CSS utilities cleanly based on color keys
-    private mapAvatarClass(user: User): User {
-        const colorMaps: Record<string, string> = {
-            emerald: 'bg-emerald text-white',
-            indigo: 'bg-indigo text-white',
-            amber: 'bg-amber text-white',
-            rose: 'bg-rose text-white'
-        };
+	public readonly usersData = signal<User[] | null>(null);
+	public readonly currentUser = signal<User | null>(this.getStoredUser());
 
-        return {
-            ...user,
-            avatarClass: user.avatarColor ? (colorMaps[user.avatarColor] || 'bg-secondary text-white') : 'bg-secondary text-white'
-        };
-    }
+	private mapAvatarClass(user: User): User {
+		const colorMaps: Record<string, string> = {
+			emerald: 'bg-emerald text-white',
+			indigo: 'bg-indigo text-white',
+			amber: 'bg-amber text-white',
+			rose: 'bg-rose text-white',
+		};
 
-    getMembersById(id: number): Observable<User | undefined> {
-        if (id === -1) {
-            return this.loadInitialData().pipe(map(() => undefined));
-        }
-        return this.loadInitialData().pipe(map((users) => users.find((u) => u.id === id)));
-    }
+		return {
+			...user,
+			avatarClass: user.avatarColor
+				? colorMaps[user.avatarColor] || 'bg-secondary text-white'
+				: 'bg-secondary text-white',
+		};
+	}
 
-    private loadInitialData(): Observable<User[]> {
-        const currentUsers = this.usersData();
-        if (currentUsers !== null) {
-            return of(currentUsers);
-        }
-        
-        return this.http.get<{users: User[]}>('/assets/data/data.json').pipe(
-            map(response => (response.users || []).map(u => this.mapAvatarClass(u))),
-            tap(users => this.usersData.set(users))
-        );
-    }
+	private getStoredUser(): User | null {
+		if (this.isBrowser) {
+			const stored = sessionStorage.getItem('currentUser');
+			if (stored) {
+				try {
+					const parsedUser: User = JSON.parse(stored);
+					return this.mapAvatarClass(parsedUser);
+				} catch {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
 
-    public login(email: string, password: string): Observable<User> {
-        return this.loadInitialData().pipe(
-            map(users => {
-                const user = users.find(u => u.email === email && u.password === password);
-                if (!user) {
-                    throw new Error('Pogrešan email ili lozinka.');
-                }
-                
-                this.currentUser.set(user);
-                
-                if (isPlatformBrowser(this.platformId)) {
-                    sessionStorage.setItem('currentUser', JSON.stringify(user));
-                }
-                
-                return user;
-            })
-        );
-    }
+	public getToken(): string | null {
+		if (this.isBrowser) {
+			return localStorage.getItem('accessToken');
+		}
+		return null;
+	}
 
-    public register(userData: User): Observable<User> {
-        return this.loadInitialData().pipe(
-            map(users => {
-                const existingUser = users.find(u => u.email === userData.email);
-                if (existingUser) {
-                    throw new Error('Korisnik sa ovim email-om već postoji.');
-                }
-                
-                const colors = ['emerald', 'indigo', 'amber', 'rose'];
-                const assignedColor = userData.avatarColor || colors[Math.floor(Math.random() * colors.length)];
+	public login(email: string, password: string): Observable<LoginResponse> {
+		return this.http
+			.post<LoginResponse>(this.loginApiUrl, { email, password })
+			.pipe(tap((response) => this.handleAuthSuccess(response)));
+	}
 
-                const newUser = this.mapAvatarClass({
-                    ...userData,
-                    avatarColor: assignedColor,
-                    id: users.length > 0 ? Math.max(...users.map(u => u.id || 0)) + 1 : 1
-                });
-                
-                const updatedUsers = [...users, newUser];
-                this.usersData.set(updatedUsers);
-                this.currentUser.set(newUser);
-                
-                if (isPlatformBrowser(this.platformId)) {
-                    sessionStorage.setItem('currentUser', JSON.stringify(newUser));
-                }
-                
-                return newUser;
-            })
-        );
-    }
+	public register(requestData: RegisterRequest): Observable<LoginResponse> {
+		return this.http
+			.post<LoginResponse>(this.registerApiUrl, requestData)
+			.pipe(tap((response) => this.handleAuthSuccess(response)));
+	}
 
-    public logout(): void {
-        this.currentUser.set(null);
-        if (isPlatformBrowser(this.platformId)) {
-            sessionStorage.removeItem('currentUser');
-        }
-    }
+	private handleAuthSuccess(response: LoginResponse): void {
+		if (this.isBrowser) {
+			if (response.token) {
+				localStorage.setItem('accessToken', response.token);
+			}
+			if (response.refreshToken) {
+				localStorage.setItem('refreshToken', response.refreshToken);
+			}
+
+			if (response.user) {
+				const formattedUser = this.mapAvatarClass(response.user);
+				sessionStorage.setItem('currentUser', JSON.stringify(formattedUser));
+				this.currentUser.set(formattedUser);
+			}
+		}
+	}
+
+	public logout(): Observable<void> {
+		return this.http.post<void>(this.logoutApiUrl, {}).pipe(
+			tap({
+				next: () => this.clearLocalSession(),
+				error: (err) => {
+					console.error('Logout failed on server, cleaning local session anyway', err);
+					this.clearLocalSession();
+				},
+			}),
+		);
+	}
+
+	private clearLocalSession(): void {
+		if (this.isBrowser) {
+			localStorage.removeItem('accessToken');
+			localStorage.removeItem('refreshToken');
+			sessionStorage.removeItem('currentUser');
+			this.currentUser.set(null);
+		}
+	}
 }

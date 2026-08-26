@@ -81,20 +81,62 @@
 					<div class="row g-3 mb-3 mx-0">
 						<div class="col-md-6">
 							<label class="form-label" for="regFirstName">First name</label>
-							<input name="firstName" id="regFirstName" type="text" class="form-control form-control-lg" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" required />
+							<input
+								name="firstName"
+								id="regFirstName"
+								type="text"
+								class="form-control form-control-lg"
+								[ngModel]="firstName()"
+								(ngModelChange)="firstName.set($event)"
+								required
+							/>
 							<div class="invalid-feedback">Please enter your first name.</div>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label" for="regLastName">Last name</label>
-							<input name="lastName" id="regLastName" type="text" class="form-control form-control-lg" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" required />
+							<input
+								name="lastName"
+								id="regLastName"
+								type="text"
+								class="form-control form-control-lg"
+								[ngModel]="lastName()"
+								(ngModelChange)="lastName.set($event)"
+								required
+							/>
 							<div class="invalid-feedback">Please enter your last name.</div>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="regUsername">Work username</label>
+						<div class="input-group input-group-lg">
+							<span class="input-group-text"><i class="bi bi-person"></i></span>
+							<input
+								name="username"
+								id="regUsername"
+								type="text"
+								class="form-control"
+								placeholder="Unique username"
+								[ngModel]="username()"
+								(ngModelChange)="username.set($event)"
+								required
+							/>
+							<div class="invalid-feedback">Enter a valid username.</div>
 						</div>
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="regEmail">Work email</label>
 						<div class="input-group input-group-lg">
 							<span class="input-group-text"><i class="bi bi-envelope"></i></span>
-							<input name="email" id="regEmail" type="email" class="form-control" placeholder="you@company.com" [ngModel]="email()" (ngModelChange)="email.set($event)" required />
+							<input
+								name="email"
+								id="regEmail"
+								type="email"
+								class="form-control"
+								placeholder="you@company.com"
+								[ngModel]="email()"
+								(ngModelChange)="email.set($event)"
+								required
+							/>
 							<div class="invalid-feedback">Enter a valid email.</div>
 						</div>
 					</div>
@@ -113,11 +155,7 @@
 								required
 								minlength="8"
 							/>
-							<button
-								type="button"
-								class="input-group-text btn-eye"
-								(click)="togglePassword()"
-							>
+							<button type="button" class="input-group-text btn-eye" (click)="togglePassword()">
 								<i [class]="passwordVisible() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
 							</button>
 						</div>
@@ -145,6 +183,27 @@
 						</div>
 						<div id="matchFeedback" class="small mt-1"></div>
 					</div>
+
+					<!--  Avatar Color Selector -->
+					<div class="mb-4">
+						<label class="form-label d-block">Choose avatar color</label>
+						<div class="d-flex align-items-center gap-3">
+							@for (color of avatarColors; track color) {
+								<button
+									type="button"
+									class="btn p-0 rounded-circle border-0 bg-{{ color }}"
+									style="width: 38px; height: 38px"
+									(click)="avatarColor.set(color)"
+									[attr.aria-label]="'Select ' + color + ' avatar color'"
+								>
+									@if (avatarColor() === color) {
+										<i class="bi bi-check-lg text-white fs-5"></i>
+									}
+								</button>
+							}
+						</div>
+					</div>
+
 					<div class="form-check mb-4">
 						<input class="form-check-input" type="checkbox" id="terms" required />
 						<label class="form-check-label" for="terms">
@@ -156,7 +215,11 @@
 					</div>
 					<button type="submit" class="btn btn-primary btn-lg w-100 mb-3" [disabled]="isLoading()">
 						@if (isLoading()) {
-							<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+							<span
+								class="spinner-border spinner-border-sm me-2"
+								role="status"
+								aria-hidden="true"
+							></span>
 							Creating...
 						} @else {
 							Create account <i class="bi bi-arrow-right ms-1"></i>

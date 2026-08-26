@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../../services/theme/theme.service';
 import { AuthService } from '../../services/auth/auth.service';
 
+export type AvatarColor = 'emerald' | 'indigo' | 'amber' | 'rose';
+
 @Component({
   selector: 'app-register',
   imports: [RouterLink, FormsModule],
@@ -19,12 +21,16 @@ export class Register {
 
 	protected readonly passwordVisible = signal(false);
 
-	// Stanje forme
+	// List of available avatar colors
+	readonly avatarColors: AvatarColor[] = ['emerald', 'indigo', 'amber', 'rose'];
+
 	protected firstName = signal('');
 	protected lastName = signal('');
+	protected username = signal('');
 	protected email = signal('');
 	protected password = signal('');
 	protected confirmPassword = signal('');
+	avatarColor = signal<AvatarColor>('indigo');
 	
 	protected errorMessage = signal<string | null>(null);
 	protected isLoading = signal(false);
@@ -34,7 +40,7 @@ export class Register {
 	}
 
 	protected handleSubmit(): void {
-		if (!this.firstName() || !this.lastName() || !this.email() || !this.password() || !this.confirmPassword()) {
+		if (!this.firstName() || !this.lastName() || !this.username() || !this.email() || !this.password() || !this.confirmPassword()) {
 			this.errorMessage.set('Please fill in all required fields.');
 			return;
 		}
@@ -50,8 +56,10 @@ export class Register {
 		this.authService.register({
 			firstName: this.firstName(),
 			lastName: this.lastName(),
+			username: this.username(),
 			email: this.email(),
-			password: this.password()
+			password: this.password(),
+			avatarColor: this.avatarColor(),
 		}).subscribe({
 			next: () => {
 				this.isLoading.set(false);
@@ -59,7 +67,16 @@ export class Register {
 			},
 			error: (err) => {
 				this.isLoading.set(false);
-				this.errorMessage.set(err.message);
+				if (typeof err.error === 'string') {
+                    this.errorMessage.set(err.error);
+                } else if (err.error?.message) {
+                    this.errorMessage.set(err.error.message);
+                } else if (err.error?.errors) {
+                    const firstError = Object.values(err.error.errors)[0] as string[];
+                    this.errorMessage.set(firstError?.[0] || 'Validation error occurred.');
+                } else {
+                    this.errorMessage.set('Registration failed. Please check your data.');
+                }
 			}
 		});
 	}

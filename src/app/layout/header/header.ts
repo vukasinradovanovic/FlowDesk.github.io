@@ -9,48 +9,54 @@ import { of, switchMap } from 'rxjs';
 import { PermissionService } from '../../services/permisions/permisions';
 
 @Component({
-  selector: 'app-header',
-  imports: [RouterLink, BreadcrumbsComponent, AvatarComponent],
-  templateUrl: './header.html',
-  styleUrl: './header.scss',
+	selector: 'app-header',
+	imports: [RouterLink, BreadcrumbsComponent, AvatarComponent],
+	templateUrl: './header.html',
+	styleUrl: './header.scss',
 })
 export class Header {
-  readonly theme = inject(ThemeService);
-  auth = inject(AuthService);
-  router = inject(Router);
-  private elementRef = inject(ElementRef);
-  readonly permissionService = inject(PermissionService);
+	readonly theme = inject(ThemeService);
+	auth = inject(AuthService);
+	router = inject(Router);
+	private elementRef = inject(ElementRef);
+	readonly permissionService = inject(PermissionService);
 
-  isDropdownOpen = false;
+	isDropdownOpen = false;
 
-  toggleDropdown(): void {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
+	toggleDropdown(): void {
+		this.isDropdownOpen = !this.isDropdownOpen;
+	}
 
-  selectedOption() {
-    this.isDropdownOpen = false;
-  }
+	selectedOption() {
+		this.isDropdownOpen = false;
+	}
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent): void {
-    if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
-      this.isDropdownOpen = false;
-    }
-  }
+	@HostListener('document:click', ['$event'])
+	onClickOutside(event: MouseEvent): void {
+		if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
+			this.isDropdownOpen = false;
+		}
+	}
 
-  protected handleLogout(): void {
-    this.auth.logout();
-    this.router.navigate(['/']);
-  }
+	protected handleLogout(): void {
+		this.auth.logout().subscribe({
+			next: () => {
+				this.router.navigate(['/']);
+			},
+			error: () => {
+				this.router.navigate(['/']);
+			},
+		});
+	}
 
-  private currentUserId = computed(() => this.auth.currentUser()?.id);
+	private currentUser = computed(() => this.auth.currentUser());
 
-    public canCreateTask = toSignal(
-        toObservable(this.currentUserId).pipe(
-            switchMap((uid) => {
-                return uid ? this.permissionService.hasPermission(uid, 'Create Tasks') : of(false);
-            })
-        ),
-        { initialValue: false }
-    );
+	public canCreateTask = toSignal(
+		toObservable(this.currentUser).pipe(
+			switchMap((uid) => {
+				return uid ? this.permissionService.hasPermission(1, 'Create Tasks') : of(false);
+			}),
+		),
+		{ initialValue: false },
+	);
 }
