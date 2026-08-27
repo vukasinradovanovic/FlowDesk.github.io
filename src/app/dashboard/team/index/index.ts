@@ -6,10 +6,11 @@ import { AuthService, User } from '../../../services/auth/auth.service';
 import { of, switchMap } from 'rxjs';
 import { RoleService } from '../../../services/role/role.service';
 import { PermissionService } from '../../../services/permisions/permisions';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-index',
-	imports: [CommonModule, DatePipe],
+	imports: [CommonModule, DatePipe, RouterLink],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 })
@@ -25,27 +26,9 @@ export class Index {
 	teams = this.teamService.allTeams;
 	members = this.teamService.allMembers;
 
+	public canCreateTeam = computed(() => this.auth.currentUser()?.permissions?.some((p) => p.name === 'Create Teams') ?? false);
+
 	ngOnInit(): void {
 		this.teamService.getTeams().subscribe();
 	}
-
-	// protected readonly authTrigger = toSignal(this.auth.currentUser(), {
-	// 	initialValue: undefined,
-	// });
-
-	// getMemberDetails(id: number): Team | undefined {
-	// 	const users = this.Team.usersData() || [];
-	// 	return users.find((user) => user.id === id);
-	// }
-
-	// private currentUserId = computed(() => this.auth.currentUser()?.id);
-
-	// public canCreateTeam = toSignal(
-	//     toObservable(this.currentUserId).pipe(
-	//         switchMap((uid) => {
-	//             return uid ? this.permissionService.hasPermission(uid, 'Create Teams') : of(false);
-	//         })
-	//     ),
-	//     { initialValue: false }
-	// );
 }

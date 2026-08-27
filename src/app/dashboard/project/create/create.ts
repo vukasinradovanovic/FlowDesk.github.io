@@ -13,7 +13,6 @@ export class CreateProject {
 
     public handleCreate(payload: ProjectFormData): void {
         console.log('Sending new record creation properties to JSON backend payload maps:', payload);
-        // Here you would connect to your project data service to push to your mock array database
         this.router.navigate(['/dashboard/projects']);
     }
 }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService, User } from '../auth/auth.service';
 import { Observable, tap } from 'rxjs';
 import { Project } from '../project/project';
+import { TeamFormData } from '../../dashboard/forms/team-form.component/team-form.component';
 
 export interface Team {
 	id: number;
@@ -19,6 +20,7 @@ export class TeamService {
 	private readonly auth = inject(AuthService);
 
 	private readonly getTeamsApiUrl = 'https://localhost:7175/api/getuserteams';
+	private readonly createTeamApiUrl = 'https://localhost:7175/api/createteam';
 
 	public readonly allTeams = signal<Team[] | null>(null);
 
@@ -37,5 +39,7 @@ export class TeamService {
 			.pipe(tap((teams) => this.allTeams.set(teams)));
 	}
 
-	
+	public createTeam(payload: TeamFormData): Observable<any> {
+		return this.http.post<any>(this.createTeamApiUrl, payload);
+	}
 }

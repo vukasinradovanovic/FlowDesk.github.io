@@ -4,13 +4,12 @@ import { of, switchMap } from 'rxjs';
 import { AuthService } from '../../../services/auth/auth.service';
 import { RoleService } from '../../../services/role/role.service';
 import { PermissionService } from '../../../services/permisions/permisions';
-import { NgClass } from '@angular/common';
 import { AvatarComponent } from '../../avatar.component/avatar.component';
 
 @Component({
     selector: 'app-profile',
     standalone: true,
-	imports: [NgClass, AvatarComponent],
+	imports: [AvatarComponent],
     templateUrl: './profile.html',
     styleUrl: './profile.scss'
 })
