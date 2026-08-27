@@ -3,10 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, tap } from 'rxjs';
 import { Role } from '../role/role.service';
-
-export interface PermissionResponse {
-	name: string;
-}
+import { Permission } from '../permisions/permisions';
 
 export interface User {
 	id: number;
@@ -16,7 +13,7 @@ export interface User {
 	avatarColor?: string;
 	avatarClass?: string;
 	role: Role;
-	permissions?: PermissionResponse[] | string[];
+	permissions?: Permission[];
 }
 
 export interface LoginResponse {

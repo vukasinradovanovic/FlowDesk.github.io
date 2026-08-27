@@ -35,7 +35,7 @@ export class Profile {
     // Resolve the clean list array of unique permission tag strings
     public userPermissions = toSignal(
         toObservable(this.currentUser).pipe(
-            switchMap((user) => (user ? this.permissionService.getUserPermissions(user.id) : of([])))
+            switchMap((user) => (user ? of(user.permissions) : of([])))
         ),
         { initialValue: [] }
     );
