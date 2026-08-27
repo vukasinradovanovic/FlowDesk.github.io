@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-	TeamFormComponent,
-	TeamFormData,
-} from '../../forms/team-form.component/team-form.component';
+import {TeamFormComponent, TeamFormData} from '../../forms/team-form.component/team-form.component';
 import { TeamService } from '../../../services/team/team.service';
 
 @Component({

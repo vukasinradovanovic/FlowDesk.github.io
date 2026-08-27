@@ -1,0 +1,21 @@
+<div class="container py-4" style="max-width: 800px">
+    <p class="fs-2 fw-bold mb-1">Edit Team</p>
+    <p class="small mb-4 text-secondary">
+        Update details and properties for this team framework scope.
+    </p>
+
+    <!-- Pre-fill form using initialData signal -->
+    @if (initialTeamData()) {
+        <app-team-form 
+            submitLabel="Update Team" 
+            [initialData]="initialTeamData()" 
+            (formSubmit)="handleUpdate($event)"
+        >
+        </app-team-form>
+    } @else {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-secondary">Loading team details...</p>
+        </div>
+    }
+</div>

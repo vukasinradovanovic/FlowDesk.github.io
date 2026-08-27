@@ -20,7 +20,7 @@
 			<div class="d-flex gap-2">
 				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
 
-				@if (canCreateTeam()) { 
+				@if (canCreateTeam()) {
 					<button class="btn btn-primary btn-sm" [routerLink]="'/dashboard/team/create'">
 						<i class="bi bi-plus-lg me-1"></i> New Team
 					</button>
@@ -63,10 +63,38 @@
 									}
 								</div>
 							</td>
-							<td class="d-flex justify-content-end">
-								<button class="btn-icon">
-									<i class="bi bi-three-dots"></i>
-								</button>
+							<!-- Actions -->
+							<td class="text-end">
+								<!-- 1. Added wrapper div with class "dropdown" -->
+								<div class="dropdown d-inline-block">
+									<button
+										type="button"
+										class="btn-icon"
+										(click)="toggleDropdownProject(team.id, $event)"
+									>
+										<i class="bi bi-three-dots"></i>
+									</button>
+
+									@if (openDropdownId() === team.id) {
+										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
+											<a
+												class="dropdown-item d-flex align-items-center gap-2"
+												[routerLink]="['/dashboard/team/edit', team.id]"
+												(click)="openDropdownId.set(null)"
+											>
+												<i class="bi bi-pencil small"></i> Edit Team
+											</a>
+
+											<button
+												type="button"
+												class="dropdown-item d-flex align-items-center gap-2 text-danger"
+												(click)="openDropdownId.set(null)"
+											>
+												<i class="bi bi-trash small"></i> Delete
+											</button>
+										</div>
+									}
+								</div>
 							</td>
 						</tr>
 					} @empty {

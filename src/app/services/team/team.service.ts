@@ -21,6 +21,8 @@ export class TeamService {
 
 	private readonly getTeamsApiUrl = 'https://localhost:7175/api/getuserteams';
 	private readonly createTeamApiUrl = 'https://localhost:7175/api/createteam';
+	private readonly getTeamByIdApiUrl = 'https://localhost:7175/api/showteam';
+	private readonly updateTeamApiUrl = 'https://localhost:7175/api/updateteam';
 
 	public readonly allTeams = signal<Team[] | null>(null);
 
@@ -41,5 +43,18 @@ export class TeamService {
 
 	public createTeam(payload: TeamFormData): Observable<any> {
 		return this.http.post<any>(this.createTeamApiUrl, payload);
+	}
+
+	public getTeamById(id: number): Observable<TeamFormData> {
+		return this.http.get<TeamFormData>(`${this.getTeamByIdApiUrl}/${id}`);
+	}
+
+	public updateTeam(id: number, payload: TeamFormData): Observable<void> {
+		const updatePayload = {
+			id: id,
+			...payload,
+		};
+
+		return this.http.put<void>(`${this.updateTeamApiUrl}/${id}`, updatePayload);
 	}
 }

@@ -11,7 +11,8 @@ import { anonGuard } from './guards/anon-guard';
 import { EditProject } from './dashboard/project/edit/edit';
 import { Profile } from './dashboard/user/profile/profile';
 import { CreateProject } from './dashboard/project/create/create';
-import { CreateTeam } from './dashboard/team/create/create-team';
+import { CreateTeam } from './dashboard/team/create-team/create-team';
+import { EditTeam } from './dashboard/team/edit-team/edit-team';
 
 export const routes: Routes = [
 	{
@@ -66,6 +67,11 @@ export const routes: Routes = [
 				path: 'team/create',
 				component: CreateTeam,
 				data: { breadcrumb: 'New Team' },
+			},
+			{
+				path: 'team/edit/:id',
+				component: EditTeam,
+				data: { breadcrumb: 'Edit Team' },
 			},
 			{
 				path: 'profile',
