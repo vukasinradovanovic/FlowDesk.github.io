@@ -13,6 +13,7 @@ import { Profile } from './dashboard/user/profile/profile';
 import { CreateProject } from './dashboard/project/create/create';
 import { CreateTeam } from './dashboard/team/create-team/create-team';
 import { EditTeam } from './dashboard/team/edit-team/edit-team';
+import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
 
 export const routes: Routes = [
 	{
@@ -62,6 +63,11 @@ export const routes: Routes = [
 				path: 'team',
 				component: TeamsIndex,
 				data: { breadcrumb: 'Team' },
+			},
+			{
+				path: 'all-teams',
+				component: ViewAllTeams,
+				data: { breadcrumb: 'All Teams' },
 			},
 			{
 				path: 'team/create',

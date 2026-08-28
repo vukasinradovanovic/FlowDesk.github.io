@@ -24,53 +24,53 @@ export class Index {
 
 	public readonly activeFilter = signal<FilterScope>('week');
 
-	public readonly teamProjects = computed(() => {
-		const filter = this.activeFilter();
-		const projects = this.allProjects();
+	// public readonly teamProjects = computed(() => {
+	// 	const filter = this.activeFilter();
+	// 	const projects = this.allProjects();
 
-		return this.filterProjectsByScope(projects, filter);
-	});
+	// 	return this.filterProjectsByScope(projects, filter);
+	// });
 
-	// Computed properties to get counts of projects based on their status
-	public readonly completedCount = computed(
-		() =>
-			this.allProjects()?.filter((p) => p.status?.name === 'Completed').length ?? 0,
-	);
+	// // Computed properties to get counts of projects based on their status
+	// public readonly completedCount = computed(
+	// 	() =>
+	// 		this.allProjects()?.filter((p) => p.status?.name === 'Completed').length ?? 0,
+	// );
 
-	// Computed properties to get counts of projects based on their status
-	public readonly inProgressCount = computed(
-		() =>
-			this.allProjects()?.filter((p) =>
-				p.status?.name === 'In Progress' || p.status?.name === 'On Track',
-			).length ?? 0,
-	);
+	// // Computed properties to get counts of projects based on their status
+	// public readonly inProgressCount = computed(
+	// 	() =>
+	// 		this.allProjects()?.filter((p) =>
+	// 			p.status?.name === 'In Progress' || p.status?.name === 'On Track',
+	// 		).length ?? 0,
+	// );
 
-	// Computed properties to get counts of projects based on their status
-	public readonly overdueCount = computed(
-		() =>
-			this.allProjects()?.filter((p) => p.status?.name === 'At Risk').length ?? 0,
-	);
+	// // Computed properties to get counts of projects based on their status
+	// public readonly overdueCount = computed(
+	// 	() =>
+	// 		this.allProjects()?.filter((p) => p.status?.name === 'At Risk').length ?? 0,
+	// );
 
-	public setFilter(scope: FilterScope): void {
-		this.activeFilter.set(scope);
-	}
+	// public setFilter(scope: FilterScope): void {
+	// 	this.activeFilter.set(scope);
+	// }
 
-	private readonly projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
+	// private readonly projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 
-	public readonly projectsCount = computed(() => this.projects().length);
+	// public readonly projectsCount = computed(() => this.projects().length);
 
-	private filterProjectsByScope(projects: any[], scope: FilterScope): any[] {
-		const now = new Date();
-		return projects.filter((project) => {
-			if (!project.updatedAt) return true; // fallback
-			const projectDate = new Date(project.updatedAt);
-			const diffTime = Math.abs(now.getTime() - projectDate.getTime());
-			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+	// private filterProjectsByScope(projects: any[], scope: FilterScope): any[] {
+	// 	const now = new Date();
+	// 	return projects.filter((project) => {
+	// 		if (!project.updatedAt) return true; // fallback
+	// 		const projectDate = new Date(project.updatedAt);
+	// 		const diffTime = Math.abs(now.getTime() - projectDate.getTime());
+	// 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-			if (scope === 'day') return diffDays <= 1;
-			if (scope === 'week') return diffDays <= 7;
-			if (scope === 'month') return diffDays <= 30;
-			return true;
-		});
-	}
+	// 		if (scope === 'day') return diffDays <= 1;
+	// 		if (scope === 'week') return diffDays <= 7;
+	// 		if (scope === 'month') return diffDays <= 30;
+	// 		return true;
+	// 	});
+	// }
 }

@@ -33,7 +33,7 @@ export class Index {
 		this.isDropdownOpen = false;
 	}
 
-	teams = toSignal(this.teamService.getTeams(), { initialValue: [] });
+	teams = toSignal(this.teamService.getUserTeams(), { initialValue: [] });
 
 	public openDropdownSlug = signal<string | null>(null);
 

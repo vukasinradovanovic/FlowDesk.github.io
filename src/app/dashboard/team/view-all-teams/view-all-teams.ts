@@ -1,31 +1,29 @@
-import { Component, inject, computed, HostListener, signal, ElementRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Team, TeamService } from '../../../services/team/team.service';
-import { AuthService, User } from '../../../services/auth/auth.service';
-import { PermissionService } from '../../../services/permisions/permisions';
+import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TeamService } from '../../../services/team/team.service';
+import { PermissionService } from '../../../services/permisions/permisions';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
-	selector: 'app-index',
+	selector: 'app-view-all-teams',
 	imports: [CommonModule, DatePipe, RouterLink],
-	templateUrl: './index.html',
-	styleUrl: './index.scss',
+	templateUrl: './view-all-teams.html',
+	styleUrl: './view-all-teams.scss',
 })
-export class Index {
+export class ViewAllTeams {
 	private readonly teamService = inject(TeamService);
 	private readonly permissionService = inject(PermissionService);
 	public readonly auth = inject(AuthService);
 
-
 	public readonly today = new Date();
 	private elementRef = inject(ElementRef);
 
-	teams = this.teamService.myTeams;
-	members = this.teamService.allMembers;
+	teams = this.teamService.allTeams;
+    members = this.teamService.allMembers;
 
-	public canCreateTeam = computed(
-		() => this.permissionService.hasPermission('Create Teams', this.auth.currentUser())
+	public canCreateTeam = computed(() =>
+		this.permissionService.hasPermission('Create Teams', this.auth.currentUser()),
 	);
 
 	public openDropdownId = signal<number | null>(null);
@@ -60,6 +58,6 @@ export class Index {
 	}
 
 	ngOnInit(): void {
-		this.teamService.getUserTeams().subscribe();
+		this.teamService.getAllTeams().subscribe();
 	}
 }
