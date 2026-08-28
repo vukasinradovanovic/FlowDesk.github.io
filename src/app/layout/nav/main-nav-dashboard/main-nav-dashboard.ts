@@ -11,7 +11,7 @@ interface NavLink {
 	route: string[];
 	adons?: string;
 	exact?: boolean;
-    permission?: string;
+	permission?: string;
 }
 
 @Component({
@@ -23,14 +23,16 @@ interface NavLink {
 export class MainNavDashboard {
 	public readonly auth = inject(AuthService);
 	private readonly projectService = inject(ProjectService);
-    public readonly permissionService = inject(PermissionService);
+	public readonly permissionService = inject(PermissionService);
 
-	private readonly projects = toSignal(this.projectService.getUsersProjects(), { initialValue: [] });
+	private readonly projects = toSignal(this.projectService.getUsersProjects(), {
+		initialValue: [],
+	});
 
 	public readonly projectsCount = computed(() => this.projects().length);
 
-    public canViewAllTeams = computed(
-		() => this.permissionService.hasPermission('View Teams', this.auth.currentUser())
+	public canViewAllTeams = computed(() =>
+		this.permissionService.hasPermission('View Teams', this.auth.currentUser()),
 	);
 
 	public readonly navLinks = computed<NavLink[]>(() => {
@@ -44,10 +46,21 @@ export class MainNavDashboard {
 				icon: 'bi bi-folder2-open',
 				route: ['/dashboard', 'projects'],
 				adons: this.projectsCount().toString(),
+				exact: true,
+			},
+			{
+				label: 'Manage All Projects',
+				icon: 'bi bi-folder2-open',
+				route: ['/dashboard', 'projects', 'all'],
+				permission: 'View Projects',
 			},
 			{ label: 'Team', icon: 'bi bi-people', route: ['/dashboard', 'team'] },
-			{ label: 'Manage All Teams', icon: 'bi bi-people', route: ['/dashboard', 'all-teams'], permission: "View Teams" },
-
+			{
+				label: 'Manage All Teams',
+				icon: 'bi bi-people',
+				route: ['/dashboard', 'teams', 'all'],
+				permission: 'View Teams',
+			},
 			// { label: 'Kanban Board', icon: 'bi bi-kanban', route: ['/dashboard', 'settings'] },
 			// { label: 'Calendar', icon: 'bi bi-calendar3', route: ['/dashboard', 'calendar'] },
 			// { label: 'Analytics', icon: 'bi bi-bar-chart', route: ['/dashboard', 'analytics'] },

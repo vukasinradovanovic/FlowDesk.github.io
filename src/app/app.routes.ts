@@ -14,6 +14,7 @@ import { CreateProject } from './dashboard/project/create/create';
 import { CreateTeam } from './dashboard/team/create-team/create-team';
 import { EditTeam } from './dashboard/team/edit-team/edit-team';
 import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
+import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-projects';
 
 export const routes: Routes = [
 	{
@@ -50,6 +51,11 @@ export const routes: Routes = [
 				data: { breadcrumb: 'Projects' },
 			},
 			{
+				path: 'projects/all',
+				component: ViewAllProjects,
+				data: { breadcrumb: 'All Projects' },
+			},
+			{
 				path: 'projects/create',
 				component: CreateProject,
 				data: { breadcrumb: 'New Project' },
@@ -65,7 +71,7 @@ export const routes: Routes = [
 				data: { breadcrumb: 'Team' },
 			},
 			{
-				path: 'all-teams',
+				path: 'teams/all',
 				component: ViewAllTeams,
 				data: { breadcrumb: 'All Teams' },
 			},

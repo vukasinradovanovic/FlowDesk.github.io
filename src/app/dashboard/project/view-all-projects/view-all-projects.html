@@ -1,0 +1,137 @@
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
+	<div>
+		<h1 class="h3 fw-bold mb-1">All Projects</h1>
+		<p class="text-secondary mb-0">Manage your projects and track their progress.</p>
+	</div>
+	<div class="d-flex gap-2">
+		<button class="btn btn-light-soft">
+			<i class="bi bi-calendar3 me-1"></i> {{ currentDate | date: 'MMM d, y' }}
+		</button>
+		<!-- <button class="btn btn-light-soft"><i class="bi bi-download me-1"></i> Export</button>
+		<button class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New Project</button> -->
+	</div>
+</div>
+
+<!-- Stats -->
+<div class="row g-3 mb-4"></div>
+
+<!-- Recent Projects Table -->
+<div class="card card-plain">
+	<div class="card-body">
+		<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+			<div>
+				<h5 class="fw-semibold mb-1">Recent Projects</h5>
+				<p class="text-secondary small mb-0">Active projects with progress updates</p>
+			</div>
+			<div class="d-flex gap-2">
+				<button class="btn btn-light-soft btn-sm"><i class="bi bi-funnel me-1"></i> Filter</button>
+				@if (canCreateProjects()) {
+					<button class="btn btn-primary btn-sm" [routerLink]="'/dashboard/projects/create'">
+						<i class="bi bi-plus-lg me-1"></i> New Project
+					</button>
+				}
+			</div>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-modern align-middle">
+				<thead>
+					<tr>
+						<th>Project</th>
+						<th>Team</th>
+						<th>Progress</th>
+						<th>Due Date</th>
+						<th>Status</th>
+						<th class="text-end">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (t of teams(); track t.id) {
+						@for (p of t.projects ?? []; track p.id) {
+							<tr>
+								<td>
+									<div class="d-flex align-items-center gap-3">
+										<div
+											[class]="
+												'project-icon bg-' +
+												(p.theme || 'primary') +
+												'-soft text-' +
+												(p.theme || 'primary')
+											"
+										>
+											<i class="bi {{ p.icon }}"></i>
+										</div>
+										<div>
+											<div class="fw-semibold">{{ p.name }}</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<span class="text-secondary fw-semibold">{{ t.name }}</span>
+								</td>
+								<td style="min-width: 180px">
+									<!-- Progress Bar -->
+								</td>
+								<td class="small">{{ p.dueDate | date: 'MMM d, y' }}</td>
+								<!-- Status -->
+								<td>
+									@if (p.status) {
+										<span
+											[class]="
+												'badge bg-' +
+												(p.status.theme.replace('badge-', '') || 'primary') +
+												'-soft text-' +
+												(p.status.theme.replace('badge-', '') || 'primary')
+											"
+										>
+											{{ p.status.name }}
+										</span>
+									} @else {
+										<span class="badge bg-secondary-soft text-secondary"> No Status </span>
+									}
+								</td>
+								<td class="text-end align-middle">
+									<div class="dropdown d-inline-block">
+										<button class="btn-icon" (click)="toggleDropdownProject(p.slug, $event)">
+											<i class="bi bi-three-dots"></i>
+										</button>
+
+										@if (openDropdownSlug() === p.slug) {
+											<div class="dropdown-menu show" (click)="$event.stopPropagation()">
+												<a
+													class="dropdown-item d-flex align-items-center gap-2"
+													[routerLink]="['/dashboard/projects/edit', p.slug]"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-pencil small"></i> Edit Project
+												</a>
+
+												<button
+													type="button"
+													class="dropdown-item d-flex align-items-center gap-2 text-danger"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-trash small"></i> Delete
+												</button>
+											</div>
+										}
+									</div>
+								</td>
+							</tr>
+						} @empty {
+							<tr>
+								<td colspan="6" class="text-muted text-center py-3">
+									No projects found for {{ t.name }}
+								</td>
+							</tr>
+						}
+					} @empty {
+						<tr>
+							<td colspan="6" class="text-muted text-center py-4">No teams available.</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
