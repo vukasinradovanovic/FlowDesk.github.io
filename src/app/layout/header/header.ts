@@ -16,7 +16,7 @@ import { PermissionService } from '../../services/permisions/permisions';
 })
 export class Header {
 	readonly theme = inject(ThemeService);
-	auth = inject(AuthService);
+	readonly authService = inject(AuthService);
 	router = inject(Router);
 	private elementRef = inject(ElementRef);
 	readonly permissionService = inject(PermissionService);
@@ -39,7 +39,7 @@ export class Header {
 	}
 
 	protected handleLogout(): void {
-		this.auth.logout().subscribe({
+		this.authService.logout().subscribe({
 			next: () => {
 				this.router.navigate(['/']);
 			},
@@ -49,14 +49,12 @@ export class Header {
 		});
 	}
 
-	private currentUser = computed(() => this.auth.currentUser());
+	private currentUser = computed(() => this.authService.currentUser());
 
-	public canCreateTask = toSignal(
-		toObservable(this.currentUser).pipe(
-			switchMap((uid) => {
-				return uid ? this.permissionService.hasPermission(1, 'Create Tasks') : of(false);
-			}),
-		),
-		{ initialValue: false },
-	);
+	public hasPermission(permissionName: string): boolean {
+		const user = this.authService.currentUser();
+		return user?.permissions?.some((p) => p.name === permissionName) ?? false;
+	}
+	
+	public canCreateTask = computed(() => this.hasPermission('Create Tasks'));
 }

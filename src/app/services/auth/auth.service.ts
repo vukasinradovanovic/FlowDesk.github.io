@@ -2,10 +2,8 @@ import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, tap } from 'rxjs';
-
-export interface PermissionResponse {
-	name: string;
-}
+import { Role } from '../role/role.service';
+import { Permission } from '../permisions/permisions';
 
 export interface User {
 	id: number;
@@ -14,8 +12,8 @@ export interface User {
 	email?: string;
 	avatarColor?: string;
 	avatarClass?: string;
-	role?: string;
-	permissions?: PermissionResponse[] | string[];
+	role: Role;
+	permissions?: Permission[];
 }
 
 export interface LoginResponse {

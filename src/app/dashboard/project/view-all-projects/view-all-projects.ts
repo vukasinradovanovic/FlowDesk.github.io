@@ -1,20 +1,19 @@
-import { Component, inject, computed, ElementRef, signal, HostListener } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { AuthService, User } from '../../../services/auth/auth.service';
+import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { ProjectService } from '../../../services/project/project';
+import { CommonModule, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TeamService } from '../../../services/team/team.service';
 import { PermissionService } from '../../../services/permisions/permisions';
-import { of, switchMap } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-	selector: 'app-index',
+	selector: 'app-view-all-projects',
 	imports: [DatePipe, CommonModule, RouterLink],
-	templateUrl: './index.html',
-	styleUrl: './index.scss',
+	templateUrl: './view-all-projects.html',
+	styleUrl: './view-all-projects.scss',
 })
-export class Index {
+export class ViewAllProjects {
 	protected readonly currentDate = new Date();
 
 	private readonly projectService = inject(ProjectService);
@@ -35,7 +34,7 @@ export class Index {
 		this.isDropdownOpen = false;
 	}
 
-	teams = toSignal(this.teamService.getUserTeams(), { initialValue: [] });
+	teams = toSignal(this.teamService.getAllTeams(), { initialValue: [] });
 
 	public openDropdownSlug = signal<string | null>(null);
 

@@ -19,7 +19,7 @@ export class Dashboard {
 	authService = inject(AuthService);
 	teamService = inject(TeamService);
 
-	projectsTrigger = toSignal(this.projectService.getProjects(), { initialValue: null });
+	projectsTrigger = toSignal(this.projectService.getUsersProjects(), { initialValue: null });
 
 	// authTrigger = toSignal(this.authService.getMembersById(-1), { initialValue: null });
 }
