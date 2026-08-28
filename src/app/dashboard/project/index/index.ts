@@ -19,11 +19,13 @@ export class Index {
 
 	private readonly projectService = inject(ProjectService);
 	private readonly teamService = inject(TeamService);
-	// private readonly permisionsService = inject(PermissionService);
+	private readonly permissionService = inject(PermissionService);
 	public readonly auth = inject(AuthService);
 	private elementRef = inject(ElementRef);
 
-	// public readonly permissoion = 'Create Projects';
+	public canCreateProjects = computed(
+		() => this.permissionService.hasPermission('Create Projects', this.auth.currentUser())
+	);
 
 	isDropdownOpen = false;
 	toggleDropdown(): void {

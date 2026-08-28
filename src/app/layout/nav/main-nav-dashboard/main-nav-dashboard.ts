@@ -25,7 +25,7 @@ export class MainNavDashboard {
 	private readonly projectService = inject(ProjectService);
     public readonly permissionService = inject(PermissionService);
 
-	private readonly projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
+	private readonly projects = toSignal(this.projectService.getUsersProjects(), { initialValue: [] });
 
 	public readonly projectsCount = computed(() => this.projects().length);
 

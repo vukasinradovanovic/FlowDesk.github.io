@@ -1,7 +1,10 @@
-import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { PermissionService } from '../../../services/permisions/permisions';
+import { AuthService } from '../../../services/auth/auth.service';
+import { TeamService } from '../../../services/team/team.service';
 
 export interface ProjectFormData {
     id?: number;
@@ -10,18 +13,21 @@ export interface ProjectFormData {
     theme: string;
     progress: number;
     dueDate: string;
-    status: string;
-    teamId: number;
+    teamId: string;
 }
 
 @Component({
     selector: 'app-project-form',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterLink],
-    templateUrl: './project-form.component.html'
+    templateUrl: './project-form.component.html',
+    styleUrl: './project-form.component.scss',
 })
 export class ProjectFormComponent implements OnInit {
     private readonly fb = inject(FormBuilder);
+    private readonly permissionService = inject(PermissionService);
+    private readonly auth = inject(AuthService);
+    private readonly teamService = inject(TeamService);
 
     @Input() submitLabel: string = 'Save Project';
     @Input() initialData: ProjectFormData | null = null;
@@ -29,6 +35,17 @@ export class ProjectFormComponent implements OnInit {
     @Output() formSubmit = new EventEmitter<ProjectFormData>();
 
     public projectForm!: FormGroup;
+
+    public canAssignTeam = computed(
+		() => this.permissionService.hasPermission('Can Assign Teams', this.auth.currentUser())
+	);
+
+    public availableTeams = computed(() => {
+        if (this.canAssignTeam()) {
+            return this.teamService.allTeams() ?? [];
+        }
+        return this.teamService.myTeams() ?? [];
+    });
 
     // Available style/meta pickers matched to your layout options
     public icons = ['bi-palette', 'bi-phone', 'bi-cpu', 'bi-bookmark-star', 'bi-laptop', 'bi-gear'];
@@ -40,10 +57,8 @@ export class ProjectFormComponent implements OnInit {
             name: [this.initialData?.name || '', [Validators.required, Validators.minLength(3)]],
             icon: [this.initialData?.icon || 'bi-palette', Validators.required],
             theme: [this.initialData?.theme || 'primary', Validators.required],
-            progress: [this.initialData?.progress ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
             dueDate: [this.initialData?.dueDate || '', Validators.required],
-            status: [this.initialData?.status || 'In Progress', Validators.required],
-            teamId: [this.initialData?.teamId || 1, Validators.required]
+            teamId: [this.initialData?.teamId || '', Validators.required],
         });
     }
 
