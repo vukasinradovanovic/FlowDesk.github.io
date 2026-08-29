@@ -4,10 +4,10 @@
 		Update metrics, metrics, or statuses for this active tracker instance.
 	</p>
 
-	@if (projectToEdit()) {
+	@if (initialProjectData()) {
 		<app-project-form
 			submitLabel="Update Details"
-			[initialData]="projectToEdit()"
+			[initialData]="initialProjectData()"
             [hasRangePicker]="true"
 			(formSubmit)="handleUpdate($event)"
 		>
