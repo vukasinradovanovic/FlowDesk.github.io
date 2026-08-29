@@ -5,15 +5,16 @@ import { RouterLink } from '@angular/router';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService } from '../../../services/auth/auth.service';
 import { TeamService } from '../../../services/team/team.service';
+import { StatusService } from '../../../services/status/status';
 
 export interface ProjectFormData {
     id?: number;
     name: string;
     icon: string;
     theme: string;
-    progress: number;
     dueDate: string;
-    teamId: string;
+    teamId: number | string;
+    statusId: number | string;
 }
 
 @Component({
@@ -28,17 +29,17 @@ export class ProjectFormComponent implements OnInit {
     private readonly permissionService = inject(PermissionService);
     private readonly auth = inject(AuthService);
     private readonly teamService = inject(TeamService);
+    private readonly statusService = inject(StatusService);
 
     @Input() submitLabel: string = 'Save Project';
     @Input() initialData: ProjectFormData | null = null;
-	@Input() hasRangePicker: boolean = false;
     @Output() formSubmit = new EventEmitter<ProjectFormData>();
 
     public projectForm!: FormGroup;
 
     public canAssignTeam = computed(
-		() => this.permissionService.hasPermission('Can Assign Teams', this.auth.currentUser())
-	);
+        () => this.permissionService.hasPermission('Can Assign Teams', this.auth.currentUser())
+    );
 
     public availableTeams = computed(() => {
         if (this.canAssignTeam()) {
@@ -47,18 +48,29 @@ export class ProjectFormComponent implements OnInit {
         return this.teamService.myTeams() ?? [];
     });
 
-    // Available style/meta pickers matched to your layout options
     public icons = ['bi-palette', 'bi-phone', 'bi-cpu', 'bi-bookmark-star', 'bi-laptop', 'bi-gear'];
     public themes = ['primary', 'emerald', 'amber', 'indigo', 'rose'];
-    public statuses = ['In Progress', 'On Track', 'At Risk', 'Completed'];
+
+    public statuses = computed(() => this.statusService.allStatuses() ?? []);
 
     ngOnInit(): void {
+        // Fetch statuses if not already in store
+        this.statusService.getAllStatuses().subscribe();
+
+        // Populate team stores based on permissions
+        this.teamService.getUserTeams().subscribe();
+        if (this.canAssignTeam()) {
+            this.teamService.getAllTeams().subscribe();
+        }
+
         this.projectForm = this.fb.group({
+            id: [this.initialData?.id || null],
             name: [this.initialData?.name || '', [Validators.required, Validators.minLength(3)]],
             icon: [this.initialData?.icon || 'bi-palette', Validators.required],
             theme: [this.initialData?.theme || 'primary', Validators.required],
             dueDate: [this.initialData?.dueDate || '', Validators.required],
             teamId: [this.initialData?.teamId || '', Validators.required],
+            statusId: [this.initialData?.statusId || '', Validators.required],
         });
     }
 

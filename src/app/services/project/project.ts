@@ -13,9 +13,6 @@ export interface Project {
 	theme: string;
 	dueDate: Date;
 	status: Status;
-	//   teamId?: number | string;
-	//   members?: (number | string)[];
-	//   updatedAt?: string;
 }
 
 @Injectable({
@@ -28,20 +25,23 @@ export class ProjectService {
 	private readonly getProjectsApiUrl = 'https://localhost:7175/api/getalluserprojects';
 	private readonly createProjectApiUrl = 'https://localhost:7175/api/createproject';
 	private readonly getAllProjectsApiUrl = 'https://localhost:7175/api/getallprojects';
+	private readonly getProjectByIdApiUrl = 'https://localhost:7175/api/showproject';
+	private readonly updateProjectApiUrl = 'https://localhost:7175/api/updateproject';
 
 	public readonly allUsersProjects = signal<Project[] | null>(null);
 	public readonly AllProjects = signal<Project[] | null>(null);
 
-	private loadProjects(signal: typeof this.allUsersProjects | typeof this.AllProjects, apiUrl: string): Observable<Project[]> {
+	private loadProjects(
+		signal: typeof this.allUsersProjects | typeof this.AllProjects,
+		apiUrl: string,
+	): Observable<Project[]> {
 		const cachedProjects = signal();
 
 		if (cachedProjects !== null) {
 			return of(cachedProjects);
 		}
 
-		return this.http
-			.get<Project[]>(apiUrl)
-			.pipe(tap((projects) => signal.set(projects)));
+		return this.http.get<Project[]>(apiUrl).pipe(tap((projects) => signal.set(projects)));
 	}
 
 	public getUsersProjects(): Observable<Project[]> {
@@ -52,11 +52,20 @@ export class ProjectService {
 		return this.loadProjects(this.AllProjects, this.getAllProjectsApiUrl);
 	}
 
-	public getProjectBySlug(slug: string): Observable<Project | undefined> {
-		return this.loadProjects(this.allUsersProjects, this.getProjectsApiUrl).pipe(map((projects) => projects.find((p) => p.slug === slug)));
+	public getProjectBySlug(slug: string): Observable<ProjectFormData> {
+		return this.http.get<ProjectFormData>(`${this.getProjectByIdApiUrl}/${slug}`);
 	}
 
 	public createProject(payload: ProjectFormData): Observable<any> {
 		return this.http.post<any>(this.createProjectApiUrl, payload);
+	}
+
+	public updateProject(slug: string, payload: ProjectFormData): Observable<void> {
+		const updatePayload = {
+			slug: slug,
+			...payload,
+		};
+
+		return this.http.put<void>(`${this.updateProjectApiUrl}/${slug}`, updatePayload);
 	}
 }

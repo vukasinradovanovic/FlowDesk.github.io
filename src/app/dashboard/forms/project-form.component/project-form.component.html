@@ -1,87 +1,118 @@
 <form
-	[formGroup]="projectForm"
-	(ngSubmit)="onSubmit()"
-	class="card shadow-sm border border-light-subtle rounded-3 p-4"
+    [formGroup]="projectForm"
+    (ngSubmit)="onSubmit()"
+    class="card shadow-sm border border-light-subtle rounded-3 p-4"
 >
-	<div class="row g-3">
-		<div class="col-12">
-			<label class="form-label small fw-semibold">Project Name</label>
-			<input
-				type="text"
-				formControlName="name"
-				class="form-control"
-				placeholder="e.g. Redesign Dashboard Layout"
-				[ngClass]="{
-					'is-invalid': projectForm.get('name')?.touched && projectForm.get('name')?.invalid,
-				}"
-			/>
-			<div class="invalid-feedback">A valid project name (minimum 3 characters) is required.</div>
-		</div>
+    <!-- Hidden ID Field (Passed to backend payload, invisible to user) -->
+    <input type="hidden" formControlName="id" />
 
-		<div class="col-md-6">
-			<label class="form-label small fw-semibold text-secondary">Visual Element Icon</label>
-			<select formControlName="icon" class="form-select">
-				@for (icon of icons; track icon) {
-					<option [value]="icon">{{ icon.replace('bi-', '') | titlecase }}</option>
-				}
-			</select>
-		</div>
+    <div class="row g-3">
+        <!-- Project Name -->
+        <div class="col-12">
+            <label class="form-label small fw-semibold">Project Name</label>
+            <input
+                type="text"
+                formControlName="name"
+                class="form-control"
+                placeholder="e.g. Redesign Dashboard Layout"
+                [ngClass]="{
+                    'is-invalid': projectForm.get('name')?.touched && projectForm.get('name')?.invalid,
+                }"
+            />
+            <div class="invalid-feedback">A valid project name (minimum 3 characters) is required.</div>
+        </div>
 
-		<div class="col-md-6">
-			<label class="form-label small fw-semibold text-secondary">Theme Color Context</label>
-			<select formControlName="theme" class="form-select">
-				@for (t of themes; track t) {
-					<option [value]="t">{{ t | titlecase }}</option>
-				}
-			</select>
-		</div>
+        <!-- Visual Element Icon -->
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Visual Element Icon</label>
+            <select formControlName="icon" class="form-select">
+                @for (icon of icons; track icon) {
+                    <option [value]="icon">{{ icon.replace('bi-', '') | titlecase }}</option>
+                }
+            </select>
+        </div>
 
-		<div class="col-md-6">
-			<label class="form-label small fw-semibold text-secondary">Target Due Date</label>
-			<input
-				type="date"
-				formControlName="dueDate"
-				class="form-control"
-				[ngClass]="{
-					'is-invalid': projectForm.get('dueDate')?.touched && projectForm.get('dueDate')?.invalid,
-				}"
-			/>
-		</div>
-		<!-- Team assigment -->
-		<div class="col-md-6">
-			<label class="form-label small fw-semibold text-secondary">Assign Team</label>
-			<select
-				formControlName="teamId"
-				class="form-select"
-				[ngClass]="{
-					'is-invalid': projectForm.get('teamId')?.touched && projectForm.get('teamId')?.invalid,
-				}"
-			>
-				<option value="" disabled>Select a Team</option>
+        <!-- Theme Color Context -->
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Theme Color Context</label>
+            <select formControlName="theme" class="form-select">
+                @for (t of themes; track t) {
+                    <option [value]="t">{{ t | titlecase }}</option>
+                }
+            </select>
+        </div>
 
-				@for (team of availableTeams(); track team.id) {
-					<option [value]="team.id">
-						{{ team.name }}
-					</option>
-				}
-			</select>
+        <!-- Target Due Date -->
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Target Due Date</label>
+            <input
+                type="date"
+                formControlName="dueDate"
+                class="form-control"
+                [ngClass]="{
+                    'is-invalid': projectForm.get('dueDate')?.touched && projectForm.get('dueDate')?.invalid,
+                }"
+            />
+        </div>
 
-			@if (projectForm.get('teamId')?.touched && projectForm.get('teamId')?.invalid) {
-				<div class="invalid-feedback">Please select a team for this project.</div>
-			}
-		</div>
+        <!-- Assign Team -->
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Assign Team</label>
+            <select
+                formControlName="teamId"
+                class="form-select"
+                [ngClass]="{
+                    'is-invalid': projectForm.get('teamId')?.touched && projectForm.get('teamId')?.invalid,
+                }"
+            >
+                <option value="" disabled>Select a Team</option>
+                @for (team of availableTeams(); track team.id) {
+                    <option [value]="team.id">
+                        {{ team.name }}
+                    </option>
+                }
+            </select>
 
-		<div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-			<button
-				type="button"
-				class="btn btn-secondary btn-sm border"
-				[routerLink]="'/dashboard/projects'"
-			>
-				Cancel
-			</button>
-			<button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="projectForm.invalid">
-				{{ submitLabel }}
-			</button>
-		</div>
-	</div>
+            @if (projectForm.get('teamId')?.touched && projectForm.get('teamId')?.invalid) {
+                <div class="invalid-feedback">Please select a team for this project.</div>
+            }
+        </div>
+
+        <!-- 🟢 Project Status Selection -->
+        <div class="col-md-6">
+            <label class="form-label small fw-semibold text-secondary">Project Status</label>
+            <select
+                formControlName="statusId"
+                class="form-select"
+                [ngClass]="{
+                    'is-invalid': projectForm.get('statusId')?.touched && projectForm.get('statusId')?.invalid,
+                }"
+            >
+                <option value="" disabled>Select Status</option>
+                @for (status of statuses(); track status.id) {
+                    <option [value]="status.id">
+                        {{ status.name }}
+                    </option>
+                }
+            </select>
+
+            @if (projectForm.get('statusId')?.touched && projectForm.get('statusId')?.invalid) {
+                <div class="invalid-feedback">Please select a status for this project.</div>
+            }
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button
+                type="button"
+                class="btn btn-secondary btn-sm border"
+                [routerLink]="'/dashboard/projects'"
+            >
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="projectForm.invalid">
+                {{ submitLabel }}
+            </button>
+        </div>
+    </div>
 </form>
