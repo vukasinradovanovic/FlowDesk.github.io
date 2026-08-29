@@ -20,7 +20,7 @@ export class Index {
 	public readonly auth = inject(AuthService);
 	public readonly today = new Date();
 
-	public readonly allProjects = toSignal(this.projectService.getUsersProjects(), { initialValue: [] });
+	// public readonly allProjects = toSignal(this.projectService.getUsersProjects(), { initialValue: [] });
 
 	public readonly activeFilter = signal<FilterScope>('week');
 
