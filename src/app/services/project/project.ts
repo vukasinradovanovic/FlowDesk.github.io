@@ -27,6 +27,7 @@ export class ProjectService {
 	private readonly getAllProjectsApiUrl = 'https://localhost:7175/api/getallprojects';
 	private readonly getProjectByIdApiUrl = 'https://localhost:7175/api/showproject';
 	private readonly updateProjectApiUrl = 'https://localhost:7175/api/updateproject';
+	private readonly deleteProjectApiUrl = 'https://localhost:7175/api/deleteproject';
 
 	public readonly allUsersProjects = signal<Project[] | null>(null);
 	public readonly AllProjects = signal<Project[] | null>(null);
@@ -67,5 +68,9 @@ export class ProjectService {
 		};
 
 		return this.http.put<void>(`${this.updateProjectApiUrl}/${slug}`, updatePayload);
+	}
+
+	public deleteProject(slug: string): Observable<void> {
+		return this.http.delete<void>(`${this.deleteProjectApiUrl}/${slug}`);
 	}
 }
