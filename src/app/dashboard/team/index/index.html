@@ -50,16 +50,14 @@
 							</td>
 							<td>
 								<div class="avatar-stack">
-									@for (id of team.members; track id) {
+									@for (member of team.members; track member.id) {
 										<div class="avatar avatar-xs">
-											@for (member of members(); track member.id) {
-												<span [class]="'avatar-initials bg-' + member.avatarColor">
-													{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
-												</span>
-											} @empty {
-												<span class="member-badge unknown">User: {{ id }}</span>
-											}
+											<span [class]="'avatar-initials bg-' + (member.avatarColor || 'primary')">
+												{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
+											</span>
 										</div>
+									} @empty {
+										<span class="text-muted small">No members</span>
 									}
 								</div>
 							</td>

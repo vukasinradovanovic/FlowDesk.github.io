@@ -3,7 +3,7 @@ import { Component, computed, ElementRef, HostListener, inject, signal } from '@
 import { RouterLink } from '@angular/router';
 import { TeamService } from '../../../services/team/team.service';
 import { PermissionService } from '../../../services/permisions/permisions';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService, User } from '../../../services/auth/auth.service';
 
 @Component({
 	selector: 'app-view-all-teams',
@@ -49,6 +49,10 @@ export class ViewAllTeams {
 			});
 		}
 	}
+
+	public getMemberById(id: number) {
+        return this.members().find(m => m.id === id);
+    }
 
 	@HostListener('document:click', ['$event'])
 	onClickOutside(event: MouseEvent): void {
