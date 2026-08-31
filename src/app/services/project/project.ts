@@ -1,10 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable, of, tap } from 'rxjs';
 import { Status } from '../status/status';
 import { ProjectFormData } from '../../dashboard/forms/project-form.component/project-form.component';
-import { PaginatedResponse } from '../pagination/pagination';
+import { PaginatedResponse, Pagination, PaginationParams } from '../pagination/pagination';
+import { Team } from '../team/team.service';
 
 export interface Project {
     id: number;
@@ -14,6 +15,7 @@ export interface Project {
     theme: string;
     dueDate: Date;
     status: Status;
+    Team?: Team;
 }
 
 @Injectable({
@@ -22,6 +24,7 @@ export interface Project {
 export class ProjectService {
     private readonly auth = inject(AuthService);
     private readonly http = inject(HttpClient);
+	private readonly pagination = inject(Pagination);
 
     private readonly getProjectsApiUrl = 'https://localhost:7175/api/getalluserprojects';
     private readonly createProjectApiUrl = 'https://localhost:7175/api/createproject';
@@ -62,13 +65,15 @@ export class ProjectService {
         );
     }
 
-    public getAllProjects(): Observable<PaginatedResponse<Project>> {
-        const cachedState = this.allProjectsState();
-        if (cachedState !== null) {
-            return of(cachedState);
-        }
+    public getAllProjects(params?: Partial<PaginationParams>): Observable<PaginatedResponse<Project>> {
+        const queryParamsObj = this.pagination.buildHttpParams(params ?? {});
+        let httpParams = new HttpParams();
 
-        return this.http.get<PaginatedResponse<Project>>(this.getAllProjectsApiUrl).pipe(
+        Object.keys(queryParamsObj).forEach((key) => {
+            httpParams = httpParams.set(key, queryParamsObj[key]);
+        });
+
+        return this.http.get<PaginatedResponse<Project>>(this.getAllProjectsApiUrl, { params: httpParams }).pipe(
             tap((response) => this.allProjectsState.set(response))
         );
     }
