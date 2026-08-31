@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { RouterLink } from '@angular/router';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService } from '../../../services/auth/auth.service';
-import { TeamService } from '../../../services/team/team.service';
+import { Team, TeamService } from '../../../services/team/team.service';
 import { StatusService } from '../../../services/status/status';
 
 export interface ProjectFormData {
@@ -41,12 +41,12 @@ export class ProjectFormComponent implements OnInit {
         () => this.permissionService.hasPermission('Can Assign Teams', this.auth.currentUser())
     );
 
-    public availableTeams = computed(() => {
-        if (this.canAssignTeam()) {
-            return this.teamService.allTeams() ?? [];
-        }
-        return this.teamService.myTeams() ?? [];
-    });
+    public readonly availableTeams = computed<Team[]>(() => {
+    if (this.canAssignTeam()) {
+        return this.teamService.allTeamsState()?.items ?? [];
+    }
+    return this.teamService.myTeams() ?? [];
+});
 
     public icons = ['bi-palette', 'bi-phone', 'bi-cpu', 'bi-bookmark-star', 'bi-laptop', 'bi-gear'];
     public themes = ['primary', 'emerald', 'amber', 'indigo', 'rose'];
