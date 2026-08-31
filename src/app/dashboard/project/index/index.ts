@@ -39,6 +39,23 @@ export class Index {
 
 	public openDropdownSlug = signal<string | null>(null);
 
+	public onDeleteProject(slug: string, event: MouseEvent): void {
+		event.stopPropagation();
+		this.openDropdownSlug.set(null);
+
+		if (confirm('Are you sure you want to delete this project?')) {
+			this.projectService.deleteProject(slug).subscribe({
+				next: () => {
+					console.log(`Project ${slug} deleted successfully`);
+					this.teamService.getUserTeams().subscribe();
+				},
+				error: (err: unknown) => {
+					console.error('Failed to delete project:', err);
+				},
+			});
+		}
+	}
+
 	public toggleDropdownProject(slug: string, event: MouseEvent): void {
 		event.stopPropagation();
 		if (this.openDropdownSlug() === slug) {
