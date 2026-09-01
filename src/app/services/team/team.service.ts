@@ -38,7 +38,7 @@ export class TeamService {
 	private readonly deleteTeamApiUrl = 'https://localhost:7175/api/deleteteam';
 
 	public readonly allTeamsState = signal<PaginatedResponse<Team> | null>(null);
-	public readonly myTeams = signal<Team[] | null>(null);
+	public readonly myTeams = signal<PaginatedResponse<Team> | null>(null);
 
 	public readonly allMembers = computed<User[]>(() => {
 		const teams = this.allTeamsState()?.items ?? [];
@@ -47,10 +47,12 @@ export class TeamService {
 		return Array.from(new Map(membersList.map((user) => [user.id, user])).values());
 	});
 
-	public getUserTeams(): Observable<Team[]> {
+	public getUserTeams(params?: Partial<PaginationParams>): Observable<PaginatedResponse<Team>> {
+		const httpParams = this.pagination.buildHttpParams(params);
+
 		return this.http
-			.get<Team[]>(this.getUserTeamsApiUrl)
-			.pipe(tap((teams) => this.myTeams.set(teams)));
+			.get<PaginatedResponse<Team>>(this.getUserTeamsApiUrl, { params: httpParams }) 
+			.pipe(tap((response) => this.myTeams.set(response)));
 	}
 
 	public getAllTeams(params?: Partial<PaginationParams>): Observable<PaginatedResponse<Team>> {

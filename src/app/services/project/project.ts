@@ -26,7 +26,7 @@ export class ProjectService {
 	private readonly http = inject(HttpClient);
 	private readonly pagination = inject(Pagination);
 
-	private readonly getProjectsApiUrl = 'https://localhost:7175/api/getalluserprojects';
+	private readonly getUsersProjectsApiUrl = 'https://localhost:7175/api/getalluserprojects';
 	private readonly createProjectApiUrl = 'https://localhost:7175/api/createproject';
 	private readonly getAllProjectsApiUrl = 'https://localhost:7175/api/getallprojects';
 	private readonly getProjectByIdApiUrl = 'https://localhost:7175/api/showproject';
@@ -48,14 +48,13 @@ export class ProjectService {
 		return state.totalCount ?? state.TotalCount ?? state.items?.length ?? state.Items?.length ?? 0;
 	});
 
-	public getUsersProjects(): Observable<PaginatedResponse<Project>> {
-		const cachedState = this.userProjectsState();
-		if (cachedState !== null) {
-			return of(cachedState);
-		}
+	public getUsersProjects(
+		params?: Partial<PaginationParams>,
+	): Observable<PaginatedResponse<Project>> {
+		const httpParams = this.pagination.buildHttpParams(params);
 
 		return this.http
-			.get<PaginatedResponse<Project>>(this.getProjectsApiUrl)
+			.get<PaginatedResponse<Project>>(this.getUsersProjectsApiUrl, { params: httpParams })
 			.pipe(tap((response) => this.userProjectsState.set(response)));
 	}
 

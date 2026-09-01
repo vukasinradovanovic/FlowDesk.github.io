@@ -31,16 +31,13 @@ export class ViewAllProjects implements OnInit {
     public readonly auth = inject(AuthService);
     private readonly elementRef = inject(ElementRef);
 
-    // 🟢 Writable Pagination Controls
     public readonly currentPage = signal<number>(1);
     public readonly pageSize = signal<number>(10);
     public readonly searchTerm = signal<string>('');
 
-    // 🟢 Read State from Service
     public readonly paginatedProjects = computed(() => this.projectService.allProjectsState());
     public readonly projects = computed<Project[]>(() => this.paginatedProjects()?.items ?? []);
 
-    // 🟢 Derived Response Metadata
     public readonly totalPages = computed(() => this.paginatedProjects()?.pagesCount ?? 1);
     public readonly totalCount = computed(() => this.paginatedProjects()?.totalCount ?? 0);
 
