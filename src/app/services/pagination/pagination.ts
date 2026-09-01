@@ -1,45 +1,48 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 export interface PaginatedResponse<T> {
-    items: T[];
-    currentPage: number;
-    totalPages: number;
-    totalCount: number;
+	totalCount: number;
+	pagesCount: number;
+	items: T[];
+	currentPage: number;
+	perPage: number;
 }
 
 export interface PaginationParams {
-    pageNumber: number;
-    pageSize: number;
-    searchTerm?: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+	currentPage?: number;
+	perPage?: number;
+	searchTerm?: string;
+	sortBy?: string;
+	sortOrder?: 'asc' | 'desc';
 }
 
 @Injectable({
 	providedIn: 'root',
 })
 export class Pagination {
-	public readonly defaultParams: PaginationParams = {
-        pageNumber: 1,
-        pageSize: 10,
-        searchTerm: '',
-    };
+	public readonly defaultParams: Required<
+		Pick<PaginationParams, 'currentPage' | 'perPage' | 'searchTerm'>
+	> = {
+		currentPage: 1,
+		perPage: 10,
+		searchTerm: '',
+	};
 
-	public buildHttpParams(params: Partial<PaginationParams>): Record<string, string> {
-        const queryParams: Record<string, string> = {
-            pageNumber: (params.pageNumber ?? this.defaultParams.pageNumber).toString(),
-            pageSize: (params.pageSize ?? this.defaultParams.pageSize).toString(),
-        };
+	public buildHttpParams(params?: Partial<PaginationParams>): HttpParams {
+		let httpParams = new HttpParams()
+			.set('currentPage', (params?.currentPage ?? this.defaultParams.currentPage).toString())
+			.set('perPage', (params?.perPage ?? this.defaultParams.perPage).toString());
 
-        if (params.searchTerm) {
-            queryParams['searchTerm'] = params.searchTerm;
-        }
+		if (params?.searchTerm?.trim()) {
+			httpParams = httpParams.set('searchTerm', params.searchTerm.trim());
+		}
 
-        if (params.sortBy) {
-            queryParams['sortBy'] = params.sortBy;
-            queryParams['sortOrder'] = params.sortOrder ?? 'asc';
-        }
+		if (params?.sortBy) {
+			httpParams = httpParams.set('sortBy', params.sortBy);
+			httpParams = httpParams.set('sortOrder', params.sortOrder ?? 'asc');
+		}
 
-        return queryParams;
-    }
+		return httpParams;
+	}
 }

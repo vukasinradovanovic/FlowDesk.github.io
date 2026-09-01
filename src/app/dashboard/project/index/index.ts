@@ -1,16 +1,14 @@
 import { Component, inject, computed, ElementRef, signal, HostListener } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { AuthService, User } from '../../../services/auth/auth.service';
-import { ProjectService } from '../../../services/project/project';
-import { TeamService } from '../../../services/team/team.service';
+import { Project, ProjectService } from '../../../services/project/project';
 import { PermissionService } from '../../../services/permisions/permisions';
-import { of, switchMap } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { PaginationComponent } from '../../pagination.component/pagination.component';
 
 @Component({
 	selector: 'app-index',
-	imports: [DatePipe, CommonModule, RouterLink],
+	imports: [DatePipe, CommonModule, RouterLink, PaginationComponent],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 })
@@ -18,26 +16,56 @@ export class Index {
 	protected readonly currentDate = new Date();
 
 	private readonly projectService = inject(ProjectService);
-	private readonly teamService = inject(TeamService);
 	private readonly permissionService = inject(PermissionService);
 	public readonly auth = inject(AuthService);
-	private elementRef = inject(ElementRef);
+	private readonly elementRef = inject(ElementRef);
 
-	public canCreateProjects = computed(
-		() => this.permissionService.hasPermission('Create Projects', this.auth.currentUser())
+	public readonly currentPage = signal<number>(1);
+	public readonly pageSize = signal<number>(10);
+	public readonly searchTerm = signal<string>('');
+
+	public readonly paginatedProjects = computed(() => this.projectService.userProjectsState());
+	public readonly projects = computed<Project[]>(() => this.paginatedProjects()?.items ?? []);
+
+	public readonly totalPages = computed(() => this.paginatedProjects()?.pagesCount ?? 1);
+	public readonly totalCount = computed(() => this.paginatedProjects()?.totalCount ?? 0);
+
+	// Permissions
+	public readonly canCreateProjects = computed(() =>
+		this.permissionService.hasPermission('Create Projects', this.auth.currentUser()),
 	);
 
-	isDropdownOpen = false;
-	toggleDropdown(): void {
-		this.isDropdownOpen = !this.isDropdownOpen;
-	}
-	selectedOption() {
-		this.isDropdownOpen = false;
+	public readonly openDropdownSlug = signal<string | null>(null);
+
+	ngOnInit(): void {
+		this.loadProjects();
 	}
 
-	teams = toSignal(this.teamService.getUserTeams(), { initialValue: [] });
+	public loadProjects(): void {
+		this.projectService
+			.getUsersProjects({
+				currentPage: this.currentPage(),
+				perPage: this.pageSize(),
+				searchTerm: this.searchTerm(),
+			})
+			.subscribe();
+	}
 
-	public openDropdownSlug = signal<string | null>(null);
+	public goToPage(page: number): void {
+		this.currentPage.set(page);
+		this.loadProjects();
+	}
+
+	public onSearchChange(term: string): void {
+		this.searchTerm.set(term);
+		this.currentPage.set(1);
+		this.loadProjects();
+	}
+
+	public toggleDropdownProject(slug: string, event: MouseEvent): void {
+		event.stopPropagation();
+		this.openDropdownSlug.update((curr) => (curr === slug ? null : slug));
+	}
 
 	public onDeleteProject(slug: string, event: MouseEvent): void {
 		event.stopPropagation();
@@ -46,8 +74,7 @@ export class Index {
 		if (confirm('Are you sure you want to delete this project?')) {
 			this.projectService.deleteProject(slug).subscribe({
 				next: () => {
-					console.log(`Project ${slug} deleted successfully`);
-					this.teamService.getUserTeams().subscribe();
+					this.loadProjects();
 				},
 				error: (err: unknown) => {
 					console.error('Failed to delete project:', err);
@@ -56,18 +83,12 @@ export class Index {
 		}
 	}
 
-	public toggleDropdownProject(slug: string, event: MouseEvent): void {
-		event.stopPropagation();
-		if (this.openDropdownSlug() === slug) {
-			this.openDropdownSlug.set(null);
-		} else {
-			this.openDropdownSlug.set(slug);
-		}
-	}
-
 	@HostListener('document:click', ['$event'])
 	onClickOutside(event: MouseEvent): void {
-		if (this.openDropdownSlug() !== null && !this.elementRef.nativeElement.contains(event.target)) {
+		if (
+			this.openDropdownSlug() !== null &&
+			!this.elementRef.nativeElement.contains(event.target as Node)
+		) {
 			this.openDropdownSlug.set(null);
 		}
 	}

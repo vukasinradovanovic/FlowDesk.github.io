@@ -17,15 +17,19 @@ export class Index {
 	private readonly permissionService = inject(PermissionService);
 	public readonly auth = inject(AuthService);
 
-
 	public readonly today = new Date();
 	private elementRef = inject(ElementRef);
 
-	teams = this.teamService.myTeams;
+	public readonly teams = computed<Team[]>(() => {
+		const response = this.teamService.myTeams();
+		if (!response) return [];
+
+		return Array.isArray(response) ? response : (response.items ?? []);
+	});
 	members = this.teamService.allMembers;
 
-	public canCreateTeam = computed(
-		() => this.permissionService.hasPermission('Create Teams', this.auth.currentUser())
+	public canCreateTeam = computed(() =>
+		this.permissionService.hasPermission('Create Teams', this.auth.currentUser()),
 	);
 
 	public openDropdownId = signal<number | null>(null);
@@ -62,4 +66,8 @@ export class Index {
 	ngOnInit(): void {
 		this.teamService.getUserTeams().subscribe();
 	}
+
+	public getMemberById(id: number): User | undefined {
+        return this.members().find((m) => m.id === id);
+    }
 }

@@ -37,8 +37,9 @@
 						<th class="text-end">Actions</th>
 					</tr>
 				</thead>
+				<!-- Inside index.html -->
 				<tbody>
-					@for (team of teams(); track team.name) {
+					@for (team of teams(); track team.id) {
 						<tr>
 							<td>
 								<div class="d-flex align-items-center gap-3">
@@ -50,16 +51,16 @@
 							</td>
 							<td>
 								<div class="avatar-stack">
-									@for (member of team.members; track member.id) {
-										<div class="avatar avatar-xs">
-											<span [class]="'avatar-initials bg-' + (member.avatarColor || 'primary')">
-												{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
-											</span>
-										</div>
-									} @empty {
-										<span class="text-muted small">No members</span>
-									}
-								</div>
+                                    @for (member of team.members; track member.id) {
+                                        <div class="avatar avatar-xs">
+                                            <span [class]="'avatar-initials bg-' + (member.avatarColor || 'primary')">
+                                                {{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
+                                            </span>
+                                        </div>
+                                    } @empty {
+                                        <span class="text-muted small">No members</span>
+                                    }
+                                </div>
 							</td>
 							<!-- Actions -->
 							<td class="text-end">

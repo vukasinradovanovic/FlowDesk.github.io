@@ -1,51 +1,44 @@
 import {
-	Component,
-	computed,
-	ElementRef,
-	HostListener,
-	inject,
-	OnInit,
-	signal,
+    Component,
+    computed,
+    ElementRef,
+    HostListener,
+    inject,
+    OnInit,
+    signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ProjectService, Project } from '../../../services/project/project';
-import { ProjectWithTeam, Team, TeamService } from '../../../services/team/team.service';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService } from '../../../services/auth/auth.service';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
-import { map } from 'rxjs';
 
 @Component({
-	selector: 'app-view-all-projects',
-	standalone: true,
-	imports: [DatePipe, CommonModule, RouterLink, FormsModule, PaginationComponent],
-	templateUrl: './view-all-projects.html',
-	styleUrl: './view-all-projects.scss',
+    selector: 'app-view-all-projects',
+    standalone: true,
+    imports: [DatePipe, CommonModule, RouterLink, FormsModule, PaginationComponent],
+    templateUrl: './view-all-projects.html',
+    styleUrl: './view-all-projects.scss',
 })
 export class ViewAllProjects implements OnInit {
-	protected readonly currentDate = new Date();
+    protected readonly currentDate = new Date();
 
     private readonly projectService = inject(ProjectService);
     private readonly permissionService = inject(PermissionService);
     public readonly auth = inject(AuthService);
     private readonly elementRef = inject(ElementRef);
 
-    // Pagination Signals
     public readonly currentPage = signal<number>(1);
     public readonly pageSize = signal<number>(10);
     public readonly searchTerm = signal<string>('');
 
-    // State Signal
     public readonly paginatedProjects = computed(() => this.projectService.allProjectsState());
-    
     public readonly projects = computed<Project[]>(() => this.paginatedProjects()?.items ?? []);
 
-    // Metadata
-    public readonly totalPages = computed(() => this.paginatedProjects()?.totalPages ?? 1);
+    public readonly totalPages = computed(() => this.paginatedProjects()?.pagesCount ?? 1);
     public readonly totalCount = computed(() => this.paginatedProjects()?.totalCount ?? 0);
 
     // Permissions
@@ -62,8 +55,8 @@ export class ViewAllProjects implements OnInit {
     public loadProjects(): void {
         this.projectService
             .getAllProjects({
-                pageNumber: this.currentPage(),
-                pageSize: this.pageSize(),
+                currentPage: this.currentPage(),
+                perPage: this.pageSize(),
                 searchTerm: this.searchTerm(),
             })
             .subscribe();

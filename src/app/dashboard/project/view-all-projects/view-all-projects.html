@@ -60,9 +60,19 @@
 									</div>
 								</div>
 							</td>
-							<span class="text-secondary fw-semibold">
-								{{ p.Team?.name || 'No Team' }}
-							</span>
+							<!-- Team Name -->
+							<td>
+								@for (t of p.teams; track t.id) {
+									<span class="text-secondary fw-semibold">
+										{{ t.name }}
+										@if ($index < p.teams.length - 1) {
+											<span>, </span>
+										}
+									</span>
+								} @empty {
+									<span class="text-secondary fw-semibold">No Team Assigned</span>
+								}
+							</td>
 							<td style="min-width: 180px">
 								<!-- Progress Bar -->
 							</td>
@@ -120,7 +130,6 @@
 			</table>
 		</div>
 
-		<!-- 🟢 Pagination Component -->
 		<app-pagination
 			[currentPage]="currentPage()"
 			[totalPages]="totalPages()"
