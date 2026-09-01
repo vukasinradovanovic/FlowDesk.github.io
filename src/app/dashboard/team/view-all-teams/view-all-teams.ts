@@ -30,8 +30,8 @@ export class ViewAllTeams {
     public readonly teams = computed<Team[]>(() => this.paginatedTeams()?.items ?? []);
     public readonly members = this.teamService.allMembers;
 
-    public readonly totalPages = computed(() => this.paginatedTeams()?.totalPages ?? 1);
-    public readonly totalCount = computed(() => this.paginatedTeams()?.totalCount ?? 0);
+    public readonly totalPages = computed(() => this.paginatedTeams()?.totalCount ?? 1);
+    public readonly totalCount = computed(() => this.paginatedTeams()?.pagesCount ?? 0);
 
     public readonly canCreateTeam = computed(() =>
         this.permissionService.hasPermission('Create Teams', this.auth.currentUser())
@@ -46,8 +46,8 @@ export class ViewAllTeams {
     public loadTeams(): void {
         this.teamService
             .getAllTeams({
-                pageNumber: this.currentPage(),
-                pageSize: this.pageSize(),
+                currentPage: this.currentPage(),
+                perPage: this.pageSize(),
                 searchTerm: this.searchTerm(),
             })
             .subscribe();
