@@ -15,6 +15,8 @@ import { CreateTeam } from './dashboard/team/create-team/create-team';
 import { EditTeam } from './dashboard/team/edit-team/edit-team';
 import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
 import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-projects';
+import { ActivationSuccess } from './auth/activation-success/activation-success';
+import { activationGuard } from './guards/activation-guard';
 
 export const routes: Routes = [
 	{
@@ -31,6 +33,12 @@ export const routes: Routes = [
 				path: 'register',
 				component: Register,
 				data: { animation: 'register' },
+			},
+			{
+				path: 'activate',
+				component: ActivationSuccess,
+				canActivate: [activationGuard],
+				data: { animation: 'activate' },
 			},
 		],
 	},

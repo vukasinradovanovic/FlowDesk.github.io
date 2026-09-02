@@ -34,6 +34,7 @@ export class Register {
 	
 	protected errorMessage = signal<string | null>(null);
 	protected isLoading = signal(false);
+	protected registrationSuccess = signal(false);
 
 	protected togglePassword(): void {
 		this.passwordVisible.update((value) => !value);
@@ -42,16 +43,19 @@ export class Register {
 	protected handleSubmit(): void {
 		if (!this.firstName() || !this.lastName() || !this.username() || !this.email() || !this.password() || !this.confirmPassword()) {
 			this.errorMessage.set('Please fill in all required fields.');
+			this.registrationSuccess.set(false);
 			return;
 		}
 
 		if (this.password() !== this.confirmPassword()) {
 			this.errorMessage.set('Password and confirm password do not match.');
+			this.registrationSuccess.set(false);
 			return;
 		}
 
 		this.isLoading.set(true);
 		this.errorMessage.set(null);
+		this.registrationSuccess.set(false);
 
 		this.authService.register({
 			firstName: this.firstName(),
@@ -63,10 +67,18 @@ export class Register {
 		}).subscribe({
 			next: () => {
 				this.isLoading.set(false);
-				this.router.navigate(['/dashboard']);
+				this.registrationSuccess.set(true);
+				this.errorMessage.set(null);
+				this.firstName.set('');
+				this.lastName.set('');
+				this.username.set('');
+				this.email.set('');
+				this.password.set('');
+				this.confirmPassword.set('');
 			},
 			error: (err) => {
 				this.isLoading.set(false);
+				this.registrationSuccess.set(false);
 				if (typeof err.error === 'string') {
                     this.errorMessage.set(err.error);
                 } else if (err.error?.message) {

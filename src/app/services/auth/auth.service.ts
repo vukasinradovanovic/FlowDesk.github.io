@@ -90,10 +90,8 @@ export class AuthService {
 			.pipe(tap((response) => this.handleAuthSuccess(response)));
 	}
 
-	public register(requestData: RegisterRequest): Observable<LoginResponse> {
-		return this.http
-			.post<LoginResponse>(this.registerApiUrl, requestData)
-			.pipe(tap((response) => this.handleAuthSuccess(response)));
+	public register(requestData: RegisterRequest): Observable<void> {
+		return this.http.post<void>(this.registerApiUrl, requestData);
 	}
 
 	private handleAuthSuccess(response: LoginResponse): void {
