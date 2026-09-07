@@ -15,6 +15,7 @@ export interface Task {
 	createdAt: Date;
 	dueDate: Date;
 	updatedAt: Date;
+	projectId: number;
 	assignedUserId: number;
 	TaskId: number;
 	statusId?: number;
@@ -85,13 +86,8 @@ export class TasksService {
 		return this.http.post<Task>(this.createTaskApiUrl, payload);
 	}
 
-	public updateTask(slug: string, payload: TaskFormData): Observable<void> {
-		const updatePayload = {
-			slug: slug,
-			...payload,
-		};
-
-		return this.http.put<void>(`${this.updateTaskApiUrl}/${slug}`, updatePayload);
+	public updateTask(slug: string, payload: FormData): Observable<void> {
+		return this.http.put<void>(`${this.updateTaskApiUrl}/${slug}`, payload);
 	}
 
 	public deleteTask(slug: string): Observable<void> {

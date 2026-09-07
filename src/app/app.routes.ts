@@ -18,6 +18,7 @@ import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-
 import { ViewAllTasks } from './dashboard/tasks/view-all-tasks/view-all-tasks';
 import { Index as TasksIndex } from './dashboard/tasks/index/index';
 import { Create as CreateTask } from './dashboard/tasks/create/create';
+import { Edit as EditTask } from './dashboard/tasks/edit/edit';
 import { Show as ShowTask } from './dashboard/tasks/show/show';
 import { ActivationSuccess } from './auth/activation-success/activation-success';
 import { activationGuard } from './guards/activation-guard';
@@ -84,6 +85,11 @@ export const routes: Routes = [
 				path: 'tasks/create',
 				component: CreateTask,
 				data: { breadcrumb: 'New Task' },
+			},
+			{
+				path: 'tasks/edit/:slug',
+				component: EditTask,
+				data: { breadcrumb: 'Edit Task' },
 			},
 			{
 				path: 'tasks/:slug',

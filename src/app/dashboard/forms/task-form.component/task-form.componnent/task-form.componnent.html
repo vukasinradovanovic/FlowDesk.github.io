@@ -42,6 +42,19 @@
 		</div>
 
 		<div class="col-md-6">
+			<label for="task-status" class="form-label small fw-semibold">Status</label>
+			<select id="task-status" formControlName="statusId" class="form-select">
+				<option value="" disabled>Select a status</option>
+				@for (status of statuses(); track status.id) {
+					<option [value]="status.id">{{ status.name }}</option>
+				}
+			</select>
+			@if (taskForm.get('statusId')?.touched && taskForm.get('statusId')?.invalid) {
+				<div class="invalid-feedback d-block">Please select a task status.</div>
+			}
+		</div>
+
+		<div class="col-md-6">
 			<label for="task-attachments" class="form-label small fw-semibold">Attachments</label>
 			<input id="task-attachments" type="file" class="form-control" multiple (change)="onFilesSelected($event)" />
 			@if (selectedFiles.length > 0) {
@@ -51,7 +64,7 @@
 
 		<div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
 			<a class="btn btn-secondary btn-sm border" routerLink="/dashboard/tasks">Cancel</a>
-			<button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="taskForm.invalid">Create Task</button>
+			<button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="taskForm.invalid">{{ submitLabel }}</button>
 		</div>
 	</div>
 </form>
