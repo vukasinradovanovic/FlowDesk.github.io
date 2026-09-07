@@ -15,6 +15,14 @@ import { CreateTeam } from './dashboard/team/create-team/create-team';
 import { EditTeam } from './dashboard/team/edit-team/edit-team';
 import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
 import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-projects';
+import { ViewAllTasks } from './dashboard/tasks/view-all-tasks/view-all-tasks';
+import { Index as TasksIndex } from './dashboard/tasks/index/index';
+import { Create as CreateTask } from './dashboard/tasks/create/create';
+import { Show as ShowTask } from './dashboard/tasks/show/show';
+import { ActivationSuccess } from './auth/activation-success/activation-success';
+import { activationGuard } from './guards/activation-guard';
+import { adminGuard } from './guards/admin-guard';
+import { Index as AdminIndex } from './dashboard/admin/index/index';
 
 export const routes: Routes = [
 	{
@@ -32,6 +40,12 @@ export const routes: Routes = [
 				component: Register,
 				data: { animation: 'register' },
 			},
+			{
+				path: 'activate',
+				component: ActivationSuccess,
+				canActivate: [activationGuard],
+				data: { animation: 'activate' },
+			},
 		],
 	},
 	{
@@ -40,6 +54,12 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 		data: { breadcrumb: 'Workspace' },
 		children: [
+			{
+				path: 'admin/logs',
+				component: AdminIndex,
+				canActivate: [adminGuard],
+				data: { breadcrumb: 'System Logs' },
+			},
 			{
 				path: '',
 				component: Index,
@@ -54,6 +74,32 @@ export const routes: Routes = [
 				path: 'projects/all',
 				component: ViewAllProjects,
 				data: { breadcrumb: 'All Projects' },
+			},
+			{
+				path: 'tasks/all',
+				component: ViewAllTasks,
+				data: { breadcrumb: 'All Tasks' },
+			},
+			{
+				path: 'tasks/create',
+				component: CreateTask,
+				data: { breadcrumb: 'New Task' },
+			},
+			{
+				path: 'tasks/:slug',
+				component: ShowTask,
+				data: {
+					breadcrumb: 'Task',
+					breadcrumbParents: [
+						{ match: '/dashboard/tasks/all', label: 'All Tasks', url: '/dashboard/tasks/all' },
+						{ match: '/dashboard/tasks', label: 'Tasks', url: '/dashboard/tasks' },
+					],
+				},
+			},
+			{
+				path: 'tasks',
+				component: TasksIndex,
+				data: { breadcrumb: 'Tasks' },
 			},
 			{
 				path: 'projects/create',

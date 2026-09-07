@@ -28,7 +28,11 @@ export class EditTeam implements OnInit {
 			this.teamId.set(id);
 
 			this.teamService.getTeamById(id).subscribe({
-				next: (team: TeamFormData) => this.initialTeamData.set(team),
+				next: (team: TeamFormData) =>
+					this.initialTeamData.set({
+						...team,
+						userIds: team.userIds ?? team.members?.map((user) => user.id) ?? [],
+					}),
 				error: (err: unknown) => console.error('Failed to load team data', err),
 			});
 		}

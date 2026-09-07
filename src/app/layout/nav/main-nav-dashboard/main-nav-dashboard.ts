@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ProjectService } from '../../../services/project/project';
 import { PermissionService } from '../../../services/permisions/permisions';
+import { TasksService } from '../../../services/tasks/tasks.service';
 
 interface NavLink {
     label: string;
@@ -11,6 +12,7 @@ interface NavLink {
     adons?: string;
     exact?: boolean;
     permission?: string;
+	adminOnly?: boolean;
 }
 
 @Component({
@@ -23,9 +25,14 @@ export class MainNavDashboard implements OnInit {
     public readonly auth = inject(AuthService);
     private readonly projectService = inject(ProjectService);
     public readonly permissionService = inject(PermissionService);
+    private readonly tasksService = inject(TasksService);
 
     public readonly projectsCount = computed(() => 
         this.projectService.totalUserProjectsCount()
+    );
+
+    public readonly tasksCount = computed(() => 
+        this.tasksService.totalUserTasksCount()
     );
 
     public canViewAllTeams = computed(() =>
@@ -38,6 +45,19 @@ export class MainNavDashboard implements OnInit {
 
         return [
             { label: 'Home', icon: 'bi bi-grid-1x2', route: ['/dashboard'], exact: true },
+            {
+                label: 'Tasks',
+                icon: 'bi bi-list-check',
+                route: ['/dashboard', 'tasks'],
+                adons: String(this.tasksCount()),
+                exact: true,
+            },
+            {
+                label: 'Manage All Tasks',
+                icon: 'bi bi-list-check',
+                route: ['/dashboard', 'tasks', 'all'],
+                permission: 'View Tasks',
+            },
             {
                 label: 'Projects',
                 icon: 'bi bi-folder2-open',
@@ -57,6 +77,12 @@ export class MainNavDashboard implements OnInit {
                 icon: 'bi bi-people',
                 route: ['/dashboard', 'teams', 'all'],
                 permission: 'View Teams',
+            },
+            {
+                label: 'System Logs',
+                icon: 'bi bi-shield-check',
+                route: ['/dashboard', 'admin', 'logs'],
+                adminOnly: true,
             },
 			// { label: 'Kanban Board', icon: 'bi bi-kanban', route: ['/dashboard', 'settings'] },
 			// { label: 'Calendar', icon: 'bi bi-calendar3', route: ['/dashboard', 'calendar'] },

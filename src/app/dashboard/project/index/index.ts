@@ -5,10 +5,11 @@ import { Project, ProjectService } from '../../../services/project/project';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { RouterLink } from '@angular/router';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
+import { SearchComponent } from '../../search.component/search.component/search.component';
 
 @Component({
 	selector: 'app-index',
-	imports: [DatePipe, CommonModule, RouterLink, PaginationComponent],
+	imports: [DatePipe, CommonModule, RouterLink, PaginationComponent, SearchComponent],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 })
@@ -33,6 +34,12 @@ export class Index {
 	// Permissions
 	public readonly canCreateProjects = computed(() =>
 		this.permissionService.hasPermission('Create Projects', this.auth.currentUser()),
+	);
+	public readonly canEditProjects = computed(() =>
+		this.permissionService.hasPermission('Edit Projects', this.auth.currentUser()),
+	);
+	public readonly canDeleteProjects = computed(() =>
+		this.permissionService.hasPermission('Delete Projects', this.auth.currentUser()),
 	);
 
 	public readonly openDropdownSlug = signal<string | null>(null);

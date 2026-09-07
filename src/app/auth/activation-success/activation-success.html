@@ -1,0 +1,31 @@
+<div class="row g-0 min-vh-100">
+  <div class="col-12">
+    <div class="auth-success-shell d-flex align-items-center justify-content-center p-4 p-lg-5">
+      <div class="auth-success-card text-center">
+        <div class="success-icon mb-4">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+
+        <span class="eyebrow">Account activation</span>
+        <h1 class="fw-bold mb-3">Account activated</h1>
+
+        <p class="lead mb-4">
+          Your Flowdesk account is now active and ready to use.
+          @if (isTokenPresent) {
+            <span class="d-block mt-2 text-secondary small">Verified token: {{ activationToken }}</span>
+          }
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+          <a routerLink="/" class="btn btn-primary btn-lg px-4">
+            Go to sign in
+            <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+          <a routerLink="/register" class="btn btn-outline-primary btn-lg px-4">
+            Create another account
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

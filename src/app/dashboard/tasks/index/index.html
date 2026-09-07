@@ -1,0 +1,146 @@
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
+	<div>
+		<h1 class="h3 fw-bold mb-1">{{ auth.currentUser()?.firstName }} Tasks</h1>
+		<p class="text-secondary mb-0">Manage your tasks and track their progress.</p>
+	</div>
+	<div class="d-flex gap-2">
+		<button class="btn btn-light-soft">
+			<i class="bi bi-calendar3 me-1"></i> {{ currentDate | date: 'MMM d, y' }}
+		</button>
+	</div>
+</div>
+
+<div class="card card-plain">
+	<div class="card-body">
+		<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+			<div>
+				<h5 class="fw-semibold mb-1">Recent Tasks</h5>
+				<p class="text-secondary small mb-0">Your assigned tasks and progress updates</p>
+			</div>
+			<div class="d-flex gap-2">
+				<app-search
+					placeholder="Search tasks"
+					label="Search tasks"
+					[initialValue]="searchTerm()"
+					(searchChange)="onSearchChange($event)"
+				></app-search>
+				@if (canCreateTask()) {
+					<button class="btn btn-primary btn-sm" [routerLink]="'/dashboard/tasks/create'">
+						<i class="bi bi-plus-lg me-1"></i> New Task
+					</button>
+				}
+			</div>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-modern align-middle">
+				<thead>
+					<tr>
+						<th>Task</th>
+						<th>Description</th>
+						<th>Due Date</th>
+						<th>Created Date</th>
+						<th>Last Edited</th>
+						<th>Status</th>
+						<th class="text-end">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (task of tasks(); track task.id) {
+						<tr>
+							<td>
+								<div class="d-flex align-items-center gap-3">
+									<div class="project-icon bg-primary-soft text-primary">
+										<i class="bi bi-check2-square"></i>
+									</div>
+									<div>
+										<a
+											class="task-link fw-semibold text-decoration-none"
+											[routerLink]="['/dashboard/tasks', task.slug]"
+										>
+											{{ task.name }}
+										</a>
+										<div class="text-secondary small">Task #{{ task.id }}</div>
+									</div>
+								</div>
+							</td>
+							<td class="text-secondary small">{{ descriptionPreview(task.description) }}</td>
+							<td class="small">{{ task.dueDate | date: 'MMM d, y' }}</td>
+							<td class="small">{{ task.createdAt | date: 'MMM d, y' }}</td>
+							<td class="small">{{ task.updatedAt | date: 'MMM d, y' }}</td>
+							<td>
+								@if (task.status) {
+									<span
+										[class]="
+											'badge bg-' +
+											(task.status.theme.replace('badge-', '') || 'primary') +
+											'-soft text-' +
+											(task.status.theme.replace('badge-', '') || 'primary')
+										"
+									>
+										{{ task.status.name }}
+									</span>
+								} @else {
+									<span class="badge bg-secondary-soft text-secondary">No Status</span>
+								}
+							</td>
+							<!-- Actions column -->
+							<td class="text-end align-middle">
+								<div class="dropdown d-inline-block">
+									<button
+										class="btn-icon"
+										[attr.aria-label]="'Actions for ' + task.name"
+										(click)="toggleDropdownTask(task.slug, $event)"
+									>
+										<i class="bi bi-three-dots"></i>
+									</button>
+									@if (openDropdownSlug() === task.slug) {
+										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
+											<a
+												class="dropdown-item d-flex align-items-center gap-2"
+												[routerLink]="['/dashboard/tasks', task.slug]"
+												(click)="openDropdownSlug.set(null)"
+											>
+												<i class="bi bi-list-check small"></i> View Task
+											</a>
+											@if (canEditTask()) {
+												<a
+													class="dropdown-item d-flex align-items-center gap-2"
+													[routerLink]="['/dashboard/tasks/edit', task.slug]"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-pencil small"></i> Edit Task
+												</a>
+											}
+											@if (canDeleteTask()) {
+												<button
+													type="button"
+													class="dropdown-item d-flex align-items-center gap-2 text-danger"
+													(click)="onDeleteTask(task.slug, $event)"
+												>
+													<i class="bi bi-trash small"></i> Delete Task
+												</button>
+											}
+										</div>
+									}
+								</div>
+							</td>
+						</tr>
+					} @empty {
+						<tr>
+							<td colspan="7" class="text-muted text-center py-4">No tasks available.</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<app-pagination
+			[currentPage]="currentPage()"
+			[totalPages]="totalPages()"
+			[totalCount]="totalCount()"
+			[pageSize]="pageSize()"
+			(pageChange)="goToPage($event)"
+		></app-pagination>
+	</div>
+</div>

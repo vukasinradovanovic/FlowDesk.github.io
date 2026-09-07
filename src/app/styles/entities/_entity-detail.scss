@@ -1,0 +1,73 @@
+@mixin surface {
+	background: var(--fd-surface);
+	border: 1px solid var(--bs-border-color-translucent);
+	border-radius: 0.5rem;
+	min-height: 20rem;
+	padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+@mixin centered-state {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+
+@mixin header {
+	align-items: flex-start;
+	display: flex;
+	gap: 1.5rem;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+@mixin panel {
+	background: var(--fd-surface-2);
+	border: 1px solid var(--bs-border-color-translucent);
+	border-radius: 0.5rem;
+	padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+@mixin icon {
+	align-items: center;
+	background: var(--bs-primary-bg-subtle);
+	border-radius: 0.5rem;
+	color: var(--bs-primary);
+	display: flex;
+	flex: 0 0 3.5rem;
+	font-size: 1.5rem;
+	height: 3.5rem;
+	justify-content: center;
+	width: 3.5rem;
+}
+
+@mixin eyebrow {
+	color: var(--bs-secondary-color);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	margin: 0 0 0.25rem;
+	text-transform: uppercase;
+}
+
+@mixin title {
+	font-size: clamp(1.5rem, 3vw, 2.25rem);
+	font-weight: 700;
+	margin: 0;
+	word-break: break-word;
+}
+
+@mixin badge {
+	border-radius: 999px;
+	display: inline-flex;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	padding: 0.4rem 0.7rem;
+}
+
+@mixin section-title {
+	font-size: 1rem;
+	font-weight: 700;
+	margin: 0 0 1rem;
+}

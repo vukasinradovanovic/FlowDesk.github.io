@@ -6,10 +6,11 @@ import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService, User } from '../../../services/auth/auth.service';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
 import { FormsModule } from '@angular/forms';
+import { SearchComponent } from '../../search.component/search.component/search.component';
 
 @Component({
 	selector: 'app-view-all-teams',
-	imports: [CommonModule, DatePipe, RouterLink, FormsModule, PaginationComponent],
+    imports: [CommonModule, DatePipe, RouterLink, FormsModule, PaginationComponent, SearchComponent],
 	templateUrl: './view-all-teams.html',
 	styleUrl: './view-all-teams.scss',
 })
@@ -33,9 +34,16 @@ export class ViewAllTeams {
     public readonly totalPages = computed(() => this.paginatedTeams()?.totalCount ?? 1);
     public readonly totalCount = computed(() => this.paginatedTeams()?.pagesCount ?? 0);
 
+    // Permissions
     public readonly canCreateTeam = computed(() =>
         this.permissionService.hasPermission('Create Teams', this.auth.currentUser())
     );
+    public readonly canEditTeams = computed(() =>
+		this.permissionService.hasPermission('Edit Teams', this.auth.currentUser()),
+	);
+	public readonly canDeleteTeams = computed(() =>
+		this.permissionService.hasPermission('Delete Teams', this.auth.currentUser()),
+	);
 
     public readonly openDropdownId = signal<number | null>(null);
 

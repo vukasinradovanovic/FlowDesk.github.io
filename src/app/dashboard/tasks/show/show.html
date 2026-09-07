@@ -1,0 +1,109 @@
+@if (isLoading()) {
+	<div class="task-show task-show--loading" aria-live="polite">
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Loading task details</span>
+		</div>
+	</div>
+} @else if (hasError() || !task()) {
+	<section class="task-show task-show--error" aria-live="polite">
+		<div class="task-show__empty-icon"><i class="bi bi-exclamation-circle"></i></div>
+		<h1 class="task-show__empty-title">Task unavailable</h1>
+		<p class="task-show__empty-text">The requested task could not be loaded.</p>
+		<a class="btn btn-primary" routerLink="/dashboard/tasks">Back to Tasks</a>
+	</section>
+} @else {
+	<section class="task-show">
+		<header class="task-show__header">
+			<div class="task-show__title-group">
+				<a class="task-show__back-link" routerLink="/dashboard/tasks">
+					<i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Tasks
+				</a>
+				<div class="task-show__identity">
+					<div class="task-show__icon" aria-hidden="true"><i class="bi bi-check2-square"></i></div>
+					<div>
+						<p class="task-show__eyebrow">Task #{{ task()!.id }}</p>
+						<h1 class="task-show__title">{{ task()!.name }}</h1>
+					</div>
+				</div>
+			</div>
+			@if (status(); as taskStatus) {
+						<span
+							[class]="
+								'badge bg-' +
+								(taskStatus.theme.replace('badge-', '') || 'primary') +
+								'-soft text-' +
+								(taskStatus.theme.replace('badge-', '') || 'primary')
+							"
+						>
+							{{ taskStatus.name }}
+						</span>
+					} @else {
+						<span class="badge bg-secondary-soft text-secondary"> No Status </span>
+					}
+		</header>
+
+		<div class="task-show__content">
+			<article class="task-show__description">
+				<h2 class="task-show__section-title">Description</h2>
+				<p class="task-show__description-text">
+					{{ task()!.description || 'No description provided.' }}
+				</p>
+			</article>
+
+			<section class="task-show__details" aria-labelledby="task-details-title">
+				<h2 id="task-details-title" class="task-show__section-title">Task Details</h2>
+				<dl class="task-show__metadata">
+					<div class="task-show__metadata-item task-show__metadata-item--highlighted">
+						<dt>Due Date</dt>
+						<dd>{{ task()!.dueDate | date: 'MMM d, y, h:mm a' }}</dd>
+					</div>
+					<div class="task-show__metadata-item">
+						<dt>Created Date</dt>
+						<dd>{{ task()!.createdAt | date: 'MMM d, y, h:mm a' }}</dd>
+					</div>
+					<div class="task-show__metadata-item">
+						<dt>Last Edited</dt>
+						<dd>{{ task()!.updatedAt | date: 'MMM d, y, h:mm a' }}</dd>
+					</div>
+					<div class="task-show__metadata-item">
+						<dt>Assigned User ID</dt>
+						<dd>{{ task()!.assignedUserId }}</dd>
+					</div>
+					<div class="task-show__metadata-item">
+						<dt>Task ID</dt>
+						<dd>{{ task()!.TaskId }}</dd>
+					</div>
+					<div class="task-show__metadata-item">
+						<dt>Slug</dt>
+						<dd class="task-show__value--code">{{ task()!.slug }}</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section class="task-show__attachments" aria-labelledby="task-attachments-title">
+				<h2 id="task-attachments-title" class="task-show__section-title">Attachments</h2>
+				@if (task()!.attachments.length) {
+					<div class="task-show__attachment-list">
+						@for (attachment of task()!.attachments; track attachment.id) {
+							<button
+								type="button"
+								class="task-show__attachment"
+								(click)="downloadAttachment(attachment.filePath, attachment.originalFileName)"
+								[attr.aria-label]="'Download ' + attachment.originalFileName"
+							>
+								<i class="bi bi-paperclip" aria-hidden="true"></i>
+								<span class="task-show__attachment-info">
+									<strong>{{ attachment.originalFileName }}</strong>
+									<span>{{ formatFileSize(attachment.fileSize) }} · {{ attachment.uploadedAt | date: 'MMM d, y' }}</span>
+								</span>
+								<i class="bi bi-download" aria-hidden="true"></i>
+							</button>
+						}
+					</div>
+				} @else {
+					<p class="task-show__empty-text">No attachments uploaded.</p>
+				}
+			</section>
+		</div>
+	</section>
+}

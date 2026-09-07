@@ -1,0 +1,46 @@
+<div class="admin-page">
+	<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+		<div>
+			<h1 class="h3 fw-bold mb-1">System Logs</h1>
+			<p class="text-secondary mb-0">Monitor administrative and application activity.</p>
+		</div>
+		<button type="button" class="btn btn-light-soft btn-sm" (click)="loadLogs()" [disabled]="isLoading()">
+			<i class="bi bi-arrow-clockwise me-1"></i> Refresh
+		</button>
+	</div>
+
+	@if (isLoading()) {
+		<div class="card card-plain p-5 text-center" aria-live="polite">
+			<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading logs</span></div>
+		</div>
+	} @else if (hasError()) {
+		<div class="card card-plain p-5 text-center">
+			<i class="bi bi-exclamation-circle text-danger fs-2"></i>
+			<p class="mt-3 mb-3">Logs could not be loaded.</p>
+			<button type="button" class="btn btn-primary btn-sm" (click)="loadLogs()">Try again</button>
+		</div>
+	} @else {
+		<div class="card card-plain">
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-modern align-middle">
+						<thead><tr><th>Time</th><th>Level</th><th>Action</th><th>User</th><th>Message</th><th class="text-end">Details</th></tr></thead>
+						<tbody>
+							@for (log of logs(); track log.id) {
+								<tr>
+									<td class="small text-nowrap">{{ log.timestamp ? (log.timestamp | date: 'MMM d, y, h:mm:ss a') : 'Unknown' }}</td>
+									<td><span class="badge bg-primary-soft text-primary">{{ log.level }}</span></td>
+									<td class="fw-semibold">{{ log.action }}</td>
+									<td class="small">{{ log.user }}</td>
+									<td class="text-secondary small">{{ log.message || '-' }}</td>
+									<td class="text-end"><button type="button" class="btn-icon" [attr.aria-label]="'Toggle details for log ' + log.id" (click)="toggleDetails(log.id)"><i class="bi" [class.bi-chevron-down]="expandedLogId() !== log.id" [class.bi-chevron-up]="expandedLogId() === log.id"></i></button></td>
+								</tr>
+								@if (expandedLogId() === log.id) { <tr><td colspan="6"><pre class="admin-page__details">{{ formatDetails(log.details) }}</pre></td></tr> }
+							} @empty { <tr><td colspan="6" class="text-center text-secondary py-5">No log entries found.</td></tr> }
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	}
+</div>

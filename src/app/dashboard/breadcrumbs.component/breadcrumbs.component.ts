@@ -1,8 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, effect, inject, signal } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { TasksService } from '../../services/tasks/tasks.service';
 
 export interface BreadcrumbItem {
+	label: string;
+	url: string;
+}
+
+interface BreadcrumbParent {
+	match: string;
 	label: string;
 	url: string;
 }
@@ -17,14 +24,29 @@ export interface BreadcrumbItem {
 export class BreadcrumbsComponent {
 	private readonly router = inject(Router);
 	private readonly activatedRoute = inject(ActivatedRoute);
+	private readonly tasksService = inject(TasksService);
 
 	public readonly breadcrumbs = signal<BreadcrumbItem[]>([]);
+	private previousUrl = '';
+	private currentUrl = this.router.url;
 
 	constructor() {
-		this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-			const root = this.activatedRoute.root;
-			this.breadcrumbs.set(this.createBreadcrumbs(root));
+		this.router.events
+			.pipe(filter((event) => event instanceof NavigationEnd))
+			.subscribe((event) => {
+				this.previousUrl = this.currentUrl;
+				this.currentUrl = event.urlAfterRedirects;
+				this.refreshBreadcrumbs();
+			});
+
+		effect(() => {
+			this.tasksService.currentTask();
+			this.refreshBreadcrumbs();
 		});
+	}
+
+	private refreshBreadcrumbs(): void {
+		this.breadcrumbs.set(this.createBreadcrumbs(this.activatedRoute.root));
 	}
 
 	private createBreadcrumbs(
@@ -52,8 +74,16 @@ export class BreadcrumbsComponent {
 					nextUrl += `/${routeURL}`;
 				}
 
-				const label = child.snapshot.data['breadcrumb'];
+				const label =
+					child.routeConfig?.path === 'tasks/:slug'
+						? this.tasksService.currentTask()?.name ?? 'Task'
+						: child.snapshot.data['breadcrumb'];
 				if (label) {
+					const parent = this.getBreadcrumbParent(child.snapshot.data['breadcrumbParents']);
+					if (parent && !breadcrumbs.some((item) => item.url === parent.url)) {
+						breadcrumbs.push(parent);
+					}
+
 					const isDuplicate = breadcrumbs.some((item) => item.url === nextUrl);
 					if (!isDuplicate) {
 						breadcrumbs.push({ label, url: nextUrl });
@@ -67,5 +97,18 @@ export class BreadcrumbsComponent {
 		}
 
 		return breadcrumbs;
+	}
+
+	private getBreadcrumbParent(value: unknown): BreadcrumbItem | null {
+		if (!Array.isArray(value)) return null;
+
+		const parents = value as BreadcrumbParent[];
+		const previousPath = this.previousUrl.split('?')[0];
+		const parent = parents.find(
+			(candidate) =>
+				typeof candidate.match === 'string' && previousPath.startsWith(candidate.match),
+		);
+
+		return parent ? { label: parent.label, url: parent.url } : null;
 	}
 }

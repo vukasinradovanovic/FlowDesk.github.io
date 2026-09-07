@@ -1,0 +1,14 @@
+.admin-page {
+	&__details {
+		background: var(--fd-surface-2);
+		border: 1px solid var(--fd-border);
+		border-radius: var(--fd-radius-sm);
+		color: var(--fd-text);
+		font-size: 0.8125rem;
+		margin: 0;
+		max-height: 16rem;
+		overflow: auto;
+		padding: 1rem;
+		white-space: pre-wrap;
+	}
+}

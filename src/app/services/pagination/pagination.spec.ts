@@ -13,4 +13,11 @@ describe('Pagination', () => {
 	it('should be created', () => {
 		expect(service).toBeTruthy();
 	});
+
+	it('should send searchTerm as the backend keyword parameter', () => {
+		const params = service.buildHttpParams({ searchTerm: 'release notes' });
+
+		expect(params.get('keyword')).toBe('release notes');
+		expect(params.has('searchTerm')).toBeFalsy();
+	});
 });
