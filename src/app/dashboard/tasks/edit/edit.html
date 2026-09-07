@@ -1,0 +1,18 @@
+<div class="container py-4" style="max-width: 800px">
+	<p class="fs-2 fw-bold mb-1">Edit Task</p>
+	<p class="small mb-4">Update the task details, assignment, or add new attachments.</p>
+
+	@if (initialTaskData(); as taskData) {
+		<app-task-form
+			submitLabel="Update Task"
+			[initialData]="taskData"
+			(formSubmit)="handleUpdate($event)"
+		></app-task-form>
+	} @else {
+		<div class="card card-plain p-5 text-center" aria-live="polite">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading task</span>
+			</div>
+		</div>
+	}
+</div>

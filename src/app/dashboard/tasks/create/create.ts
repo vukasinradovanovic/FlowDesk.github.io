@@ -23,6 +23,7 @@ export class Create {
 		formData.append('DueDate', payload.dueDate);
 		formData.append('ProjectId', String(payload.projectId));
 		formData.append('AssignedUserId', String(payload.assignedUserId));
+		formData.append('StatusId', String(payload.statusId));
 
 		for (const attachment of payload.attachments) {
 			formData.append('Attachments', attachment, attachment.name);
