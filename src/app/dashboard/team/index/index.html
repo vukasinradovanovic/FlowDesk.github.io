@@ -51,16 +51,16 @@
 							</td>
 							<td>
 								<div class="avatar-stack">
-                                    @for (member of team.members; track member.id) {
-                                        <div class="avatar avatar-xs">
-                                            <span [class]="'avatar-initials bg-' + (member.avatarColor || 'primary')">
-                                                {{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
-                                            </span>
-                                        </div>
-                                    } @empty {
-                                        <span class="text-muted small">No members</span>
-                                    }
-                                </div>
+									@for (member of team.members; track member.id) {
+										<div class="avatar avatar-xs">
+											<span [class]="'avatar-initials bg-' + (member.avatarColor || 'primary')">
+												{{ member.firstName?.charAt(0) }}{{ member.lastName?.charAt(0) }}
+											</span>
+										</div>
+									} @empty {
+										<span class="text-muted small">No members</span>
+									}
+								</div>
 							</td>
 							<!-- Actions -->
 							<td class="text-end">
@@ -75,21 +75,24 @@
 
 									@if (openDropdownId() === team.id) {
 										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
-											<a
-												class="dropdown-item d-flex align-items-center gap-2"
-												[routerLink]="['/dashboard/team/edit', team.id]"
-												(click)="openDropdownId.set(null)"
-											>
-												<i class="bi bi-pencil small"></i> Edit Team
-											</a>
-
-											<button
+											@if (canEditTeams()) {
+												<a
+													class="dropdown-item d-flex align-items-center gap-2"
+													[routerLink]="['/dashboard/team/edit', team.id]"
+													(click)="openDropdownId.set(null)"
+												>
+													<i class="bi bi-pencil small"></i> Edit Team
+												</a>
+											}
+											@if (canDeleteTeams()) {
+												<button
 												type="button"
 												class="dropdown-item d-flex align-items-center gap-2 text-danger"
 												(click)="onDeleteTeam(team.id, $event)"
 											>
 												<i class="bi bi-trash small"></i> Delete
 											</button>
+											}
 										</div>
 									}
 								</div>

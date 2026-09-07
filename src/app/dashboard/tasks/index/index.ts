@@ -13,6 +13,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { Task, TasksService } from '../../../services/tasks/tasks.service';
 import { SearchComponent } from '../../search.component/search.component/search.component';
 import { RouterLink } from '@angular/router';
+import { PermissionService } from '../../../services/permisions/permisions';
 
 @Component({
 	selector: 'app-index',
@@ -29,6 +30,7 @@ export class Index implements OnInit {
 
 	private readonly tasksService = inject(TasksService);
 	public readonly auth = inject(AuthService);
+	public readonly permissionService = inject(PermissionService);
 	private readonly elementRef = inject(ElementRef);
 
 	public readonly currentPage = signal(1);
@@ -40,6 +42,17 @@ export class Index implements OnInit {
 	public readonly tasks = computed<Task[]>(() => this.paginatedTasks()?.items ?? []);
 	public readonly totalPages = computed(() => this.paginatedTasks()?.pagesCount ?? 1);
 	public readonly totalCount = computed(() => this.paginatedTasks()?.totalCount ?? 0);
+
+	// Permissions
+	public readonly canCreateTask = computed(() =>
+		this.permissionService.hasPermission('Create Tasks', this.auth.currentUser()),
+	);
+	public readonly canEditTask = computed(() =>
+		this.permissionService.hasPermission('Edit Tasks', this.auth.currentUser()),
+	);
+	public readonly canDeleteTask = computed(() =>
+		this.permissionService.hasPermission('Delete Tasks', this.auth.currentUser()),
+	);
 
 	ngOnInit(): void {
 		this.loadTasks();

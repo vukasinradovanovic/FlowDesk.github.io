@@ -99,6 +99,7 @@
 									<span class="badge bg-secondary-soft text-secondary"> No Status </span>
 								}
 							</td>
+							<!-- Actions column -->
 							<td class="text-end align-middle">
 								<div class="dropdown d-inline-block">
 									<button class="btn-icon" (click)="toggleDropdownProject(p.slug, $event)">
@@ -107,21 +108,24 @@
 
 									@if (openDropdownSlug() === p.slug) {
 										<div class="dropdown-menu show" (click)="$event.stopPropagation()">
-											<a
-												class="dropdown-item d-flex align-items-center gap-2"
-												[routerLink]="['/dashboard/projects/edit', p.slug]"
-												(click)="openDropdownSlug.set(null)"
-											>
-												<i class="bi bi-pencil small"></i> Edit Project
-											</a>
-
-											<button
-												type="button"
-												class="dropdown-item d-flex align-items-center gap-2 text-danger"
-												(click)="onDeleteProject(p.slug, $event)"
-											>
-												<i class="bi bi-trash small"></i> Delete
-											</button>
+											@if (canEditProjects()) {
+												<a
+													class="dropdown-item d-flex align-items-center gap-2"
+													[routerLink]="['/dashboard/projects/edit', p.slug]"
+													(click)="openDropdownSlug.set(null)"
+												>
+													<i class="bi bi-pencil small"></i> Edit Project
+												</a>
+											}
+											@if (canDeleteProjects()) {
+												<button
+													type="button"
+													class="dropdown-item d-flex align-items-center gap-2 text-danger"
+													(click)="onDeleteProject(p.slug, $event)"
+												>
+													<i class="bi bi-trash small"></i> Delete
+												</button>
+											}
 										</div>
 									}
 								</div>

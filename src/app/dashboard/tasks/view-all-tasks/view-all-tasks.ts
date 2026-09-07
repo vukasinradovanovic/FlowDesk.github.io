@@ -43,7 +43,15 @@ export class ViewAllTasks implements OnInit {
 	public readonly tasks = computed<Task[]>(() => this.paginatedTasks()?.items ?? []);
 	public readonly totalPages = computed(() => this.paginatedTasks()?.pagesCount ?? 1);
 	public readonly totalCount = computed(() => this.paginatedTasks()?.totalCount ?? 0);
-	public readonly canDeleteTasks = computed(() =>
+
+	// Permissions
+	public readonly canCreateTask = computed(() =>
+		this.permissionService.hasPermission('Create Tasks', this.auth.currentUser()),
+	);
+	public readonly canEditTask = computed(() =>
+		this.permissionService.hasPermission('Edit Tasks', this.auth.currentUser()),
+	);
+	public readonly canDeleteTask = computed(() =>
 		this.permissionService.hasPermission('Delete Tasks', this.auth.currentUser()),
 	);
 

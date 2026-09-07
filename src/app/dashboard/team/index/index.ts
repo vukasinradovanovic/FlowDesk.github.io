@@ -28,8 +28,15 @@ export class Index {
 	});
 	members = this.teamService.allMembers;
 
+	// Permissions
 	public canCreateTeam = computed(() =>
 		this.permissionService.hasPermission('Create Teams', this.auth.currentUser()),
+	);
+	public readonly canEditTeams = computed(() =>
+		this.permissionService.hasPermission('Edit Teams', this.auth.currentUser()),
+	);
+	public readonly canDeleteTeams = computed(() =>
+		this.permissionService.hasPermission('Delete Teams', this.auth.currentUser()),
 	);
 
 	public openDropdownId = signal<number | null>(null);

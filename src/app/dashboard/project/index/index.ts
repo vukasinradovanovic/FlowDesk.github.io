@@ -35,6 +35,12 @@ export class Index {
 	public readonly canCreateProjects = computed(() =>
 		this.permissionService.hasPermission('Create Projects', this.auth.currentUser()),
 	);
+	public readonly canEditProjects = computed(() =>
+		this.permissionService.hasPermission('Edit Projects', this.auth.currentUser()),
+	);
+	public readonly canDeleteProjects = computed(() =>
+		this.permissionService.hasPermission('Delete Projects', this.auth.currentUser()),
+	);
 
 	public readonly openDropdownSlug = signal<string | null>(null);
 
