@@ -1,0 +1,17 @@
+.search-control {
+	position: relative;
+	min-width: 12rem;
+}
+
+.search-control .bi-search {
+	position: absolute;
+	top: 50%;
+	left: 0.75rem;
+	transform: translateY(-50%);
+	z-index: 1;
+	color: var(--bs-secondary-color);
+}
+
+.search-control .form-control {
+	padding-left: 2.25rem;
+}

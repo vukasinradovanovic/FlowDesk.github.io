@@ -5,10 +5,11 @@ import { Project, ProjectService } from '../../../services/project/project';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { RouterLink } from '@angular/router';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
+import { SearchComponent } from '../../search.component/search.component/search.component';
 
 @Component({
 	selector: 'app-index',
-	imports: [DatePipe, CommonModule, RouterLink, PaginationComponent],
+	imports: [DatePipe, CommonModule, RouterLink, PaginationComponent, SearchComponent],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 })

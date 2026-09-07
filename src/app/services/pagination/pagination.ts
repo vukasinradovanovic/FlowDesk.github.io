@@ -35,7 +35,7 @@ export class Pagination {
 			.set('perPage', (params?.perPage ?? this.defaultParams.perPage).toString());
 
 		if (params?.searchTerm?.trim()) {
-			httpParams = httpParams.set('searchTerm', params.searchTerm.trim());
+			httpParams = httpParams.set('keyword', params.searchTerm.trim());
 		}
 
 		if (params?.sortBy) {

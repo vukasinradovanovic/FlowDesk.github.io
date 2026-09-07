@@ -15,11 +15,12 @@ import { ProjectService, Project } from '../../../services/project/project';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService } from '../../../services/auth/auth.service';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
+import { SearchComponent } from '../../search.component/search.component/search.component';
 
 @Component({
     selector: 'app-view-all-projects',
     standalone: true,
-    imports: [DatePipe, CommonModule, RouterLink, FormsModule, PaginationComponent],
+    imports: [DatePipe, CommonModule, RouterLink, FormsModule, PaginationComponent, SearchComponent],
     templateUrl: './view-all-projects.html',
     styleUrl: './view-all-projects.scss',
 })

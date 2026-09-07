@@ -6,10 +6,11 @@ import { PermissionService } from '../../../services/permisions/permisions';
 import { AuthService, User } from '../../../services/auth/auth.service';
 import { PaginationComponent } from '../../pagination.component/pagination.component';
 import { FormsModule } from '@angular/forms';
+import { SearchComponent } from '../../search.component/search.component/search.component';
 
 @Component({
 	selector: 'app-view-all-teams',
-	imports: [CommonModule, DatePipe, RouterLink, FormsModule, PaginationComponent],
+    imports: [CommonModule, DatePipe, RouterLink, FormsModule, PaginationComponent, SearchComponent],
 	templateUrl: './view-all-teams.html',
 	styleUrl: './view-all-teams.scss',
 })

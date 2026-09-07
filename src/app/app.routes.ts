@@ -15,6 +15,8 @@ import { CreateTeam } from './dashboard/team/create-team/create-team';
 import { EditTeam } from './dashboard/team/edit-team/edit-team';
 import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
 import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-projects';
+import { ViewAllTasks } from './dashboard/tasks/view-all-tasks/view-all-tasks';
+import { Index as TasksIndex } from './dashboard/tasks/index/index';
 import { ActivationSuccess } from './auth/activation-success/activation-success';
 import { activationGuard } from './guards/activation-guard';
 
@@ -62,6 +64,16 @@ export const routes: Routes = [
 				path: 'projects/all',
 				component: ViewAllProjects,
 				data: { breadcrumb: 'All Projects' },
+			},
+			{
+				path: 'tasks/all',
+				component: ViewAllTasks,
+				data: { breadcrumb: 'All Tasks' },
+			},
+			{
+				path: 'tasks',
+				component: TasksIndex,
+				data: { breadcrumb: 'Tasks' },
 			},
 			{
 				path: 'projects/create',
