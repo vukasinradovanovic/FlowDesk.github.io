@@ -12,6 +12,7 @@ interface NavLink {
     adons?: string;
     exact?: boolean;
     permission?: string;
+	adminOnly?: boolean;
 }
 
 @Component({
@@ -76,6 +77,12 @@ export class MainNavDashboard implements OnInit {
                 icon: 'bi bi-people',
                 route: ['/dashboard', 'teams', 'all'],
                 permission: 'View Teams',
+            },
+            {
+                label: 'System Logs',
+                icon: 'bi bi-shield-check',
+                route: ['/dashboard', 'admin', 'logs'],
+                adminOnly: true,
             },
 			// { label: 'Kanban Board', icon: 'bi bi-kanban', route: ['/dashboard', 'settings'] },
 			// { label: 'Calendar', icon: 'bi bi-calendar3', route: ['/dashboard', 'calendar'] },

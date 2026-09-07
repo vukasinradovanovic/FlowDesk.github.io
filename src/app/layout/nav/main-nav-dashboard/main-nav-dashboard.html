@@ -2,7 +2,8 @@
     <div class="nav-label">Menu</div>
 
     @for (link of navLinks(); track link.label) {
-        @if (!link.permission || permissionService.hasPermission(link.permission, auth.currentUser())) {
+        @if ((!link.permission || permissionService.hasPermission(link.permission, auth.currentUser())) &&
+            (!link.adminOnly || auth.currentUser()?.role?.name?.toLowerCase() === 'admin')) {
             <a
                 [routerLink]="link.route"
                 routerLinkActive="active"

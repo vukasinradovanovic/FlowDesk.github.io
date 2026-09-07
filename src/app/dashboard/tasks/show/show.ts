@@ -1,10 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EMPTY, map, of, switchMap } from 'rxjs';
-import { Status, StatusService } from '../../../../services/status/status';
-import { Task, TasksService } from '../../../../services/tasks/tasks.service';
+import { Status, StatusService } from '../../../services/status/status';
+import { Task, TasksService } from '../../../services/tasks/tasks.service';
 
 @Component({
 	selector: 'app-show',
@@ -13,6 +14,8 @@ import { Task, TasksService } from '../../../../services/tasks/tasks.service';
 	styleUrl: './show.scss',
 })
 export class Show implements OnInit {
+	private readonly apiOrigin = 'https://localhost:7175';
+	private readonly http = inject(HttpClient);
 	private readonly route = inject(ActivatedRoute);
 	private readonly tasksService = inject(TasksService);
 	private readonly statusService = inject(StatusService);
@@ -22,6 +25,31 @@ export class Show implements OnInit {
 	public readonly status = signal<Status | null>(null);
 	public readonly isLoading = signal(true);
 	public readonly hasError = signal(false);
+
+	public attachmentUrl(filePath: string): string {
+		if (/^https?:\/\//i.test(filePath)) return filePath;
+		return `${this.apiOrigin}/${filePath.replace(/^\/+/, '')}`;
+	}
+
+	public formatFileSize(fileSize: number): string {
+		if (fileSize < 1024) return `${fileSize} B`;
+		if (fileSize < 1024 * 1024) return `${(fileSize / 1024).toFixed(1)} KB`;
+		return `${(fileSize / (1024 * 1024)).toFixed(1)} MB`;
+	}
+
+	public downloadAttachment(filePath: string, fileName: string): void {
+		this.http.get(this.attachmentUrl(filePath), { responseType: 'blob' }).subscribe({
+			next: (file) => {
+				const downloadUrl = URL.createObjectURL(file);
+				const link = document.createElement('a');
+				link.href = downloadUrl;
+				link.download = fileName;
+				link.click();
+				URL.revokeObjectURL(downloadUrl);
+			},
+			error: (error: unknown) => console.error('Failed to download attachment:', error),
+		});
+	}
 
 	ngOnInit(): void {
 		this.route.paramMap

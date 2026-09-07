@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { PaginatedResponse, Pagination, PaginationParams } from '../pagination/pagination';
 import { Status } from '../status/status';
 import { Observable, tap } from 'rxjs';
+import { Attachments } from '../attachments/attachments';
 import { TaskFormData } from '../../dashboard/forms/task-form.component/task-form.componnent/task-form.componnent';
 
 export interface Task {
@@ -18,6 +19,7 @@ export interface Task {
 	TaskId: number;
 	statusId?: number;
 	status?: Status;
+	attachments: Attachments[];
 }
 
 @Injectable({
@@ -79,8 +81,8 @@ export class TasksService {
 			.pipe(tap((task) => this.currentTask.set(task)));
 	}
 
-	public createTask(payload: TaskFormData): Observable<any> {
-		return this.http.post<any>(this.createTaskApiUrl, payload);
+	public createTask(payload: FormData): Observable<Task> {
+		return this.http.post<Task>(this.createTaskApiUrl, payload);
 	}
 
 	public updateTask(slug: string, payload: TaskFormData): Observable<void> {

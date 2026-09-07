@@ -73,8 +73,9 @@ export class TeamService {
 
 	public updateTeam(id: number, payload: TeamFormData): Observable<void> {
 		const updatePayload = {
-			id: id,
-			...payload,
+			Id: id,
+			Name: payload.name,
+			UserIds: payload.userIds ?? [],
 		};
 
 		return this.http.put<void>(`${this.updateTeamApiUrl}/${id}`, updatePayload);

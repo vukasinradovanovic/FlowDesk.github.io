@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { Role } from '../role/role.service';
 import { Permission } from '../permisions/permisions';
 
@@ -42,6 +42,7 @@ export class AuthService {
 	private readonly loginApiUrl = 'https://localhost:7175/api/auth/login';
 	private readonly registerApiUrl = 'https://localhost:7175/api/register';
 	private readonly logoutApiUrl = 'https://localhost:7175/api/auth/logout';
+	private readonly getAllUsersApiUrl = 'https://localhost:7175/api/getallusers';
 
 	public readonly usersData = signal<User[] | null>(null);
 	public readonly currentUser = signal<User | null>(this.getStoredUser());
@@ -92,6 +93,25 @@ export class AuthService {
 
 	public register(requestData: RegisterRequest): Observable<void> {
 		return this.http.post<void>(this.registerApiUrl, requestData);
+	}
+
+	public getAllUsers(): Observable<User[]> {
+		return this.http
+			.get<unknown>(this.getAllUsersApiUrl)
+			.pipe(
+				map((response) => this.normalizeUsers(response)),
+				tap((users) => this.usersData.set(users)),
+			);
+	}
+
+	private normalizeUsers(response: unknown): User[] {
+		if (Array.isArray(response)) return response as User[];
+		if (!response || typeof response !== 'object') return [];
+
+		const body = response as Record<string, unknown>;
+		const users = body['items'] ?? body['Items'] ?? body['users'] ?? body['Users'] ?? body['data'];
+
+		return Array.isArray(users) ? (users as User[]) : [];
 	}
 
 	private handleAuthSuccess(response: LoginResponse): void {

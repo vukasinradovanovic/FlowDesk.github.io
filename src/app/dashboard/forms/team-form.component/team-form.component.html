@@ -7,6 +7,23 @@
             <div class="invalid-feedback">A valid team name (minimum 3 characters) is required.</div>
         </div>
 
+        <div class="col-12">
+            <label for="team-members" class="form-label small fw-semibold">Team Members</label>
+            <select id="team-members" formControlName="userIds" class="form-select" multiple size="6">
+                @for (user of users(); track user.id) {
+                    <option [ngValue]="user.id">
+                        {{ user.firstName }} {{ user.lastName }}{{ user.email ? ' (' + user.email + ')' : '' }}
+                    </option>
+                } @empty {
+                    <option disabled>No users available</option>
+                }
+            </select>
+            <div class="form-text">Hold Ctrl or Command to select multiple members.</div>
+            @if (projectForm.get('userIds')?.touched && projectForm.get('userIds')?.invalid) {
+                <div class="invalid-feedback d-block">Select at least one team member.</div>
+            }
+        </div>
+
         <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
             <button type="button" class="btn btn-secondary btn-sm border" [routerLink]="'/dashboard/teams'">Cancel</button>
             <button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="projectForm.invalid">

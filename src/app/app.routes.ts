@@ -17,9 +17,12 @@ import { ViewAllTeams } from './dashboard/team/view-all-teams/view-all-teams';
 import { ViewAllProjects } from './dashboard/project/view-all-projects/view-all-projects';
 import { ViewAllTasks } from './dashboard/tasks/view-all-tasks/view-all-tasks';
 import { Index as TasksIndex } from './dashboard/tasks/index/index';
-import { Show as ShowTask } from './dashboard/tasks/show/show/show';
+import { Create as CreateTask } from './dashboard/tasks/create/create';
+import { Show as ShowTask } from './dashboard/tasks/show/show';
 import { ActivationSuccess } from './auth/activation-success/activation-success';
 import { activationGuard } from './guards/activation-guard';
+import { adminGuard } from './guards/admin-guard';
+import { Index as AdminIndex } from './dashboard/admin/index/index';
 
 export const routes: Routes = [
 	{
@@ -52,6 +55,12 @@ export const routes: Routes = [
 		data: { breadcrumb: 'Workspace' },
 		children: [
 			{
+				path: 'admin/logs',
+				component: AdminIndex,
+				canActivate: [adminGuard],
+				data: { breadcrumb: 'System Logs' },
+			},
+			{
 				path: '',
 				component: Index,
 				data: { breadcrumb: 'Dashboard' },
@@ -70,6 +79,11 @@ export const routes: Routes = [
 				path: 'tasks/all',
 				component: ViewAllTasks,
 				data: { breadcrumb: 'All Tasks' },
+			},
+			{
+				path: 'tasks/create',
+				component: CreateTask,
+				data: { breadcrumb: 'New Task' },
 			},
 			{
 				path: 'tasks/:slug',
