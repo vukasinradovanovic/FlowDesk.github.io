@@ -16,7 +16,8 @@ export interface Task {
 	updatedAt: Date;
 	assignedUserId: number;
 	TaskId: number;
-	status: Status;
+	statusId?: number;
+	status?: Status;
 }
 
 @Injectable({
@@ -30,12 +31,13 @@ export class TasksService {
 	private readonly getUsersTasksApiUrl = 'https://localhost:7175/api/getusertasks';
 	private readonly createTaskApiUrl = 'https://localhost:7175/api/createtask';
 	private readonly getAllTasksApiUrl = 'https://localhost:7175/api/getalltasks';
-	private readonly getTaskByIdApiUrl = 'https://localhost:7175/api/showtask';
+	private readonly getTaskBySlugApiUrl = 'https://localhost:7175/api/showtask';
 	private readonly updateTaskApiUrl = 'https://localhost:7175/api/updatetask';
 	private readonly deleteTaskApiUrl = 'https://localhost:7175/api/deletetask';
 
 	public readonly userTasksState = signal<PaginatedResponse<Task> | null>(null);
 	public readonly allTasksState = signal<PaginatedResponse<Task> | null>(null);
+	public readonly currentTask = signal<Task | null>(null);
 
 	public readonly allUsersTasks = computed(() => {
 		const state = this.userTasksState() as any;
@@ -69,8 +71,12 @@ export class TasksService {
 			.pipe(tap((response) => this.allTasksState.set(response)));
 	}
 
-	public getTaskBySlug(slug: string): Observable<TaskFormData> {
-		return this.http.get<TaskFormData>(`${this.getTaskByIdApiUrl}/${slug}`);
+	public getTaskBySlug(slug: string): Observable<Task> {
+		this.currentTask.set(null);
+
+		return this.http
+			.get<Task>(`${this.getTaskBySlugApiUrl}/${slug}`)
+			.pipe(tap((task) => this.currentTask.set(task)));
 	}
 
 	public createTask(payload: TaskFormData): Observable<any> {

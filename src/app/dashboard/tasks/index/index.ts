@@ -12,10 +12,11 @@ import { PaginationComponent } from '../../pagination.component/pagination.compo
 import { AuthService } from '../../../services/auth/auth.service';
 import { Task, TasksService } from '../../../services/tasks/tasks.service';
 import { SearchComponent } from '../../search.component/search.component/search.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-index',
-	imports: [CommonModule, DatePipe, PaginationComponent, SearchComponent],
+	imports: [CommonModule, DatePipe, PaginationComponent, SearchComponent, RouterLink],
 	templateUrl: './index.html',
 	styleUrl: './index.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

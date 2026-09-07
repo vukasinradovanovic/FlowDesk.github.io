@@ -50,7 +50,9 @@
 										<i class="bi bi-check2-square"></i>
 									</div>
 									<div>
-										<div class="fw-semibold">{{ task.name }}</div>
+										<a class="fw-semibold text-decoration-none" [routerLink]="['/dashboard/tasks', task.slug]">
+											{{ task.name }}
+										</a>
 										<div class="text-secondary small">Task #{{ task.id }}</div>
 									</div>
 								</div>

@@ -14,10 +14,11 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { PermissionService } from '../../../services/permisions/permisions';
 import { Task, TasksService } from '../../../services/tasks/tasks.service';
 import { SearchComponent } from '../../search.component/search.component/search.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-view-all-tasks',
-	imports: [CommonModule, DatePipe, FormsModule, PaginationComponent, SearchComponent],
+	imports: [CommonModule, DatePipe, FormsModule, PaginationComponent, SearchComponent, RouterLink],
 	templateUrl: './view-all-tasks.html',
 	styleUrl: './view-all-tasks.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
